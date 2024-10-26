@@ -1,7 +1,0 @@
-{
-  "name": "troque-ton-objet",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
-}
