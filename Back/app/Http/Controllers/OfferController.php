@@ -27,6 +27,7 @@ class OfferController extends Controller
     {
         $offers = Offer::query()
             ->with(['user'])
+            ->isVisible()
             ->get();
 
         return response()->json([

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,5 +23,10 @@ class Offer extends Model
     public function getIsUpdatedAttribute(): bool
     {
         return $this->updated_at->getTimestamp() !== $this->created_at->getTimestamp();
+    }
+
+    public function scopeIsVisible(Builder $query, bool $isVisible = true)
+    {
+        return $query->where('is_visible', $isVisible);
     }
 }
