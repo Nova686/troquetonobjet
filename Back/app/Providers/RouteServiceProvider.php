@@ -29,13 +29,16 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
-            Route::middleware(['api', 'auth:sanctum', 'verified'])
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
-
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/auth.php'));
+            Route::prefix('api')->group(function () {
+                Route::middleware(['api', 'auth:sanctum', 'verified'])
+                    ->group(base_path('routes/api.php'));
+                
+                Route::middleware(['api'])
+                    ->group(base_path('routes/guest.php'));
+    
+                Route::middleware('api')
+                    ->group(base_path('routes/auth.php'));
+            });
         });
     }
 }

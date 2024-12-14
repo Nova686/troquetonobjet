@@ -56,6 +56,8 @@ class OfferController extends Controller
 
     public function show(Offer $offer)
     {
+        $this->authorize('view', $offer);
+
         return response()->json([
             'offer' => OfferResource::make($offer)
         ]);
@@ -63,6 +65,8 @@ class OfferController extends Controller
 
     public function update(EditOfferRequest $request, Offer $offer)
     {
+        $this->authorize('update', $offer);
+
         $validated = $request->validated();
 
         $offer->update($validated);
@@ -74,6 +78,8 @@ class OfferController extends Controller
 
     public function destroy(Offer $offer)
     {
+        $this->authorize('delete', $offer);
+
         $offer->delete();
 
         return response()->noContent();
