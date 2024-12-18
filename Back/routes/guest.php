@@ -10,4 +10,4 @@ Route::prefix('offers')->group(function () {
     Route::get('{offer}', [OfferController::class, 'get']);
 });
 
-Route::get("auto-complete/{searchTerm}", [GooglePlaceController::class, "AutoComplete"]);
+Route::get("auto-complete", [GooglePlaceController::class, "AutoComplete"]);
