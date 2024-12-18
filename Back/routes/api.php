@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
-
+use App\Http\Controllers\TestController;
 
 Route::prefix('/')->group(function () {
     // Route for Users
