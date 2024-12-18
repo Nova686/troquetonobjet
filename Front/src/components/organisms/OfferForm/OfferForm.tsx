@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
+import axiosService from "../../../services/AxiosService";
 
 const OfferForm: React.FC = () => {
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
@@ -7,6 +8,7 @@ const OfferForm: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [category, setCategory] = useState<{ id: number; label: string } | null>(null);
     const [isDonation, setIsDonation] = useState<boolean>(false);
+    const [isVisible, setIsVisible] = useState<boolean>(true);
 
     // Fonction pour gérer le changement de valeur du titre
     const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,9 +22,13 @@ const OfferForm: React.FC = () => {
     const handleChangeCategory = (event: React.ChangeEvent<{}>, newValue: { id: number; label: string } | null) => {
         setCategory(newValue);
     };
-    // Fonction pour gérer le changement de valeur de la catégorie
+    // Fonction pour gérer le changement de valeur de la donation
     const handleChangeDonation = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsDonation(event.target.checked);
+    };
+    // Fonction pour gérer le changement de valeur de la visibilitée
+    const handleChangeVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsVisible(event.target.checked);
     };
 
     const aCategory = [
@@ -64,18 +70,30 @@ const OfferForm: React.FC = () => {
     ];
 
     // Fonction pour gérer le clic sur le bouton "Valider"
-    const handleSubmit = () => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+       event.preventDefault()
 
-        console.log({
-            "userId": 314,
-            "categoryId": category?.id,
+        const data = {
+            // "userId": 1, // TODO: Récupérer via Len
+            // "categoryId": category?.id,
             "title": title,
             "description": description,
-            "longitude": 314, // TODO: a faire
-            "latitude": 314, // TODO: a faire
-            "cityName": 314, // TODO: a faire
-            "isDonation": isDonation,
-        });
+            "is_visible": isVisible,
+            "is_donation": isDonation,
+            "city_name": 'TestLand', // TODO: a faire
+            "longitude": Math.random(), // TODO: a faire
+            "latitude": Math.random(), // TODO: a faire
+        };
+        console.log('Payload:', data);
+        console.log('Headers:', axiosService.defaults.headers);
+
+
+        try {
+            const response = await axiosService.post('offers', data);
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -92,16 +110,22 @@ const OfferForm: React.FC = () => {
                 onChange={handleChangeTitle}
                 margin="normal"
                 required={true}
+                inputProps={{
+                    maxLength: 100,
+                }}
             />
             <TextField
                 label="Description de mon objet"
                 variant="outlined"
                 fullWidth
+                multiline
                 value={description}
                 onChange={handleChangeDescription}
                 margin="normal"
                 required={true}
-                // errorText={"La description de l'objet est trop longue"}
+                inputProps={{
+                    maxLength: 1500,
+                }}
             />
             <Autocomplete
                 disablePortal
@@ -110,6 +134,7 @@ const OfferForm: React.FC = () => {
                 value={category}
                 onChange={handleChangeCategory}
                 isOptionEqualToValue={(option, value) => option.id === value?.id}
+                style={{marginTop: '16px'}}
             />
             <FormControlLabel
                 control={
@@ -120,6 +145,16 @@ const OfferForm: React.FC = () => {
                 }
                 style={{display: 'flex', userSelect: "none"}}
                 label="Voulez-vous donner votre objet ?"
+            />
+            <FormControlLabel
+                control={
+                    <Switch
+                        checked={isVisible}
+                        onChange={handleChangeVisibility}
+                    />
+                }
+                style={{display: 'flex', userSelect: "none"}}
+                label="Votre objet devra être visible ?"
             />
             <Button
                 variant="contained"
