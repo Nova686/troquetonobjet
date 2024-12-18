@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * 
+ * @property int $id
  * @property string $title
  * @property string $description
  * @property bool $is_visible
@@ -16,6 +18,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property float $longitude
  * @property float $latitude
  * @property string $city_name
+ * @property int $user_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property User $user
  */
 class Offer extends Model
@@ -24,6 +29,11 @@ class Offer extends Model
 
     protected $fillable = [
         'title', 'description', 'is_visible', 'is_donation', 'longitude', 'latitude', 'city_name'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     public function user(): BelongsTo
