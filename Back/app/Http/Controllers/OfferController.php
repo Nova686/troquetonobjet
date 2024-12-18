@@ -6,6 +6,7 @@ use App\Http\Requests\Offers\CreateOfferRequest;
 use App\Http\Requests\Offers\EditOfferRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
+use App\Library\Results;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class OfferController extends Controller
         ]);
     }
 
-    public function index(Request $request)
+    public function getOffers(Request $request)
     {
         $offers = Offer::query()
             ->with(['user'])
@@ -55,7 +56,7 @@ class OfferController extends Controller
         ]);
     }
 
-    public function show(Offer $offer)
+    public function get(Offer $offer)
     {
         $this->authorize('view', $offer);
 
@@ -77,12 +78,13 @@ class OfferController extends Controller
         ]);
     }
 
-    public function destroy(Offer $offer)
+    public function destroy(int $idOffer)
     {
-        $this->authorize('delete', $offer);
+        $isDeleted = Offer::query()
+        ->where('id', $idOffer)
+            ->where('user_id', Auth::user()->id)
+            ->delete();
 
-        $offer->delete();
-
-        return response()->noContent();
+        return $isDeleted ? Results::noContent() : Results::notFound();
     }
 }

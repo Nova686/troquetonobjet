@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * 
+ * @property string $title
+ * @property string $description
+ * @property bool $is_visible
+ * @property bool $is_donation
+ * @property float $longitude
+ * @property float $latitude
+ * @property string $city_name
+ * @property User $user
+ */
 class Offer extends Model
 {
     use SoftDeletes;

@@ -7,14 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 class CreateOfferRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -27,8 +19,8 @@ class CreateOfferRequest extends FormRequest
             'is_visible' => ['required', 'boolean'],
             'is_donation' => ['required', 'boolean'],
             'city_name' => ['required', 'string', 'max:100'],
-            'longitude' => ['required'],
-            'latitude' => ['required'],
+            'longitude' => ['required', 'decimal'],
+            'latitude' => ['required', 'decimal'],
         ];
     }
 }
