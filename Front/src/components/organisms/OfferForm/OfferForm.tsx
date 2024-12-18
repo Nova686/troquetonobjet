@@ -1,9 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import config from "../../../config.json";
-import {GoogleMap, LoadScript} from "@react-google-maps/api";
-import {DebounceInput, Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
-import axios from "axios";
-import GoogleMapAutocomplete from "../../molecules/GoogleMapAutocomplete/GoogleMapAutocomplete";
+import React, {useState} from 'react';
+import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
 
 const OfferForm: React.FC = () => {
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
@@ -11,9 +7,6 @@ const OfferForm: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [category, setCategory] = useState<{ id: number; label: string } | null>(null);
     const [isDonation, setIsDonation] = useState<boolean>(false);
-    const [country, setCountry] = useState<string>('');
-    const [longitude, setLongitude] = useState<number>(2.3522);
-    const [latitude, setLatitude] = useState<number>(48.8566);
 
     // Fonction pour gérer le changement de valeur du titre
     const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,84 +78,8 @@ const OfferForm: React.FC = () => {
         });
     };
 
-    const handleSearch = async (cityName: string) => {
-        const url = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-
-        const response = await axios.get(url, {
-            params: {
-                input: cityName,
-                types: "(cities)",
-                components: "country:fr",
-                key: apiKey,
-            },
-        });
-
-        if (response.data.status === "OK") {
-            console.log(response.data.predictions);
-        } else {
-            console.log(`Error: ${response.data.status}`);
-        }
-    };
-
-    const containerStyle = {
-        width: "100%",
-        height: "400px",
-    };
-
-    const center = {
-        lat: latitude, // Latitude de Paris
-        lng: longitude,  // Longitude de Paris
-    };
-
-    const apiKey = config.GOOGLE_MAPS_API_KEY;
-    const mapRef = useRef<google.maps.Map | null>(null);
-
-    useEffect(() => {
-        if (mapRef.current) {
-            new google.maps.marker.AdvancedMarkerElement({
-                position: center,
-                map: mapRef.current,
-            });
-        }
-    }, []);
-
-    const options = {
-        streetViewControl: false, // Désactive Pegman (Street View)
-        mapTypeControl: false, // Désactive le contrôle du type de carte (facultatif)
-        fullscreenControl: false, // Désactive le bouton de plein écran (facultatif)
-    };
-
-
     return (
-        <>
-
-            <div style={{margin: "50px"}}></div>
-
-            {/*<GoogleMapAutocomplete/>*/}
-
-
-            <DebounceInput
-                placeholder="Tapez quelque chose..."
-                debounceTimeout={1000}
-                handleDebounce={(value) => {
-                    fetch("https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCoyf5B-cibub2QPUUbYKAgAMfldPWM0v8&input=decines&components=country:fr&types=(cities)")
-                        .then((response) => {console.log(response)});
-                }}
-            />
-
-            {/*<LoadScript googleMapsApiKey={apiKey}>*/}
-            {/*    <GoogleMap*/}
-            {/*        mapContainerStyle={containerStyle}*/}
-            {/*        center={center}*/}
-            {/*        zoom={10}*/}
-            {/*        options={options}*/}
-            {/*        onLoad={(map) => {*/}
-            {/*            mapRef.current = map;*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*    </GoogleMap>*/}
-            {/*</LoadScript>*/}
-
+        <form onSubmit={handleSubmit}>
             <Typography variant="h4" component="h2" gutterBottom>
                 Troquer mon objet
             </Typography>
@@ -174,6 +91,7 @@ const OfferForm: React.FC = () => {
                 value={title}
                 onChange={handleChangeTitle}
                 margin="normal"
+                required={true}
             />
             <TextField
                 label="Description de mon objet"
@@ -182,8 +100,8 @@ const OfferForm: React.FC = () => {
                 value={description}
                 onChange={handleChangeDescription}
                 margin="normal"
-                // error={true}
-                // helperText={"TEST"}
+                required={true}
+                // errorText={"La description de l'objet est trop longue"}
             />
             <Autocomplete
                 disablePortal
@@ -206,11 +124,11 @@ const OfferForm: React.FC = () => {
             <Button
                 variant="contained"
                 color="primary"
-                onClick={handleSubmit}
+                type={'submit'}
             >
                 Valider
             </Button>
-        </>
+        </form>
     );
 };
 

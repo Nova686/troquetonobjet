@@ -1,8 +1,39 @@
-import { TextField as MuiTextField, TextFieldProps } from "@mui/material";
-import {FC} from "react";
+import {TextField as MuiTextField, Typography} from '@mui/material';
+import {FC} from 'react';
+import {styled} from '@mui/system';
 
-const CustomTextField: FC<TextFieldProps> = ({...other}) => {
-    return <MuiTextField {...other} />;
+interface CustomTextFieldProps {
+    errorText?: string;
+
+    [key: string]: any;
+}
+
+const StyledTextField = styled(MuiTextField)({
+    marginBottom: '0px',
+});
+
+const TextField: FC<CustomTextFieldProps> = ({errorText, ...other}) => {
+    return (
+        <>
+            <StyledTextField
+                {...other}
+                error={!!errorText}
+            />
+
+            <Typography
+                component="p"
+                variant="body2"
+                sx={{
+                    fontSize: '0.75rem',
+                    margin: '3px 14px 0',
+                    color: '#d32f2f',
+                    visibility: !!errorText ? 'inert' : 'hidden'
+                }}
+            >
+                {errorText}
+            </Typography>
+        </>
+    );
 };
 
-export default CustomTextField;
+export default TextField;
