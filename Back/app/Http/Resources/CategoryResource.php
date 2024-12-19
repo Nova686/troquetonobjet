@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\SubCategory;
 
 class CategoryResource extends JsonResource
 {
@@ -18,6 +19,7 @@ class CategoryResource extends JsonResource
             "id"=> $this->id,
             "name"=> $this->name,
             "languageId"=> $this->language_id,
+            "subcategories"=>SubCategory::collection(SubCategory::where("category_id", $this->id)->get()),
         ];
     }
 }

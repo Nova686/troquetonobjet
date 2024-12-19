@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SubCategoryResource;
 use App\Library\Results;
+use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\Language;
 use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
@@ -30,7 +32,7 @@ class SubCategoryController extends Controller
         ]);
     }
 
-    public function post(Request $request)
+    public function create(Request $request)
     {
         $validated=$request->validate([
             "name"=>["max:255", "required", "unique:sub_categories,name"],
@@ -38,7 +40,11 @@ class SubCategoryController extends Controller
             "language_id"=>["required", "integer", "min:1", "exists:languages,id"]
         ]);
 
-        $subcategory=SubCategory::create($validated);
+        $subcategory = new SubCategory();
+        $subcategory->name=$validated["name"];
+        $subcategory->category()->associate($validated['category_id']);
+        $subcategory->language()->associate($validated['language_id']);
+        $subcategory->save();
         
         return Results::created([
             "subcategory"=>SubCategoryResource::make($subcategory),
@@ -46,8 +52,9 @@ class SubCategoryController extends Controller
     }
     public function update(Request $request, SubCategory $subcategory)
     {
+        dd($request);
         $validated=$request->validate([
-            "name"=>["max:255","required", "unique:subcategories,name"]
+            "name"=>["max:255","required", "unique:"((new SubCategory)->getTable()).",name"]
         ]);
         $subcategory->update($validated);
         return Results::ok(_body: ["subcategory"=>SubCategoryResource::make($subcategory)]);

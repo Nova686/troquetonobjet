@@ -24,7 +24,6 @@ Class LanguageTrad extends Model
     protected $fillable = [
         'name',
     ];
-    protected $table = 'categories';
 
     public function language(){
         return $this->belongsTo(Language::class);

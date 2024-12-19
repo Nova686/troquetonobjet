@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $id
  * @property string $codeISO
- * @property Category[] $category
- * @property SubCategory[] $subCategory
+ * @property Category[] $categories
+ * @property SubCategory[] $subCategories
  * @property LanguageTrad[] $languageTrad
  */
 
@@ -24,12 +24,11 @@ Class Language extends Model
     protected $fillable = [
         'codeISO',
     ];
-    protected $table = 'categories';
 
-    public function subCategory(){
+    public function subCategories(){
         return $this->hasMany(SubCategory::class);
     }
-    public function category(){
+    public function categories(){
         return $this->hasMany(Category::class);
     }
     public function languageTrad(){

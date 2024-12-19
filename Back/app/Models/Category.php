@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $name
  * @property int $language_id
- * @property SubCategory[] $subCategory
+ * @property SubCategory[] $subCategories
  * @property Language $language
  */
 class Category extends Model
@@ -22,11 +22,9 @@ class Category extends Model
      */
     protected $fillable = [
         'name',
-        'language_id',
     ];
-    protected $table = 'categories';
 
-    public function subCategory(){
+    public function subCategories(){
         return $this->hasMany(SubCategory::class);
     }
     public function language(){

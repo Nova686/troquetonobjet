@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Library\Results;
 use App\Models\Category;
+use App\Models\Language;
+use DeepCopy\f013\C;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -25,14 +28,18 @@ class CategoryController extends Controller
         return Results::ok(_body: ["categories" => CategoryResource::collection($categories)]);
     }
 
-    public function post(Request $request)
+    public function create(Request $request)
     {
         $validated=$request->validate([
-            "name"=>["max:255", "required", "unique:categories,name"],
-            "language_id"=>["exists:languages,id","integer"]
+            "name"=>["max:255", "required", "unique:"(New Category())->getTable().",name"],
+            "language_id"=>["exists:"(New Language())->getTable().",id","integer"]
         ]);
 
-        $category=Category::create($validated);
+        $category=new Category();
+        $category->name=$validated["name"];
+        $category->language()->associate(Language::find($validated["language_id"]));
+        $category->save();
+
         
         return Results::ok([
             "category"=> CategoryResource::make($category),
@@ -42,7 +49,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated=$request->validate([
-            "name"=>["max:255","required", "unique:categories,name"]
+            "name"=>["max:255","required", "unique:"(New Category())->getTable().",name"]
         ]);
         $category->update($validated);
         return Results::ok(_body: ["category"=>CategoryResource::make($category)]);
@@ -53,8 +60,8 @@ class CategoryController extends Controller
         if ($idCategory<=0){
             return Results::notFound();
         }
-        $isOkay = Category::where("id",$idCategory)->delete();
+        $isDeleted = Category::where("id",$idCategory)->delete();
 
-        return $isOkay ? Results::noContent() : Results::notFound();
+        return $isDeleted ? Results::noContent() : Results::notFound();
     }
 }
