@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserAddress\UserAddressRequest;
 use App\Library\GooglePlace\IGooglePlaceService;
 use App\Library\Results;
-use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,14 +33,17 @@ class UserAddressController extends Controller
         if($info === null)
             return Results::notFound(["message" => "'place_id' n'existe pas"]);
 
-        $info = UserAddress::create([
+        $obj = UserAddress::create([
             "longitude" => $info->longitude,
             "latitude" => $info->latitude,
             "city_name" => $validated["city_name"],
             "user_id" => Auth::user()->id
         ]);
 
-        $info->id == 0 ? Results::badRequest() : Results::ok($info);
+        return $obj->id == 0 ? Results::badRequest() : Results::created([
+            "longitude" => $info->longitude,
+            "latitude" => $info->latitude
+        ]);
     }
 
     public function delete(int $userAddressId)

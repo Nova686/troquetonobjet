@@ -39,11 +39,14 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
+        'language_id',
         'username',
+        'first_name',
+        'last_name',
         'phone',
         'is_admin',
         'email',
-        'password',
+        'password'
     ];
 
     /**
@@ -75,10 +78,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(userAddress::class);
     }
 
-    // public function language(): BelongsTo
-    // {
-    //     return $this->belongsTo(Language::class);
-    // }
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
+    }
 
     public function offers(): HasMany
     {
