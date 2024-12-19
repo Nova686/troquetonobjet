@@ -22,6 +22,8 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        //return Results::ok($request->json());
+
         $request->validate([
             'language_iso' => ["required", "exists:languages,codeISO"],
             'first_name' => ["required", "max:300"],
@@ -29,7 +31,7 @@ class RegisteredUserController extends Controller
             'phone' => ["nullable", "max:20"],
             'username' => ['required', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'min:8', Rules\Password::defaults()],
         ]);
 
         $languageId = Language::where("codeISO", $request->language_iso)
@@ -42,6 +44,7 @@ class RegisteredUserController extends Controller
             'first_name' => $request->first_name,
             'username' => $request->username,
             'email' => $request->email,
+            "phone" => $request->phone,
             'password' => Hash::make($request->password)
         ]);
 

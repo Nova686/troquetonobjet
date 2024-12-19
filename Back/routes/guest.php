@@ -46,14 +46,4 @@ Route::controller(SubCategoryController::class)->prefix("subcategory")->group(fu
     Route::put("/{subCategory}","update")
         ->whereNumber("subCategory");
 });
-
-Route::prefix('user-address')
-    ->controller(UserAddressController::class)
-    ->group(function () 
-    {
-        Route::get("", "getAll");
-        Route::post("", "store");
-        Route::delete("{userAddressId}", "delete")
-            ->whereNumber("userAddressId");
-    });
     
