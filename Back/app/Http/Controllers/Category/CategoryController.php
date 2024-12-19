@@ -23,7 +23,7 @@ class CategoryController extends Controller
 
     public function getAll(int $idLanguage)
     {
-        $categories=Category::query()->where("language_id", $idLanguage)->get();
+        $categories=Category::query()->with(["subCategories"])->where("language_id", $idLanguage)->get();
 
         return Results::ok(_body: ["categories" => CategoryResource::collection($categories)]);
     }
@@ -31,8 +31,8 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $validated=$request->validate([
-            "name"=>["max:255", "required", "unique:"(New Category())->getTable().",name"],
-            "language_id"=>["exists:"(New Language())->getTable().",id","integer"]
+            "name"=>["max:255", "required", "unique:".((new Category())->getTable()).",name"],
+            "language_id"=>["exists:".((new Language())->getTable()).",id","integer"]
         ]);
 
         $category=new Category();
@@ -49,7 +49,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated=$request->validate([
-            "name"=>["max:255","required", "unique:"(New Category())->getTable().",name"]
+            "name"=>["max:255","required", "unique:".((new Category())->getTable()).",name"]
         ]);
         $category->update($validated);
         return Results::ok(_body: ["category"=>CategoryResource::make($category)]);

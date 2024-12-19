@@ -16,7 +16,7 @@ class SubCategoryController extends Controller
     public function get(SubCategory $subCategory)
     {
         return Results::ok([
-            "subcategory"=>SubCategoryResource::collection($subCategory),
+            "subcategory"=>SubCategoryResource::make($subCategory),
         ]);
     }
 
@@ -35,9 +35,9 @@ class SubCategoryController extends Controller
     public function create(Request $request)
     {
         $validated=$request->validate([
-            "name"=>["max:255", "required", "unique:sub_categories,name"],
-            "category_id"=>["required", "integer", "min:1", "exists:categories,id"],
-            "language_id"=>["required", "integer", "min:1", "exists:languages,id"]
+            "name"=>["max:255", "required", "unique:".((new SubCategory())->getTable()).",name"],
+            "category_id"=>["required", "integer", "min:1", "exists:".((new Category())->getTable()).",id"],
+            "language_id"=>["required", "integer", "min:1", "exists:".((new Language())->getTable()).",id"]
         ]);
 
         $subcategory = new SubCategory();
@@ -52,9 +52,8 @@ class SubCategoryController extends Controller
     }
     public function update(Request $request, SubCategory $subcategory)
     {
-        dd($request);
         $validated=$request->validate([
-            "name"=>["max:255","required", "unique:"((new SubCategory)->getTable()).",name"]
+            "name"=>["max:255","required", "unique:".((new SubCategory)->getTable()).",name"]
         ]);
         $subcategory->update($validated);
         return Results::ok(_body: ["subcategory"=>SubCategoryResource::make($subcategory)]);
