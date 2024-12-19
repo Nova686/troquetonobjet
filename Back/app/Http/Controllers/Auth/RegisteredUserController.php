@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Users\UserResource;
+use App\Library\Results;
 use App\Models\User;
+use App\Models\Language;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -22,24 +23,35 @@ class RegisteredUserController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'language_iso' => ["required", "exists:languages,codeISO"],
+            'first_name' => ["required", "max:300"],
+            'last_name' => ["required", "max:300"],
+            'phone' => ["nullable", "max:20"],
+            'username' => ['required', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $languageId = Language::where("codeISO", $request->language_iso)
+            ->value("id");
+
         $user = User::create([
-            'name' => $request->name,
+            'language_id' => $languageId,
+            'phone' => $request->phone,
+            'last_name' => $request->last_name,
+            'first_name' => $request->first_name,
+            'username' => $request->username,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password)
         ]);
 
         event(new Registered($user));
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
+        return Results::created([
             'token' => $token,
-            'user' => $user
+            'username' => $user->username
         ]);
     }
 }

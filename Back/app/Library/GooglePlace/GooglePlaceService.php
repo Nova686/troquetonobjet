@@ -55,9 +55,9 @@ class GooglePlaceService implements IGooglePlaceService
             throw new Exception("env GOOGLE_MAPS_API_KEY introuvable");
 
         $response = Http::get(self::BASE_URL.self::DETAIL."key=$apiKey"."&place_id=$_placeId");
-    
-        if($response->status() != Response::HTTP_OK)
-            throw new Exception($response->body());
+
+        if($response->json("status") != "OK")
+            return null;
 
         $info = $response->json("result.geometry.location");
 
