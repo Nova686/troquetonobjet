@@ -23,6 +23,8 @@ class ConversationController extends Controller
 
     public function create(Offer $offer)
     {
+        $this->authorize('createConversation', $offer);
+
         $conversation = new Conversation();
         $conversation->buyer()->associate(Auth::user()->id);
         $conversation->seller()->associate($offer->user_id);

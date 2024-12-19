@@ -32,4 +32,13 @@ class OfferPolicy
     {
         return $user->id === $offer->user_id;
     }
+
+     /**
+     * Create a new policy instance.
+     */
+    public function createConversation(User $user, Offer $offer): bool
+    {
+        return $offer->user_id !== $user->id && $offer->is_visible &&
+            $offer->conversation()->where('seller_id', $user->id)->orWhere('buyer_id', $user->id)->count() === 0;
+    }
 }
