@@ -38,6 +38,8 @@ class ConversationController extends Controller
 
     public function hide(Conversation $conversation)
     {
+        $this->authorize('view', $conversation);
+
         if ($conversation->buyer_id === Auth::user()->id) {
             $conversation->is_closed_buyer = true;
         } else {
