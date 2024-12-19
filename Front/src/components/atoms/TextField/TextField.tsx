@@ -27,10 +27,11 @@ const TextField: FC<CustomTextFieldProps> = ({errorText, ...other}) => {
                     fontSize: '0.75rem',
                     margin: '3px 14px 0',
                     color: !!errorText ? '#d32f2f' : 'transparent',
-                    userSelect: 'none'
+                    userSelect: 'none',
+                    height: '1em'
                 }}
+                dangerouslySetInnerHTML={{ __html: errorText || '' }}
             >
-                <strong>{errorText || 'forgos'}</strong>
             </Typography>
         </>
     );

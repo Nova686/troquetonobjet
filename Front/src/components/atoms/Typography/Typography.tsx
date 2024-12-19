@@ -1,8 +1,24 @@
-import {FC} from "react";
-import { Typography as MuiTypography, TypographyProps } from "@mui/material";
+import React, { FC } from "react";
+import { Typography } from "@mui/material";
+import { styled } from "@mui/system";
 
-const CustomTypography: FC<TypographyProps> = ({...other}) => {
-    return <MuiTypography {...other} />;
+interface CustomTypographyProps {
+    type?: string;
+    [key: string]: any;
+}
+
+const CustomTypography: FC<CustomTypographyProps> = ({ type, ...other }) => {
+    const StyledTypography = styled(Typography)(() => ({
+        ...(type === "error" && {
+            backgroundColor: "red",
+            color: "white",
+            fontWeight: "bold",
+            padding: "1em",
+            borderRadius: "8px",
+        }),
+    }));
+
+    return <StyledTypography {...other} />;
 };
 
 export default CustomTypography;

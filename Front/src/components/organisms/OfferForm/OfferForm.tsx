@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
 import axiosService from "../../../services/AxiosService";
+import {AxiosError, AxiosResponse} from "axios";
 
 const OfferForm: React.FC = () => {
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
@@ -9,6 +10,9 @@ const OfferForm: React.FC = () => {
     const [category, setCategory] = useState<{ id: number; label: string } | null>(null);
     const [isDonation, setIsDonation] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
+    const [errorTitle, setErrorTitle] = useState<string>('');
+    const [errorDescription, setErrorDescription] = useState<string>('');
+    const [errors, setErrors] = useState<string>('');
 
     // Fonction pour gérer le changement de valeur du titre
     const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +75,7 @@ const OfferForm: React.FC = () => {
 
     // Fonction pour gérer le clic sur le bouton "Valider"
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-       event.preventDefault()
+        event.preventDefault()
 
         const data = {
             // "userId": 1, // TODO: Récupérer via Len
@@ -84,15 +88,39 @@ const OfferForm: React.FC = () => {
             "longitude": Math.random(), // TODO: a faire
             "latitude": Math.random(), // TODO: a faire
         };
-        console.log('Payload:', data);
-        console.log('Headers:', axiosService.defaults.headers);
-
 
         try {
-            const response = await axiosService.post('offers', data);
-            console.log(response.data);
+            const response: AxiosResponse = await axiosService.post('offers', data);
+            setErrors('');
+            setErrorTitle('');
+            setErrorDescription('');
+
+            if (response.status === 200)
+            {
+                console.log('Redirige sur la liste des offres pignouf') // TODO: redirection liste des offres
+            }
         } catch (error) {
-            console.error(error);
+            if (error instanceof AxiosError) {
+                // Accéder aux propriétés spécifiques à l'erreur Axios
+                const aError = error.response?.data.errors ?? error.message;
+
+                for (const key in aError) {
+                    switch (key) {
+                        case 'title':
+                            setErrorTitle(aError[key].join("<br />")); // TODO: revoir en flex pour Célien
+                            break;
+                        case 'description':
+                            setErrorDescription(aError[key].join("<br />")); // TODO: revoir en flex pour Célien
+                            break;
+                        default:
+                            setErrors(aError[key]);
+                            break;
+                    }
+                }
+            } else {
+                console.error('Erreur inconnue:', error);
+                setErrors('Une erreur à été retournée, veuillez-rééssayer.');
+            }
         }
     };
 
@@ -113,6 +141,7 @@ const OfferForm: React.FC = () => {
                 inputProps={{
                     maxLength: 100,
                 }}
+                errorText={errorTitle}
             />
             <TextField
                 label="Description de mon objet"
@@ -126,6 +155,7 @@ const OfferForm: React.FC = () => {
                 inputProps={{
                     maxLength: 1500,
                 }}
+                errorText={errorDescription}
             />
             <Autocomplete
                 disablePortal
@@ -163,6 +193,11 @@ const OfferForm: React.FC = () => {
             >
                 Valider
             </Button>
+            {!!errors && (
+                <Typography variant="body1" type={'error'} style={{ marginTop: '16px' }}>
+                    {errors}
+                </Typography>
+            )}
         </form>
     );
 };
