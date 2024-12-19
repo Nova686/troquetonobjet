@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import {useState, FC, ChangeEvent, FormEvent} from 'react';
 import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
 import axiosService from "../../../services/AxiosService";
 import {AxiosError, AxiosResponse} from "axios";
+import {Category, Offer} from "../../../typings/Offer";
 
-const OfferForm: React.FC = () => {
+const OfferForm: FC = () => {
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -15,27 +16,27 @@ const OfferForm: React.FC = () => {
     const [errors, setErrors] = useState<string>('');
 
     // Fonction pour gérer le changement de valeur du titre
-    const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
     };
     // Fonction pour gérer le changement de valeur de la description
-    const handleChangeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeDescription = (event: ChangeEvent<HTMLInputElement>) => {
         setDescription(event.target.value);
     };
     // Fonction pour gérer le changement de valeur de la catégorie
-    const handleChangeCategory = (event: React.ChangeEvent<{}>, newValue: { id: number; label: string } | null) => {
+    const handleChangeCategory = (event: ChangeEvent<{}>, newValue: { id: number; label: string } | null) => {
         setCategory(newValue);
     };
     // Fonction pour gérer le changement de valeur de la donation
-    const handleChangeDonation = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeDonation = (event: ChangeEvent<HTMLInputElement>) => {
         setIsDonation(event.target.checked);
     };
     // Fonction pour gérer le changement de valeur de la visibilitée
-    const handleChangeVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeVisibility = (event: ChangeEvent<HTMLInputElement>) => {
         setIsVisible(event.target.checked);
     };
 
-    const aCategory = [
+    const aCategory : Category[] = [
         {"id": 1, "label": "Bureautique"},
         {"id": 2, "label": "Électronique"},
         {"id": 3, "label": "Informatique"},
@@ -74,10 +75,10 @@ const OfferForm: React.FC = () => {
     ];
 
     // Fonction pour gérer le clic sur le bouton "Valider"
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const data = {
+        const data : Offer = {
             // "userId": 1, // TODO: Récupérer via Len
             // "categoryId": category?.id,
             "title": title,
