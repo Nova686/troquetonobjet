@@ -16,7 +16,7 @@ class ConversationController extends Controller
             ->isVisible()
             ->get();
 
-        return response()->json([
+        return Results::ok([
             'conversations' => ConversationResource::collection($conversations)
         ]);
     }
@@ -31,7 +31,7 @@ class ConversationController extends Controller
         $conversation->offer()->associate($offer->id);
         $conversation->save();
 
-        return response()->json([
+        return Results::ok([
             'conversation' => ConversationResource::make($conversation)
         ]);
     }

@@ -33,7 +33,9 @@ class Offer extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'updated_at' => 'datetime',
+        'is_visible' => 'boolean',
+        'is_donation' => 'boolean',
     ];
 
     public function user(): BelongsTo

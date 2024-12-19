@@ -24,6 +24,11 @@ use Illuminate\Support\Facades\Auth;
 class Conversation extends Model
 {
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
     public function buyer(): BelongsTo
     {
         return $this->belongsTo(User::class);
