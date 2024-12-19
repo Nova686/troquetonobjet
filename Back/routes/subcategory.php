@@ -8,7 +8,7 @@ Route::controller(SubCategoryController::class)->prefix("subcategory")->group(fu
     Route::get('/{subcategory}','get')
         ->whereNumber("subcategory");
 
-    Route::get("/", "getAll/{idLanguage}")
+    Route::get("/getall/{idLanguage}", "getAll")
     ->whereNumber("idLanguage");
 
     Route::post("/", "post");

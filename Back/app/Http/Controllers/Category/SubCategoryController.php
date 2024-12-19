@@ -23,7 +23,7 @@ class SubCategoryController extends Controller
         if($idLanguage<=0){
             return Results::notFound();
         }
-        $subcategories=SubCategory::where("idLanguage", $idLanguage)->get();
+        $subcategories=SubCategory::where("language_id", $idLanguage)->get();
 
         return Results::ok([
             "subcategories"=>SubCategoryResource::collection($subcategories)
