@@ -37,7 +37,7 @@ class CategoryController extends Controller
 
         $category=new Category();
         $category->name=$validated["name"];
-        $category->language()->associate(Language::find($validated["language_id"]));
+        $category->language()->associate($validated["language_id"]);
         $category->save();
 
         

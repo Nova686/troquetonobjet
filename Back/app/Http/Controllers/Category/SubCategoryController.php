@@ -16,7 +16,7 @@ class SubCategoryController extends Controller
     public function get(SubCategory $subCategory)
     {
         return Results::ok([
-            "subcategory"=>SubCategoryResource::make($subCategory),
+            "subCategory"=>SubCategoryResource::make($subCategory),
         ]);
     }
 
@@ -25,10 +25,10 @@ class SubCategoryController extends Controller
         if($idLanguage<=0){
             return Results::notFound();
         }
-        $subcategories=SubCategory::where("language_id", $idLanguage)->get();
+        $subCategories=SubCategory::where("language_id", $idLanguage)->get();
 
         return Results::ok([
-            "subcategories"=>SubCategoryResource::collection($subcategories)
+            "subCategories"=>SubCategoryResource::collection($subCategories)
         ]);
     }
 
@@ -40,32 +40,32 @@ class SubCategoryController extends Controller
             "language_id"=>["required", "integer", "min:1", "exists:".((new Language())->getTable()).",id"]
         ]);
 
-        $subcategory = new SubCategory();
-        $subcategory->name=$validated["name"];
-        $subcategory->category()->associate($validated['category_id']);
-        $subcategory->language()->associate($validated['language_id']);
-        $subcategory->save();
+        $subCategory = new SubCategory();
+        $subCategory->name=$validated["name"];
+        $subCategory->category()->associate($validated['category_id']);
+        $subCategory->language()->associate($validated['language_id']);
+        $subCategory->save();
         
         return Results::created([
-            "subcategory"=>SubCategoryResource::make($subcategory),
+            "subCategory"=>SubCategoryResource::make($subCategory),
         ]);
     }
-    public function update(Request $request, SubCategory $subcategory)
+    public function update(Request $request, SubCategory $subCategory)
     {
         $validated=$request->validate([
             "name"=>["max:255","required", "unique:".((new SubCategory)->getTable()).",name"]
         ]);
-        $subcategory->update($validated);
-        return Results::ok(_body: ["subcategory"=>SubCategoryResource::make($subcategory)]);
+        $subCategory->update($validated);
+        return Results::ok(_body: ["subCategory"=>SubCategoryResource::make($subCategory)]);
     }
 
-    public function delete(int $idsubcategory)
+    public function delete(int $idSubCategory)
     {
-        if($idsubcategory<= 0){
+        if($idSubCategory<= 0){
             return Results::notFound();
         }
-        $isOkay = SubCategory::where("id",$idsubcategory)->delete();
+        $isDeleted = SubCategory::where("id",$idSubCategory)->delete();
         
-        return $isOkay ? Results::noContent() : Results::notFound();
+        return $isDeleted ? Results::noContent() : Results::notFound();
     }
 }
