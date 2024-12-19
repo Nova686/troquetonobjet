@@ -3,6 +3,8 @@
 use App\Http\Controllers\ConversationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Category\SubCategoryController;
 
 Route::prefix('/')->group(function () {
     // Route for Users
