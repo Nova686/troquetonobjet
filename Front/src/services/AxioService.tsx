@@ -4,8 +4,7 @@ import Cookies from 'js-cookie';
 
 // Créez une instance Axios
 const axiosService = axios.create({
-    baseURL: `${config.API_URL}/api`,
-    timeout: 5000,
+    baseURL: config.API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -27,9 +26,9 @@ axiosService.interceptors.request.use(
 axiosService.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 && window.location.pathname !== "/auth") {
             console.error('Unauthorized, redirecting to login...');
-            window.location.href = "/auth?type=s"
+            window.location.href = "/auth?type=s";
         }
         return Promise.reject(error);
     }

@@ -1,19 +1,28 @@
 import { Container } from "@mui/material";
 import { Button, TextField, Typography } from "../../atoms";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { LoginRequestModel } from "../../../typings/Auth";
+import axiosService from "../../../services/AxioService";
 
-interface LoginFormProps {
-    formSubmitCallback: (email: string, password: string) => Promise<any>
-}
 
-const LoginForm: React.FC<LoginFormProps> = ({formSubmitCallback}) => {
+const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent)  => {
         e.preventDefault();
         
-        formSubmitCallback(email, password);
+        const data: LoginRequestModel = {
+            email: email,
+            password: password
+        }
+
+        try {
+            const response = await axiosService.post("/login", data);
+            console.log(response);
+        } catch(error) {
+            console.error(error)
+        }    
     };
 
     return (
@@ -29,7 +38,7 @@ const LoginForm: React.FC<LoginFormProps> = ({formSubmitCallback}) => {
                     margin="normal"
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     required
                 />
 
@@ -40,7 +49,7 @@ const LoginForm: React.FC<LoginFormProps> = ({formSubmitCallback}) => {
                     margin="normal"
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                     required
                 />
                 <Button

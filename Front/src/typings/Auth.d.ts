@@ -8,9 +8,3 @@ export type RegisterRequestModel = {
     email: string;
     password: string;
 }
-
-export type RegisterFormModel = {
-    name: string;
-    email: string;
-    password: string;
-}
