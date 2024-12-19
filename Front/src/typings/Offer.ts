@@ -3,7 +3,7 @@ export type Category = {
     label: string;
 }
 
-export type Offer = {
+export type OfferFormCreate = {
     title: string;
     description: string;
     is_visible: boolean;
@@ -11,4 +11,20 @@ export type Offer = {
     city_name: string;
     longitude: number;
     latitude: number;
+}
+
+export type Offer = {
+    author : {
+        id : number;
+        name : string;
+    }
+    cityName : string;
+    createdAt : string;
+    description : string;
+    id : number;
+    isDonation : boolean;
+    isUpdated : boolean;
+    latitude : number;
+    longitude : number;
+    title : string
 }

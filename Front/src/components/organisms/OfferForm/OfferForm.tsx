@@ -2,7 +2,7 @@ import {useState, FC, ChangeEvent, FormEvent} from 'react';
 import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
 import axiosService from "../../../services/AxiosService";
 import {AxiosError, AxiosResponse} from "axios";
-import {Category, Offer} from "../../../typings/Offer";
+import {Category, OfferFormCreate} from "../../../typings/Offer";
 
 const OfferForm: FC = () => {
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
@@ -78,7 +78,7 @@ const OfferForm: FC = () => {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const data : Offer = {
+        const data : OfferFormCreate = {
             // "userId": 1, // TODO: Récupérer via Len
             // "categoryId": category?.id,
             "title": title,
