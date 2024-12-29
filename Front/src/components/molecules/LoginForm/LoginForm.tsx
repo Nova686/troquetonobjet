@@ -8,6 +8,7 @@ import axiosService from "../../../services/AxioService";
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState('');
 
     const handleSubmit = async (e: React.FormEvent)  => {
         e.preventDefault();
@@ -19,9 +20,8 @@ const LoginForm: React.FC = () => {
 
         try {
             const response = await axiosService.post("/login", data);
-            console.log(response);
         } catch(error) {
-            console.error(error)
+            setErrors('Une erreur à été retournée, veuillez-rééssayer.');
         }    
     };
 
@@ -61,6 +61,11 @@ const LoginForm: React.FC = () => {
                 >
                     Se connecter
                 </Button>
+                {!!errors && (
+                    <Typography variant="body1" type={'error'} style={{ marginTop: '16px' }}>
+                        {errors}
+                    </Typography>
+                )}
             </form>
         </Container>
     )

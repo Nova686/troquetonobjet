@@ -9,7 +9,7 @@ const Authentication: React.FC = () => {
         <>
             {type === "s" && <Login />}
             {type === "r" && <Register />}
-            {(type === null || (type !== "s" && type !== "r")) && <div>Bizarre</div>}
+            {(type === null || (type !== "s" && type !== "r")) && <div>Bizarre</div>}  {/* TODO Page d'erreur */}
         </>
     )
 }
