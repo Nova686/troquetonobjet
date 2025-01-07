@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * 
+ * @property int $id
  * @property bool $is_closed_buyer
  * @property bool $is_closed_seller
  * @property User $buyer

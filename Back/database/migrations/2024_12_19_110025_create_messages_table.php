@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_id')->constrained();
+            $table->foreignId('conversation_id')->constrained();
             $table->foreignId('sender_id')->constrained('users');
             $table->text('content');
             $table->string('ip_address', 16);

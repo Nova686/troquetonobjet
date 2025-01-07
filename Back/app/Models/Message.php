@@ -14,10 +14,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $ip_address
  * @property bool $is_visible
  * @property int $sender_id
- * @property int $offer_id
+ * @property int $conversation_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $sender
+ * @property Conversation $conversation
  */
 class Message extends Model
 {
@@ -35,9 +36,9 @@ class Message extends Model
         return $this->belongsTo(User::class, 'sender_id');
     }
 
-    public function offer(): BelongsTo
+    public function conversation(): BelongsTo
     {
-        return $this->belongsTo(Offer::class);
+        return $this->belongsTo(Conversation::class);
     }
 
 

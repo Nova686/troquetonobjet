@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\Offer;
 use App\Policies\ConversationPolicy;
+use App\Policies\MessagePolicy;
 use App\Policies\OfferPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Offer::class => OfferPolicy::class,
         Conversation::class => ConversationPolicy::class,
+        Message::class => MessagePolicy::class,
     ];
 
     /**
