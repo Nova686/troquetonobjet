@@ -17,13 +17,13 @@ class MessageController extends Controller
         $this->authorize('view', $conversation);
 
         $validated = $request->validate([
-            'before_id' => ['nullable', 'int'],
-            'after_id' => ['nullable', 'int']
+            'before_id' => ['nullable', 'integer'],
+            'after_id' => ['nullable', 'integer']
         ]);
 
         $messageLimit = 50;
         $query = Message::query()
-            ->with(['sender'])
+            ->with('sender')
             ->where('conversation_id', $conversation->id);
         
         if (isset($validated['before_id'])) {
