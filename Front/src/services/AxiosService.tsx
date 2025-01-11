@@ -11,7 +11,7 @@ const axiosService = axios.create({
 
 axiosService.interceptors.request.use(
     (config) => {
-        const token = "2|7ibuw8Uf1EVFMJ4mbtHtcCe0yh5EWXYaiDG1u8YOae9e7fda";
+        const token = "22|MZYXX3bc4Lvw7yf10MxSgMOnSShUG6iRNlqjt2INe89fcf24";
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

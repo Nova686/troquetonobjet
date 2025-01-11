@@ -1,3 +1,4 @@
 import OfferForm from "./OfferForm/OfferForm";
+import Conversation from "./Conversation/Conversation";
 
-export { OfferForm };
+export { OfferForm, Conversation };
