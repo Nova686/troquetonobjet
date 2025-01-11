@@ -7,9 +7,6 @@ use App\Http\Resources\CategoryResource;
 use App\Library\Results;
 use App\Models\Category;
 use App\Models\Language;
-use DeepCopy\f013\C;
-use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller

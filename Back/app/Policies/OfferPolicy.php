@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\Conversation;
 use App\Models\Offer;
 use App\Models\User;
-use Illuminate\Http\Client\Response;
+use Illuminate\Auth\Access\Response;
 
 class OfferPolicy
 {

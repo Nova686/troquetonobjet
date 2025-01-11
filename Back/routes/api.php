@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\SubCategoryController;
+use App\Http\Controllers\FavoriteOfferController;
 
 Route::prefix('/')->group(function () {
     // Route for Users
@@ -20,9 +21,11 @@ Route::prefix('/')->group(function () {
         Route::prefix('{offer}')->group(function (): void {
             Route::put('', [OfferController::class, 'update']);
             Route::delete('', [OfferController::class, 'destroy']);
-
+            Route::post('favorite', [FavoriteOfferController::class, 'favorite']);
+            
             Route::post('conversation', [ConversationController::class, 'create']);
         });
+        Route::get('favorite', [FavoriteOfferController::class, 'get']);
     });
     
     // Route for Conversations
