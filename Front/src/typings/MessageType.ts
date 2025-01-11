@@ -4,6 +4,6 @@ export type MessageType = {
     id: number
     content: string
     sender: SimpleUserType
-    createdAt: Date
+    createdAt: string
     isUpdated: boolean
 }

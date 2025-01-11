@@ -39,12 +39,12 @@
 }
 
 .message-content-editable {
-    background-color: #228B22;
+    background-color: #ddc54a;
 }
 
 .message-timestamp {
     font-size: 0.625rem;
-    color: #e2e8f0;
+    color: darkgray;
     width: 100%;
     margin-top: 0.25rem;
     display: flex;
@@ -57,12 +57,12 @@
 
 .message-actions-wrapper {
     position: absolute;
-    bottom: -0.5rem;
-    right: 0.5rem;
+    bottom: 0rem;
+    right: 1rem;
     display: flex;
     gap: 0.25rem;
-    background-color: #228B22;
-    border: 1px solid #228B22;
+    background-color: #ddc54a;
+    border: 1px solid #ddc54a;
     border-radius: 0.375rem;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -72,12 +72,8 @@
     cursor: pointer;
 }
 
-.message-action-hover {
-    background-color: #0CC11D;
-}
-
-.message-action-text {
-    color: #e2e8f0;
+.message-action:hover {
+    background-color: #d1b529;
 }
 
 .message-action-edit {
@@ -87,7 +83,6 @@
 }
 
 .message-action-delete {
-    color: #e2e8f0;
     padding: 0.25rem;
 }
 

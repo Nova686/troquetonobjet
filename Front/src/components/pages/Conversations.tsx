@@ -25,10 +25,10 @@ const Conversations: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [fileName, setFileName] = useState<string>("");
 
-    const selectConversation = async (conversation: any) => {
+    const selectConversation = async (conversation: ConversationType) => {
         setMessages([]);
         setCurrentConversation(conversation);
-        if (!id || id !== conversation.id) {
+        if (!id || parseInt(id) !== conversation.id) {
             navigate(`/conversations/${conversation.id}`);
         }
         const messagesData = await getMessages(conversation.id);
@@ -95,25 +95,18 @@ const Conversations: React.FC = () => {
         }
     };
 
-    const timestampFormat = (date: Date) => {
+    const timestampFormat = (dateString: string) => {
+        const date = new Date(dateString);
         const today = new Date();
 
-        if (
-            date.toLocaleString("fr", { dateStyle: "short" }) ===
-            today.toLocaleString("fr", { dateStyle: "short" })
-        ) {
-            return "Aujourd'hui";
-        } else if (
-            date.toLocaleString("fr", { dateStyle: "short" }) ===
-            new Date(today.getTime() - 24 * 60 * 60 * 1000).toLocaleString("fr", {
-                dateStyle: "short",
-            })
-        ) {
-            return "Hier";
+        if (date.toLocaleString('fr', { dateStyle: 'short' }) === today.toLocaleString('fr', { dateStyle: 'short' })) {
+            return `Aujourd'hui à ${date.toLocaleString('fr', { hour12: false, hour: "2-digit", minute: "2-digit" })}`;
+        } else if (date.toLocaleString('fr', { dateStyle: 'short' }) === new Date(today.getTime() - 24 * 60 * 60 * 1000).toLocaleString('fr', { dateStyle: 'short' })) {
+            return `Hier à ${date.toLocaleString('fr', { hour12: false, hour: "2-digit", minute: "2-digit" })}`;
         } else {
-            return date.toLocaleString("fr", { hour12: false, dateStyle: "short" });
+            return date.toLocaleString('fr', { hour12: false, dateStyle: "short", timeStyle: "short" });
         }
-    };
+    }
 
     useEffect(() => {
         (async () => {
@@ -132,128 +125,130 @@ const Conversations: React.FC = () => {
 
     return (
         <div className="conversations-container">
-            <div className="conversations-header">
-                <div className="conversations-list">
-                    {conversations.map((conversation) => {
-                        return (
-                        <Conversation key={conversation.id} conversation={conversation} isSelected={false} />
-                        );
-                    })}
-                </div>
-                <div>
-                    <div className="actions-bar">???</div>
-                </div>
+            <div className="conversations-list">
+                {conversations.map((conversation) => {
+                    return (
+                        <Conversation key={conversation.id}
+                                      conversation={conversation}
+                                      isSelected={currentConversation !== null && currentConversation.id === conversation.id}
+                                      onClick={selectConversation} />
+                    );
+                })}
             </div>
             <div className="messages-container">
                 {messages && (
-                <div className="messages-wrapper">
-                    {conversations.length > 0 && currentConversation ? (
-                    <>
-                        <div onScroll={handleScroll} className="messages-scroll">
-                            {messages.map((message, i) => {
-                                return (
-                                    <div key={message.id}>
-                                        {messageBoundary.first === message.id && (
-                                            <div className="conversation-start">
-                                                <div className="conversation-title">
-                                                Bonjour ???,
+                    <div className="messages-wrapper">
+                        {conversations.length > 0 && currentConversation ? (
+                            <>
+                                <div className="message-reveicer">
+                                    { currentConversation.seller.name }
+                                </div>
+                                <div className="messages-padding">
+                                    <div onScroll={handleScroll} className="messages-scroll">
+                                        {messages.map((message, i) => {
+                                            return (
+                                                <div key={message.id}>
+                                                    {messageBoundary.first === message.id && (
+                                                        <div className="conversation-start">
+                                                            <div className="conversation-title">
+                                                            Bonjour,
+                                                            </div>
+                                                            <div className="conversation-info">
+                                                            Ceci est le début de votre conversation avec {currentConversation.buyer.name}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {(i === messages.length - 1 ||
+                                                        (i <= messages.length - 1 &&
+                                                            new Date(message.createdAt).toLocaleString("fr", {
+                                                            hour12: false,
+                                                            dateStyle: "short",
+                                                            }) !==
+                                                            new Date(messages[i + 1].createdAt).toLocaleString("fr", {
+                                                                hour12: false,
+                                                                dateStyle: "short",
+                                                            }))) && (
+                                                        <div className="date-divider">
+                                                            <div className="divider-line"></div>
+                                                            <div>{timestampFormat(message.createdAt)}</div>
+                                                            <div className="divider-line"></div>
+                                                        </div>
+                                                    )}
+                                                    <Message message={message}
+                                                            withAvatar={
+                                                                i === messages.length - 1 ||
+                                                                (i <= messages.length - 1 &&
+                                                                message.sender.id !==
+                                                                    messages[i + 1].sender.id) ||
+                                                                new Date(message.createdAt).toLocaleString("fr", {
+                                                                hour12: false,
+                                                                dateStyle: "short",
+                                                                }) !==
+                                                                new Date(messages[i + 1].createdAt).toLocaleString("fr", {
+                                                                    hour12: false,
+                                                                    dateStyle: "short",
+                                                                })
+                                                            }
+                                                            isCurrentUser={message.sender.id === userAuthId} />
                                                 </div>
-                                                <div className="conversation-info">
-                                                Ceci est le début de votre conversation avec{" "}
-                                                {currentConversation.buyer.name}
-                                                </div>
-                                            </div>
-                                        )}
-                                        {(i === messages.length - 1 ||
-                                            (i <= messages.length - 1 &&
-                                                message.createdAt.toLocaleString("fr", {
-                                                hour12: false,
-                                                dateStyle: "short",
-                                                }) !==
-                                                messages[i + 1].createdAt.toLocaleString("fr", {
-                                                    hour12: false,
-                                                    dateStyle: "short",
-                                                }))) && (
-                                            <div className="date-divider">
-                                                <div className="divider-line"></div>
-                                                <div>{timestampFormat(message.createdAt)}</div>
-                                                <div className="divider-line"></div>
-                                            </div>
-                                        )}
-                                        <Message message={message}
-                                                withAvatar={
-                                                    i === messages.length - 1 ||
-                                                    (i <= messages.length - 1 &&
-                                                    message.sender.id !==
-                                                        messages[i + 1].sender.id) ||
-                                                    message.createdAt.toLocaleString("fr", {
-                                                    hour12: false,
-                                                    dateStyle: "short",
-                                                    }) !==
-                                                    messages[i + 1].createdAt.toLocaleString("fr", {
-                                                        hour12: false,
-                                                        dateStyle: "short",
-                                                    })
-                                                }
-                                                isCurrentUser={message.sender.id === userAuthId} />
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <div className="message-input-container">
-                            {fileName &&
-                                fileInputRef.current && fileInputRef.current.files &&
-                                fileInputRef.current.files.length > 0 && (
-                                <div className="file-preview">
-                                    FaFileLines
-                                    <div className="file-name">
-                                    {fileInputRef.current.files[0].name}
+                                            );
+                                        })}
                                     </div>
                                 </div>
-                            )}
-                            <div className="input-wrapper">
-                                <div>
-                                    <input type="file"
-                                        ref={fileInputRef}
-                                        className="file-input"
-                                        id="file"
-                                        onChange={(e) => setFileName(e.target.value)} />
-                                    <label htmlFor="file">
-                                        <div className="file-button">
-                                            FaFileCirclePlus
+                                <div className="message-input-container">
+                                    {fileName &&
+                                        fileInputRef.current && fileInputRef.current.files &&
+                                        fileInputRef.current.files.length > 0 && (
+                                        <div className="file-preview">
+                                            FaFileLines
+                                            <div className="file-name">
+                                            {fileInputRef.current.files[0].name}
+                                            </div>
                                         </div>
-                                    </label>
+                                    )}
+                                    <div className="input-wrapper">
+                                        <div>
+                                            <input type="file"
+                                                ref={fileInputRef}
+                                                className="file-input"
+                                                id="file"
+                                                onChange={(e) => setFileName(e.target.value)} />
+                                            <label htmlFor="file">
+                                                <div className="file-button">
+                                                    +
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <textarea ref={messageInputRef}
+                                                autoFocus
+                                                onKeyDown={textAreaPress}
+                                                value={messageContent}
+                                                onChange={(e) => setMessageContent(e.target.value)}
+                                                className="message-input"></textarea>
+                                        <button className="send-button"
+                                                onClick={sendMessage}>
+                                            Envoyer
+                                        </button>
+                                    </div>
                                 </div>
-                                <textarea ref={messageInputRef}
-                                        autoFocus
-                                        onKeyDown={textAreaPress}
-                                        value={messageContent}
-                                        onChange={(e) => setMessageContent(e.target.value)}
-                                        className="message-input"></textarea>
-                                <button className="send-button"
-                                        onClick={sendMessage}>
-                                    IoMdSend
-                                </button>
-                            </div>
-                        </div>
-                    </>
-                    ) : (
-                    <>
-                        {pageIsLoad && (
-                        <div className="no-conversation">
-                            <div>
-                            <div className="no-conversation-title">
-                                Aucune conversation
-                            </div>
-                            <div className="no-conversation-info">
-                                Vous pouvez en obtenir dans la page de recherche
-                            </div>
-                            </div>
-                        </div>
+                            </>
+                        ) : (
+                            <>
+                                {pageIsLoad && (
+                                <div className="no-conversation">
+                                    <div>
+                                    <div className="no-conversation-title">
+                                        Aucune conversation
+                                    </div>
+                                    <div className="no-conversation-info">
+                                        Voir les offres
+                                    </div>
+                                    </div>
+                                </div>
+                                )}
+                            </>
                         )}
-                    </>
-                    )}
-                </div>
+                    </div>
                 )}
             </div>
         </div>

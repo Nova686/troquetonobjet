@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { MessageType } from "../../../typings/MessageType";
 import { deleteMessage, editMessage } from "../../../services/messages";
 import Avatar from "../../atoms/Avatar/Avatar";
-import "./Message.css";  // Import du fichier CSS
+import "./Message.css";
 
 type MessageProps = {
     message: MessageType;
@@ -15,7 +15,8 @@ export const Message: React.FC<MessageProps> = ({ message, withAvatar, isCurrent
     const [isEditable, setIsEditable] = useState<boolean>(false);
     const messageContentRef = useRef<HTMLDivElement | null>(null);
 
-    const timestampFormat = (date: Date) => {
+    const timestampFormat = (dateString: string) => {
+        const date = new Date(dateString);
         const today = new Date();
 
         if (date.toLocaleString('fr', { dateStyle: 'short' }) === today.toLocaleString('fr', { dateStyle: 'short' })) {
@@ -55,39 +56,31 @@ export const Message: React.FC<MessageProps> = ({ message, withAvatar, isCurrent
                 :
                     <div style={{ width: 48, height: 48 }}></div>
                 }
-                <div 
-                    className="message-content-wrapper" 
-                    onMouseEnter={() => setIsHover(true)} 
-                    onMouseLeave={() => setIsHover(false)}
-                >
+                <div className="message-content-wrapper" 
+                     onMouseEnter={() => setIsHover(true)} 
+                     onMouseLeave={() => setIsHover(false)}>
                     <div key={message.id} className={`message-content ${isCurrentUser ? 'message-content-current-user' : 'message-content-other-user'} ${isEditable ? 'message-content-editable' : ''}`}>
                         <div contentEditable={isEditable} className="message-content-text" onKeyDown={editMessageAction} ref={messageContentRef}>
                             {message.content}
                         </div>
-                        <div className={`message-timestamp ${isCurrentUser ? 'message-timestamp-current-user' : ''}`}>
-                            {timestampFormat(message.createdAt)}{message.isUpdated && ' - modifié'}
-                        </div>
+                    </div>
+                    <div className={`message-timestamp ${isCurrentUser ? 'message-timestamp-current-user' : ''}`}>
+                        {timestampFormat(message.createdAt)}{message.isUpdated && ' - modifié'}
                     </div>
                     {isHover && isCurrentUser &&
                         <div className="message-actions-wrapper">
                             {!isEditable ?
                                 <>
                                     <div className="message-action message-action-edit" onClick={() => setIsEditable(!isEditable)}>
-                                        Edit
-                                    </div>
-                                    <div className="message-action message-action-reply">
-                                        Reply
-                                    </div>
-                                    <div className="message-action message-action-pin">
-                                        Pin
+                                        M
                                     </div>
                                     <div className="message-action message-action-delete" onClick={deleteMessageAction}>
-                                        Delete
+                                        S
                                     </div>
                                 </>
                                 :
                                 <div className="message-action message-action-check" onClick={saveEdit}>
-                                    Save
+                                    C
                                 </div>
                             }
                         </div>
