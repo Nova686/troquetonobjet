@@ -6,10 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * 
+ * @property int $id
  * @property bool $is_closed_buyer
  * @property bool $is_closed_seller
  * @property User $buyer
@@ -42,6 +44,11 @@ class Conversation extends Model
     public function offer(): BelongsTo
     {
         return $this->belongsTo(Offer::class);
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
     }
 
     public function scopeIsVisible(Builder $query): Builder

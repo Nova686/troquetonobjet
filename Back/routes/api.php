@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\Category\CategoryController;
@@ -28,5 +29,18 @@ Route::prefix('/')->group(function () {
     Route::prefix('conversations')->group(function () {
         Route::get('', [ConversationController::class, 'getConversations']);
         Route::post('{conversation}/close', [ConversationController::class, 'hide']);
+        
+        Route::prefix('{conversation}')->group(function () {
+            Route::prefix('messages')->group(function () {
+                Route::get('', [MessageController::class, 'get']);
+                Route::post('', [MessageController::class, 'store']);
+            });
+        });
+    });
+
+    // Route for Messages
+    Route::prefix('messages')->group(function () {
+        Route::put('{message}', [MessageController::class, 'update']);
+        Route::delete('{message}', [MessageController::class, 'destroy']);
     });
 });
