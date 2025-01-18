@@ -4,11 +4,13 @@ import axiosService from "../../../services/AxiosService";
 import {Offer} from "../../../typings/Offer";
 import {OfferCard} from "../../organisms";
 import {Typography} from "../../atoms";
+import {useTheme} from "@mui/material/styles";
 
 const Offers: FC = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const theme = useTheme();
 
     const handleOffers = async () => {
         setLoading(true);
@@ -32,7 +34,7 @@ const Offers: FC = () => {
 
     return (
         <div>
-            <h1>Listing des offres</h1>
+            <h1 style={{color: theme.palette.primary.main}}>Listing des offres</h1>
 
             {loading && <p>Chargement des offres...</p>}
             {error && <p style={{color: "red"}}>{error}</p>}

@@ -6,6 +6,9 @@ import {FC} from "react";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useTheme } from '@mui/material/styles';
+import {FavoriteButton} from "../../molecules";
+import ChatIcon from '@mui/icons-material/Chat';
 
 interface OfferCardProps {
     offer: Offer;
@@ -13,13 +16,26 @@ interface OfferCardProps {
 
 const OfferCard : FC<OfferCardProps> = ({offer}) => {
 
+    const theme = useTheme();
+
     const detail = (offer : Offer) => {
         return (
-            <Typography variant={'body1'} component={'div'}>
-                <Typography variant={'h5'}>{offer.title}</Typography>
-                <Typography sx={{display: 'flex', gap: '8px'}}><CalendarMonthIcon/>{formatDate(offer.createdAt)}</Typography>
-                <Typography sx={{display: 'flex', gap: '8px'}}><LocationOnIcon/>{offer.cityName}</Typography>
-                <Typography sx={{display: 'flex', gap: '8px'}}><AccountCircleIcon/>{offer.author.name}</Typography>
+            <Typography component={'div'} style={{display: 'flex', justifyContent: "space-between"}}>
+                <Typography variant={'body1'} component={'div'}>
+                    <Typography variant={'h5'}>{offer.title}</Typography>
+                    <Typography sx={{display: 'flex', gap: '8px'}}><CalendarMonthIcon/>{formatDate(offer.createdAt)}</Typography>
+                    <Typography sx={{display: 'flex', gap: '8px'}}><LocationOnIcon/>{offer.cityName}</Typography>
+                    <Typography sx={{display: 'flex', gap: '8px'}}><AccountCircleIcon/>{offer.author.name}</Typography>
+                </Typography>
+                <Typography variant={'body1'} component={'div'} style={{
+                    backgroundColor: theme.palette.background.default, borderBottomRightRadius: '8px', paddingTop: '2px',
+                    display: "flex", justifyContent: "space-between", flexDirection: 'column'
+                }}>
+                    <FavoriteButton />
+                    <Typography component={'span'} sx={{color: theme.palette.primary.main, paddingBottom: '6px', textAlign: 'center'}}>
+                        <ChatIcon sx={{fontSize: '25px'}} />
+                    </Typography>
+                </Typography>
             </Typography>
         )
     }
