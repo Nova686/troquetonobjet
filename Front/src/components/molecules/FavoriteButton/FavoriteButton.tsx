@@ -19,14 +19,14 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ defaultFilled = false }
     return (
         <Button
             onClick={toggleFavorite}
-            sx={{ color: theme.palette.custom.favorite }}
+            sx={{ color: theme.palette.secondary.main }}
         >
             {isFilled ? (
                 // S'il est favori alors on affiche un coeur en entier
-                <FavoriteIcon sx={{ color: theme.palette.custom.favorite, fontSize: '25px'}} />
+                <FavoriteIcon sx={{ color: theme.palette.secondary.main, fontSize: '25px'}} />
             ) : (
                 // Sinon, que les bordures
-                <FavoriteBorderIcon sx={{ color: theme.palette.custom.favorite, fontSize: '25px'}} />
+                <FavoriteBorderIcon sx={{ color: theme.palette.secondary.main, fontSize: '25px'}} />
             )}
         </Button>
     );

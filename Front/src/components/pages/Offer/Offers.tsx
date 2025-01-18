@@ -5,6 +5,7 @@ import {Offer} from "../../../typings/Offer";
 import {OfferCard} from "../../organisms";
 import {Typography} from "../../atoms";
 import {useTheme} from "@mui/material/styles";
+import {CreateOfferButton} from "../../molecules";
 
 const Offers: FC = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
@@ -33,8 +34,13 @@ const Offers: FC = () => {
     }, []);
 
     return (
-        <div>
-            <h1 style={{color: theme.palette.primary.main}}>Listing des offres</h1>
+        <Typography component={'div'}>
+
+            <Typography component={'div'} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+                color={theme.palette.primary.main}>
+                <h1>Listing des offres</h1>
+                <CreateOfferButton />
+            </Typography>
 
             {loading && <p>Chargement des offres...</p>}
             {error && <p style={{color: "red"}}>{error}</p>}
@@ -47,7 +53,7 @@ const Offers: FC = () => {
                     ))}
                 </Typography>
             }
-        </div>
+        </Typography>
     );
 };
 

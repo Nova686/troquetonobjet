@@ -3,17 +3,23 @@ import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} f
 import axiosService from "../../../services/AxiosService";
 import {AxiosError, AxiosResponse} from "axios";
 import {Category, OfferFormCreate} from "../../../typings/Offer";
+import {useTheme} from "@mui/material/styles";
+import {useLocation} from "react-router-dom";
 
 const OfferForm: FC = () => {
+
+    const offer = useLocation().state?.offer;
+
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
-    const [title, setTitle] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const [title, setTitle] = useState<string>(offer.title ?? '');
+    const [description, setDescription] = useState<string>(offer.description ?? '');
     const [category, setCategory] = useState<{ id: number; label: string } | null>(null);
-    const [isDonation, setIsDonation] = useState<boolean>(false);
+    const [isDonation, setIsDonation] = useState<boolean>(offer.isDonation ?? false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [errorTitle, setErrorTitle] = useState<string>('');
     const [errorDescription, setErrorDescription] = useState<string>('');
     const [errors, setErrors] = useState<string>('');
+    const theme = useTheme();
 
     // Fonction pour gérer le changement de valeur du titre
     const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +133,7 @@ const OfferForm: FC = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <Typography variant="h4" component="h2" gutterBottom>
+            <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
                 Troquer mon objet
             </Typography>
 
@@ -143,6 +149,8 @@ const OfferForm: FC = () => {
                     maxLength: 100,
                 }}
                 errorText={errorTitle}
+                color={theme.palette.primary.main}
+                sx={{backgroundColor: theme.palette.primary.main}}
             />
             <TextField
                 label="Description de mon objet"
@@ -157,6 +165,8 @@ const OfferForm: FC = () => {
                     maxLength: 1500,
                 }}
                 errorText={errorDescription}
+                color={theme.palette.primary.main}
+                sx={{backgroundColor: theme.palette.primary.main}}
             />
             <Autocomplete
                 disablePortal
@@ -166,6 +176,8 @@ const OfferForm: FC = () => {
                 onChange={handleChangeCategory}
                 isOptionEqualToValue={(option, value) => option.id === value?.id}
                 style={{marginTop: '16px'}}
+                color={theme.palette.primary.main}
+                sx={{backgroundColor: theme.palette.primary.main}}
             />
             <FormControlLabel
                 control={
@@ -174,6 +186,7 @@ const OfferForm: FC = () => {
                         onChange={handleChangeDonation}
                     />
                 }
+                sx={{color: theme.palette.primary.main}}
                 style={{display: 'flex', userSelect: "none"}}
                 label="Voulez-vous donner votre objet ?"
             />
@@ -184,6 +197,7 @@ const OfferForm: FC = () => {
                         onChange={handleChangeVisibility}
                     />
                 }
+                sx={{color: theme.palette.primary.main}}
                 style={{display: 'flex', userSelect: "none"}}
                 label="Votre objet devra être visible ?"
             />

@@ -6,6 +6,7 @@ import Autocomplete from "./Autocomplete/Autocomplete";
 import Switch from "./Switch/Switch";
 import FormControlLabel from "./FormControlLabel/FormControlLabel";
 import CardWithPictureWithoutAction from './Cards/CardWithPictureWithoutAction'
+import Link from "./Link/Link";
 
 export {
     DebounceInput,
@@ -15,5 +16,6 @@ export {
     Autocomplete,
     Switch,
     FormControlLabel,
-    CardWithPictureWithoutAction
+    CardWithPictureWithoutAction,
+    Link
 };
