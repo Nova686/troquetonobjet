@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../config.json'
+import Cookies from 'js-cookie';
 
-// Créez une instance Axios
 const axiosService = axios.create({
     baseURL: config.API_URL,
     headers: {
@@ -11,13 +11,24 @@ const axiosService = axios.create({
 
 axiosService.interceptors.request.use(
     (config) => {
-        const token = "2|7ibuw8Uf1EVFMJ4mbtHtcCe0yh5EWXYaiDG1u8YOae9e7fda";
+        const token = Cookies.get('auth_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
     },
     (error) => {
+        return Promise.reject(error);
+    }
+);
+
+axiosService.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401 && window.location.pathname !== "/auth") {
+            console.error('Unauthorized, redirecting to login...');
+            window.location.href = "/auth?type=s";
+        }
         return Promise.reject(error);
     }
 );

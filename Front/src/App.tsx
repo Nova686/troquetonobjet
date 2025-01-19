@@ -4,6 +4,8 @@ import Layout from './components/templates/Layout/Layout';
 import OfferForm from './components/organisms/OfferForm/OfferForm';
 import Home from './components/pages/Home/Home';
 import { Authentication } from './components/pages';
+import ProtectedRoute from './components/shared/ProtectedRoute';
+import Profile from './components/pages/Profile/Profile';
 
 function App() {
   return (
@@ -13,6 +15,11 @@ function App() {
           <Route index element={<Home />} />
           <Route path='/form' element={<OfferForm />} />
           <Route path='/auth' element={<Authentication />} />
+		  <Route path='/profile' element={
+			<ProtectedRoute>
+				<Profile />
+			</ProtectedRoute>
+		  }/>
         </Route>
       </Routes>
     </BrowserRouter>

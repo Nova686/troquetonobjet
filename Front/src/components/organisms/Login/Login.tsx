@@ -1,10 +1,13 @@
-import { Link } from "react-router-dom";
 import { LoginForm } from "../../molecules"
+import { LinkButton } from "../../atoms";
+import { Box } from "@mui/material";
 
 const Login : React.FC = () => {
     return (<>
         <LoginForm />
-        <Link to="/auth?type=r"><h3>Créer un compte</h3></Link>
+		<Box display="flex" justifyContent="center">
+        	<LinkButton to="/auth?type=r" color="secondary" variant="outlined" size="small" style={{padding: '0.5rem 1rem', marginTop: '1rem', width: '25%'}}>Créer un compte</LinkButton>
+    	</Box>
     </>)
 }
 
