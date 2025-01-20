@@ -27,7 +27,7 @@ const Profile = () => {
 					</Button>
 				</>
 			) : (
-				<Navigate to="/auth?type=s" />
+				<Navigate to="/auth/login" />
 			)}
 			<ApiAuthorizationTest />
 		</div>

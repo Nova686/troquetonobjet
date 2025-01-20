@@ -1,17 +1,16 @@
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Register, Login } from "../../organisms";
 
 const Authentication: React.FC = () => {
-    const [searchParams] = useSearchParams();
-    const type = searchParams.get('type');
+	const { type } = useParams<{ type: string }>();
 
-    return (
-        <>
-            {type === "s" && <Login />}
-            {type === "r" && <Register />}
-            {(type === null || (type !== "s" && type !== "r")) && <div>Bizarre</div>}  {/* TODO Page d'erreur */}
-        </>
-    )
+	if (type === 'login') {
+		return <Login />;
+	} else if (type === 'register') {
+		return <Register />;
+	} else {
+		return <Navigate to="/auth/login" />;
+	}
 }
 
 export default Authentication;

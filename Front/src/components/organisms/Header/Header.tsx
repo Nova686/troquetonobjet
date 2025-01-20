@@ -15,9 +15,7 @@ const Header: React.FC = () => {
                 </ul>
 				{!isConnected() ?
 					<div className="header-auth-buttons">
-						<Link to="/auth?type=s"><h3>Se connecter</h3></Link>
-						<h3>/</h3>
-						<Link to="/auth?type=r"><h3>Créer un compte</h3></Link>
+						<Link to="/auth/login"><h3>Connexion</h3></Link>
 					</div>
 				:
 				

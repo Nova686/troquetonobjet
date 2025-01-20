@@ -14,7 +14,7 @@ function App() {
         <Route path='/' element={<Layout />}>
           <Route index element={<Home />} />
           <Route path='/form' element={<OfferForm />} />
-          <Route path='/auth' element={<Authentication />} />
+          <Route path='/auth/:type' element={<Authentication />} />
 		  <Route path='/profile' element={
 			<ProtectedRoute>
 				<Profile />
