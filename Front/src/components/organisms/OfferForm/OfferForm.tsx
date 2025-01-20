@@ -5,16 +5,17 @@ import {AxiosError, AxiosResponse} from "axios";
 import {Category, OfferFormCreate} from "../../../typings/Offer";
 import {useTheme} from "@mui/material/styles";
 import {useLocation} from "react-router-dom";
+import {DeleteButton} from "../../molecules";
 
 const OfferForm: FC = () => {
 
     const offer = useLocation().state?.offer;
 
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
-    const [title, setTitle] = useState<string>(offer.title ?? '');
-    const [description, setDescription] = useState<string>(offer.description ?? '');
+    const [title, setTitle] = useState<string>(offer?.title ?? '');
+    const [description, setDescription] = useState<string>(offer?.description ?? '');
     const [category, setCategory] = useState<{ id: number; label: string } | null>(null);
-    const [isDonation, setIsDonation] = useState<boolean>(offer.isDonation ?? false);
+    const [isDonation, setIsDonation] = useState<boolean>(offer?.isDonation ?? false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [errorTitle, setErrorTitle] = useState<string>('');
     const [errorDescription, setErrorDescription] = useState<string>('');
@@ -133,8 +134,10 @@ const OfferForm: FC = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
+            <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}
+                sx={{display: 'flex', justifyContent: 'space-between'}}>
                 Troquer mon objet
+                { offer && <DeleteButton url={`/offers/${offer.id}`} /> }
             </Typography>
 
             <TextField

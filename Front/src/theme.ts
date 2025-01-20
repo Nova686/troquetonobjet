@@ -1,4 +1,18 @@
-import {createTheme} from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+
+declare module '@mui/material/styles' {
+    interface Palette {
+        custom: {
+            danger: string;
+        };
+    }
+
+    interface PaletteOptions {
+        custom?: {
+            danger?: string;
+        };
+    }
+}
 
 const theme = createTheme({
     palette: {
@@ -10,6 +24,9 @@ const theme = createTheme({
         },
         background: {
             default: '#172601',
+        },
+        custom: {
+            danger: '#FF0000',
         },
     },
     typography: {

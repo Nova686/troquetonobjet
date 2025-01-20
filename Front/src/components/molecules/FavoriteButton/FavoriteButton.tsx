@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import {Button} from "../../atoms"
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // Coeur vide
 import FavoriteIcon from '@mui/icons-material/Favorite'; // Coeur plein
@@ -8,7 +8,7 @@ interface FavoriteButtonProps {
     defaultFilled?: boolean;
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({ defaultFilled = false }) => {
+const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false }) => {
     const theme = useTheme();
     const [isFilled, setIsFilled] = useState(defaultFilled);
 
