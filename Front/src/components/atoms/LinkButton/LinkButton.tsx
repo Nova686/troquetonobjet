@@ -14,18 +14,18 @@ interface LinkButtonProps extends LinkProps {
 const LinkButton: FC<LinkButtonProps> = ({
 	to,
 	children,
-	variant = 'contained',
-	color = 'primary',
-	size = 'medium',
+	variant,
+	color,
+	size,
 	...props
 }) => {
 	return (
 		<Button
 			component={Link}
 			to={to}
-			variant={variant}
-			color={color}
-			size={size}
+			variant={variant ?? 'contained'}
+			color={color ?? 'primary'}
+			size={size ?? 'medium'}
 			{...props}
 		>
 			{children}
