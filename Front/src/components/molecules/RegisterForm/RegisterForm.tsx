@@ -69,8 +69,10 @@ const RegisterForm: FC = () => {
 				const apiErrors = error.response?.data.errors ?? { general: error.message };
 				setErrors(prevErrors => ({
 					...prevErrors,
-					...apiErrors
-				}));
+					name: apiErrors.name ? apiErrors.name[0] : '',
+					email: apiErrors.email ? apiErrors.email[0] : '',
+					password: apiErrors.password ? apiErrors.password[0] : '',
+				  }));
 			} else {
 				console.error('Erreur inconnue:', error);
 				setErrors(prevErrors => ({
