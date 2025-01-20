@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box } from "@mui/material";
+import { FC } from "react";
 
-const Header: React.FC = () => {
+const Header: FC = () => {
 	const { isConnected, user } = useAuth();
 
     return (

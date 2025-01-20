@@ -1,4 +1,6 @@
-const Footer: React.FC = () => {
+import { FC } from "react";
+
+const Footer: FC = () => {
 
     return (
         <>

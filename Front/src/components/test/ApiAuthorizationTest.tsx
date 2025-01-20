@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import axiosService from "../../services/AxiosService";
 import { Button, Typography } from "../atoms"
 import { Box, CircularProgress } from "@mui/material";
 
-const ApiAuthorizationTest: React.FC = () => {
+const ApiAuthorizationTest: FC = () => {
 	const [loading, setLoading] = useState(false);
 	const [isResultSuccessful, setIsResultSuccessful] = useState<boolean>();
 

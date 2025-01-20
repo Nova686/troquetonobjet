@@ -1,7 +1,8 @@
 import { Navigate, useParams } from "react-router-dom";
 import { Register, Login } from "../../organisms";
+import { FC } from "react";
 
-const Authentication: React.FC = () => {
+const Authentication: FC = () => {
 	const { type } = useParams<{ type: string }>();
 
 	if (type === 'login') {

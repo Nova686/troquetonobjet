@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { LinkProps } from 'react-router-dom';
@@ -11,7 +11,7 @@ interface LinkButtonProps extends LinkProps {
 	size?: 'small' | 'medium' | 'large';
 }
 
-const LinkButton: React.FC<LinkButtonProps> = ({
+const LinkButton: FC<LinkButtonProps> = ({
 	to,
 	children,
 	variant = 'contained',

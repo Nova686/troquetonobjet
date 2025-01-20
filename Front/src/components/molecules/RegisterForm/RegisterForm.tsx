@@ -1,12 +1,12 @@
 import { Button, CircularProgress, Container } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { TextField, Typography } from "../../atoms";
 import { RegisterRequestModel } from "../../../typings/Auth";
 import axiosService from "../../../services/AxiosService";
 import { AxiosError } from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
-const RegisterForm: React.FC = () => {
+const RegisterForm: FC = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');

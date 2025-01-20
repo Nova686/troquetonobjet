@@ -1,8 +1,9 @@
 import { LoginForm } from "../../molecules"
 import { LinkButton } from "../../atoms";
 import { Box } from "@mui/material";
+import { FC } from "react";
 
-const Login : React.FC = () => {
+const Login : FC = () => {
     return (<>
         <LoginForm />
 		<Box display="flex" justifyContent="center">

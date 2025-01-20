@@ -1,12 +1,12 @@
 import { CircularProgress, Container } from "@mui/material";
 import { Button, TextField, Typography } from "../../atoms";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { LoginRequestModel } from "../../../typings/Auth";
 import axiosService from "../../../services/AxiosService";
 import { useAuth } from "../../../contexts/AuthContext";
 
 
-const LoginForm: React.FC = () => {
+const LoginForm: FC = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [errors, setErrors] = useState('');

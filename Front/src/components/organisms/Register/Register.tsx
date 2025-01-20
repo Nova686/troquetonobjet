@@ -1,8 +1,9 @@
 import { RegisterForm } from "../../molecules";
 import { LinkButton } from "../../atoms";
 import { Box } from "@mui/material";
+import { FC } from "react";
 
-const Register : React.FC = () => {
+const Register : FC = () => {
     return (<>
         <RegisterForm />
 		<Box display="flex" justifyContent="center">
