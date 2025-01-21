@@ -32,11 +32,6 @@ const CardWithPictureWithoutAction: FC<CustomCardProps> = ({
         flexDirection: "column",
     });
 
-    const getRandomNumber = () => {
-        const randomNumber = Math.floor(Math.random() * (1025 - 1 + 1)) + 1;
-        return randomNumber.toString().padStart(4, "0");
-    };
-
     return (
         <StyledCard {...other}>
             <CardMedia
@@ -48,9 +43,7 @@ const CardWithPictureWithoutAction: FC<CustomCardProps> = ({
                 }}
                 component="img"
                 height={pictureHeight ?? (cardSize?.height ? cardSize.height * 0.66 : undefined)}
-                image={
-                    "https://pokehelp.github.io/Image/HOME/normal/" + getRandomNumber() + ".png"
-                }
+                image={"/Images/gourde.jpeg"}
                 alt={altPicture}
             />
             <CardContent sx={{flexGrow: 1, ...cardContentStyle}}>
