@@ -2,7 +2,9 @@ import React, { useRef, useState } from "react";
 import { MessageType } from "../../../typings/MessageType";
 import { deleteMessage, editMessage } from "../../../services/messages";
 import Avatar from "../../atoms/Avatar/Avatar";
+import { FaPen, FaTrash, FaCheck } from "react-icons/fa";
 import "./Message.css";
+import { timestampFormat } from "../../../services/FormatterService";
 
 type MessageProps = {
     message: MessageType;
@@ -14,19 +16,6 @@ export const Message: React.FC<MessageProps> = ({ message, withAvatar, isCurrent
     const [isHover, setIsHover] = useState<boolean>(false);
     const [isEditable, setIsEditable] = useState<boolean>(false);
     const messageContentRef = useRef<HTMLDivElement | null>(null);
-
-    const timestampFormat = (dateString: string) => {
-        const date = new Date(dateString);
-        const today = new Date();
-
-        if (date.toLocaleString('fr', { dateStyle: 'short' }) === today.toLocaleString('fr', { dateStyle: 'short' })) {
-            return `Aujourd'hui à ${date.toLocaleString('fr', { hour12: false, hour: "2-digit", minute: "2-digit" })}`;
-        } else if (date.toLocaleString('fr', { dateStyle: 'short' }) === new Date(today.getTime() - 24 * 60 * 60 * 1000).toLocaleString('fr', { dateStyle: 'short' })) {
-            return `Hier à ${date.toLocaleString('fr', { hour12: false, hour: "2-digit", minute: "2-digit" })}`;
-        } else {
-            return date.toLocaleString('fr', { hour12: false, dateStyle: "short", timeStyle: "short" });
-        }
-    }
 
     const editMessageAction = async (e: any) => {
         if (e.keyCode === 13 && !e.shiftKey) {
@@ -72,15 +61,15 @@ export const Message: React.FC<MessageProps> = ({ message, withAvatar, isCurrent
                             {!isEditable ?
                                 <>
                                     <div className="message-action message-action-edit" onClick={() => setIsEditable(!isEditable)}>
-                                        M
+                                        <FaPen size={14} />
                                     </div>
                                     <div className="message-action message-action-delete" onClick={deleteMessageAction}>
-                                        S
+                                        <FaTrash size={14} />
                                     </div>
                                 </>
                                 :
                                 <div className="message-action message-action-check" onClick={saveEdit}>
-                                    C
+                                    <FaCheck size={14} />
                                 </div>
                             }
                         </div>

@@ -6,6 +6,9 @@ import { createMessage, getConversations, getMessages } from "../../services/mes
 import { ConversationType } from "../../typings/ConversationType";
 import { MessageType } from "../../typings/MessageType";
 import Message from "../organisms/Conversation/Message";
+import { IoMdSend } from "react-icons/io";
+import { FaFileImage } from "react-icons/fa";
+import { timestampFormat } from "../../services/FormatterService";
 
 const Conversations: React.FC = () => {
     const userAuthId = 4 // TODO: remplacer par la vrai donnée
@@ -94,19 +97,6 @@ const Conversations: React.FC = () => {
             setMessageIsLoading(false);
         }
     };
-
-    const timestampFormat = (dateString: string) => {
-        const date = new Date(dateString);
-        const today = new Date();
-
-        if (date.toLocaleString('fr', { dateStyle: 'short' }) === today.toLocaleString('fr', { dateStyle: 'short' })) {
-            return `Aujourd'hui à ${date.toLocaleString('fr', { hour12: false, hour: "2-digit", minute: "2-digit" })}`;
-        } else if (date.toLocaleString('fr', { dateStyle: 'short' }) === new Date(today.getTime() - 24 * 60 * 60 * 1000).toLocaleString('fr', { dateStyle: 'short' })) {
-            return `Hier à ${date.toLocaleString('fr', { hour12: false, hour: "2-digit", minute: "2-digit" })}`;
-        } else {
-            return date.toLocaleString('fr', { hour12: false, dateStyle: "short", timeStyle: "short" });
-        }
-    }
 
     useEffect(() => {
         (async () => {
@@ -200,9 +190,9 @@ const Conversations: React.FC = () => {
                                         fileInputRef.current && fileInputRef.current.files &&
                                         fileInputRef.current.files.length > 0 && (
                                         <div className="file-preview">
-                                            FaFileLines
+                                            <FaFileImage />
                                             <div className="file-name">
-                                            {fileInputRef.current.files[0].name}
+                                                {fileInputRef.current.files[0].name}
                                             </div>
                                         </div>
                                     )}
@@ -215,7 +205,7 @@ const Conversations: React.FC = () => {
                                                 onChange={(e) => setFileName(e.target.value)} />
                                             <label htmlFor="file">
                                                 <div className="file-button">
-                                                    +
+                                                    <FaFileImage />
                                                 </div>
                                             </label>
                                         </div>
@@ -227,7 +217,7 @@ const Conversations: React.FC = () => {
                                                 className="message-input"></textarea>
                                         <button className="send-button"
                                                 onClick={sendMessage}>
-                                            Envoyer
+                                            <IoMdSend size={20} />
                                         </button>
                                     </div>
                                 </div>
