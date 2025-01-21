@@ -1,5 +1,7 @@
+import { FC } from 'react';
 import { ConversationType } from '../../../typings/ConversationType';
 import './Conversation.css';
+import { dateFormat } from '../../../services/FormatterService';
 
 type ConversationProps = {
     conversation: ConversationType;
@@ -7,15 +9,7 @@ type ConversationProps = {
     onClick: (conversation: ConversationType) => void;
 };
 
-const Conversation: React.FC<ConversationProps> = ({ conversation, isSelected, onClick }) => {
-    const formatDate = (date: string): string => {
-        return new Date(date).toLocaleString("fr", { 
-            hour12: false, 
-            dateStyle: "short", 
-            timeStyle: "short" 
-        }).replace(' ', ' à ')
-    }
-
+const Conversation: FC<ConversationProps> = ({ conversation, isSelected, onClick }) => {
     return (
         <div className={`conversation-container ${isSelected ? "conversation-selected" : "conversation-unselected"}`}
              onClick={() => onClick(conversation)}>
@@ -24,7 +18,7 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, isSelected, o
                 {conversation.lastMessage &&
                     <div>
                         <div style={{ fontSize: '0.75rem' }}>{ conversation.lastMessage.content }</div>
-                        <div style={{ fontSize: '0.6rem' }}>Dernier message le {formatDate(conversation.lastMessage.createdAt)}</div>
+                        <div style={{ fontSize: '0.6rem' }}>Dernier message le {dateFormat(conversation.lastMessage.createdAt)}</div>
                     </div>
                 }
             </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState, FC } from "react";
 import { MessageType } from "../../../typings/MessageType";
 import { deleteMessage, editMessage } from "../../../services/messages";
 import Avatar from "../../atoms/Avatar/Avatar";
@@ -12,7 +12,7 @@ type MessageProps = {
     isCurrentUser: boolean;
 };
 
-export const Message: React.FC<MessageProps> = ({ message, withAvatar, isCurrentUser }) => {
+export const Message: FC<MessageProps> = ({ message, withAvatar, isCurrentUser }) => {
     const [isHover, setIsHover] = useState<boolean>(false);
     const [isEditable, setIsEditable] = useState<boolean>(false);
     const messageContentRef = useRef<HTMLDivElement | null>(null);

@@ -33,7 +33,7 @@ class MessageController extends Controller
             } else {
                 $query->limit($messageLimit);
             }
-            $messages = $query->get()->orderByDesc('id');
+            $messages = $query->orderByDesc('id')->get();
 
         // TODO: Corriger l'algo pour ne pas en avoir besoin
         if (isset($validated['after_id'])) {

@@ -1,17 +1,17 @@
 import "./Conversations.css";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Conversation } from "../organisms";
-import { createMessage, getConversations, getMessages } from "../../services/messages";
-import { ConversationType } from "../../typings/ConversationType";
-import { MessageType } from "../../typings/MessageType";
-import Message from "../organisms/Conversation/Message";
+import { Conversation, Message } from "../../organisms";
+import { createMessage, getConversations, getMessages } from "../../../services/messages";
+import { ConversationType } from "../../../typings/ConversationType";
+import { MessageType } from "../../../typings/MessageType";
 import { IoMdSend } from "react-icons/io";
 import { FaFileImage } from "react-icons/fa";
-import { timestampFormat } from "../../services/FormatterService";
+import { timestampFormat } from "../../../services/FormatterService";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const Conversations: React.FC = () => {
-    const userAuthId = 4 // TODO: remplacer par la vrai donnée
+    const { user } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
     const [conversations, setConversations] = useState<Array<ConversationType>>([]);
@@ -179,7 +179,7 @@ const Conversations: React.FC = () => {
                                                                     dateStyle: "short",
                                                                 })
                                                             }
-                                                            isCurrentUser={message.sender.id === userAuthId} />
+                                                            isCurrentUser={!!user && user.id === message.sender.id} />
                                                 </div>
                                             );
                                         })}
