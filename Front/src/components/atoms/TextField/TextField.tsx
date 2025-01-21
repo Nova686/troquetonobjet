@@ -1,6 +1,7 @@
-import {TextField as MuiTextField, Typography} from '@mui/material';
-import {FC} from 'react';
-import {styled} from '@mui/system';
+import { TextField as MuiTextField, Typography } from '@mui/material';
+import { FC } from 'react';
+import { styled } from '@mui/system';
+import {useTheme} from "@mui/material/styles";
 
 interface CustomTextFieldProps {
     errorText?: string;
@@ -13,11 +14,41 @@ const StyledTextField = styled(MuiTextField)({
 });
 
 const TextField: FC<CustomTextFieldProps> = ({errorText, ...other}) => {
+    const theme = useTheme();
+
     return (
         <>
             <StyledTextField
+                className={'fdp'}
                 {...other}
                 error={!!errorText}
+                sx={{
+                    bgcolor: theme.palette.custom.input, // Fond personnalisé
+                    color: 'white', // Couleur générale
+                    '& .MuiInputBase-input': {
+                        color: 'white', // Texte de l'input
+                    },
+                    '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                            borderColor: 'white', // Bordure normale
+                        },
+                        '&:hover fieldset': {
+                            borderColor: 'white', // Bordure au survol
+                        },
+                        '&.Mui-focused fieldset': {
+                            borderColor: 'white', // Bordure quand focus
+                        },
+                    },
+                    '& .MuiInputLabel-root': {
+                        color: 'white', // Couleur du label au repos
+                    },
+                    '& .MuiInputLabel-root:hover': {
+                        color: 'white', // Couleur du label au survol
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: 'white', // Couleur du label quand focus
+                    },
+                }}
             />
 
             <Typography
