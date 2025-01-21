@@ -1,14 +1,20 @@
 const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
 
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
+    // Formatage de la date
+    const formattedDate = date.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
 
-    return `Le ${day}/${month}/${year} à ${hours} h ${minutes}`;
+    // Formatage de l'heure
+    const formattedTime = date.toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    return `Le ${formattedDate} à ${formattedTime}`;
 };
 
 export default formatDate;

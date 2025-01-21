@@ -15,11 +15,11 @@ const Offers: FC = () => {
 
     const handleOffers = async () => {
         setLoading(true);
-        setError(null); // Réinitialise l'erreur avant chaque appel
 
         try {
             const response: AxiosResponse = await axiosService.get("offers");
-            setOffers(response.status === 200 ? response.data.offers : []);
+            setOffers(response.data.offers);
+            setError(null);
         } catch (err) {
             setError("Une erreur s'est produite lors du chargement des offres.");
             console.error(err);

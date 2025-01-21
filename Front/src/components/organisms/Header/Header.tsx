@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
+import { FC } from "react";
 
-const Header: React.FC = () => {
+const Header: FC = () => {
 
     return (
-        <>
-            <nav className="main-navbar">
-                <ul>
-                    <li><Link to="/"><h3>Accueil</h3></Link></li>
-                    <li><Link to="/offers"><h3>Liste des offres</h3></Link></li>
-                </ul>
-            </nav>
-        </>
+        <nav className="main-navbar">
+            <ul>
+                <li><Link to="/"><h3>Accueil</h3></Link></li>
+                <li><Link to="/offers"><h3>Liste des offres</h3></Link></li>
+            </ul>
+        </nav>
     );
 }
 

@@ -1,6 +1,11 @@
-const Home : React.FC = () => {
+import { FC } from 'react';
+import {useTheme} from "@mui/material/styles";
+
+const Home : FC = () => {
+    const theme = useTheme();
+
     return (
-        <div>Bonjour comment ça va</div>
+        <div style={{color: theme.palette.primary.main}}>Ceci est la HOME provisoire</div>
     )
 }
 

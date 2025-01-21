@@ -9,7 +9,12 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/> {/* Applique les styles par défaut de MUI */}
-            <Box sx={{minHeight: '100vh', backgroundColor: 'background.default'}}>
+            <Box sx={{
+                backgroundColor: 'background.default',
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+            }}>
                 <BrowserRouter>
                     <Routes>
                         <Route path='/' element={<Layout/>}>

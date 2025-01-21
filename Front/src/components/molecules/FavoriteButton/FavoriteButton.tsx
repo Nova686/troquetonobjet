@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, MouseEvent } from 'react';
 import {Button} from "../../atoms"
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // Coeur vide
 import FavoriteIcon from '@mui/icons-material/Favorite'; // Coeur plein
@@ -6,19 +6,22 @@ import { useTheme } from '@mui/material/styles';
 
 interface FavoriteButtonProps {
     defaultFilled?: boolean;
+    [key: string]: any;
 }
 
-const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false }) => {
+const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false, ...other }) => {
     const theme = useTheme();
     const [isFilled, setIsFilled] = useState(defaultFilled);
 
-    const toggleFavorite = () => {
+    const toggleFavorite = (e: MouseEvent) => {
+        e.stopPropagation();
         setIsFilled(!isFilled);
     };
 
     return (
         <Button
             onClick={toggleFavorite}
+            {...other}
             sx={{ color: theme.palette.secondary.main }}
         >
             {isFilled ? (

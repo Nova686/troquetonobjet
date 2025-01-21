@@ -6,6 +6,9 @@
     padding: 12px 84px;
     display: flex;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    width: 100%;
 }
 
 .main-navbar h3,
@@ -28,7 +31,7 @@
 .main-footer {
     width: 100%;
     text-align: center;
-    margin-top: 16px;
+    margin-top: auto;
     border-top: #242424 1px solid;
     background-color: #e0e0e0;
     grid-area: footer;
