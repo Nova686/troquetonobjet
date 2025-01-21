@@ -2,9 +2,10 @@
 
 namespace App\Policies;
 
+use App\Models\Conversation;
 use App\Models\Offer;
 use App\Models\User;
-use Illuminate\Http\Client\Response;
+use Illuminate\Auth\Access\Response;
 
 class OfferPolicy
 {
@@ -31,5 +32,19 @@ class OfferPolicy
     public function delete(User $user, Offer $offer): bool
     {
         return $user->id === $offer->user_id;
+    }
+
+     /**
+     * Create a new policy instance.
+     */
+    public function createConversation(User $user, Offer $offer): bool
+    {
+        return $offer->user_id !== $user->id && $offer->is_visible &&
+            Conversation::query()
+                ->where('offer_id', $offer->id)
+                ->where(function ($q) use ($user) {
+                    $q->where('seller_id', $user->id)
+                    ->orWhere('buyer_id', $user->id);
+                })->count() === 0;
     }
 }

@@ -85,7 +85,7 @@ const OfferForm: FC = () => {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const data : OfferFormCreate = {
+        const data : Offer = {
             // "userId": 1, // TODO: Récupérer via Len
             // "categoryId": category?.id,
             "title": title,
@@ -134,10 +134,8 @@ const OfferForm: FC = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}
-                sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Typography variant="h4" component="h2" gutterBottom>
                 Troquer mon objet
-                { offer && <DeleteButton url={`/offers/${offer.id}`} /> }
             </Typography>
 
             <TextField
@@ -152,8 +150,6 @@ const OfferForm: FC = () => {
                     maxLength: 100,
                 }}
                 errorText={errorTitle}
-                color={theme.palette.primary.main}
-                sx={{backgroundColor: theme.palette.primary.main}}
             />
             <TextField
                 label="Description de mon objet"
@@ -168,8 +164,6 @@ const OfferForm: FC = () => {
                     maxLength: 1500,
                 }}
                 errorText={errorDescription}
-                color={theme.palette.primary.main}
-                sx={{backgroundColor: theme.palette.primary.main}}
             />
             <Autocomplete
                 disablePortal
@@ -179,8 +173,6 @@ const OfferForm: FC = () => {
                 onChange={handleChangeCategory}
                 isOptionEqualToValue={(option, value) => option.id === value?.id}
                 style={{marginTop: '16px'}}
-                color={theme.palette.primary.main}
-                sx={{backgroundColor: theme.palette.primary.main}}
             />
             <FormControlLabel
                 control={
@@ -189,7 +181,6 @@ const OfferForm: FC = () => {
                         onChange={handleChangeDonation}
                     />
                 }
-                sx={{color: theme.palette.primary.main}}
                 style={{display: 'flex', userSelect: "none"}}
                 label="Voulez-vous donner votre objet ?"
             />
@@ -200,7 +191,6 @@ const OfferForm: FC = () => {
                         onChange={handleChangeVisibility}
                     />
                 }
-                sx={{color: theme.palette.primary.main}}
                 style={{display: 'flex', userSelect: "none"}}
                 label="Votre objet devra être visible ?"
             />

@@ -1,6 +1,6 @@
-import {TextField as MuiTextField, Typography} from '@mui/material';
-import {FC} from 'react';
-import {styled} from '@mui/system';
+import { TextField as MuiTextField, Typography } from '@mui/material';
+import { FC } from 'react';
+import { styled } from '@mui/system';
 
 interface CustomTextFieldProps {
     errorText?: string;
