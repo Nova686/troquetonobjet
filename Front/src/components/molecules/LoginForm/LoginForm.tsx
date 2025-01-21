@@ -4,6 +4,8 @@ import { ChangeEvent, FC, useState } from "react";
 import { LoginRequestModel } from "../../../typings/Auth";
 import axiosService from "../../../services/AxiosService";
 import { useAuth } from "../../../contexts/AuthContext";
+import theme from "../../../theme";
+import {useTheme} from "@mui/material/styles";
 
 
 const LoginForm: FC = () => {
@@ -12,6 +14,7 @@ const LoginForm: FC = () => {
 	const [errors, setErrors] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { login } = useAuth();
+	const theme = useTheme();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -40,7 +43,7 @@ const LoginForm: FC = () => {
 
 	return (
 		<Container maxWidth="sm" style={{ marginTop: '50px' }}>
-			<Typography variant="h5" gutterBottom>
+			<Typography variant="h5" gutterBottom sx={{color: theme.palette.primary.main}}>
 				Connexion
 			</Typography>
 			<form onSubmit={handleSubmit}>
@@ -72,7 +75,7 @@ const LoginForm: FC = () => {
 					color="primary"
 					type="submit"
 					fullWidth
-					style={{ marginTop: '20px' }}
+					sx={{ marginTop: '20px' }}
 					disabled={loading}
 				>
 					{loading ? <CircularProgress size={24} color="inherit" /> : 'Se connecter'}

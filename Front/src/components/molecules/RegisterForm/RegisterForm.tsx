@@ -5,6 +5,7 @@ import { RegisterRequestModel } from "../../../typings/Auth";
 import axiosService from "../../../services/AxiosService";
 import axios, { AxiosError } from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
+import {useTheme} from "@mui/material/styles";
 
 const RegisterForm: FC = () => {
 	const [name, setName] = useState('');
@@ -20,6 +21,7 @@ const RegisterForm: FC = () => {
 	});
 	const [loading, setLoading] = useState(false);
 	const { login } = useAuth();
+	const theme = useTheme();
 
 	const validateForm = (): boolean => {
 		return validatePassword() && validateConfirmPassword();
@@ -95,7 +97,7 @@ const RegisterForm: FC = () => {
 
 	return (
 		<Container maxWidth="sm" style={{ marginTop: '50px' }}>
-			<Typography variant="h5" gutterBottom>
+			<Typography variant="h5" gutterBottom sx={{ color: theme.palette.primary.main }}>
 				Créer mon compte
 			</Typography>
 			<form onSubmit={handleSubmit}>
@@ -152,7 +154,7 @@ const RegisterForm: FC = () => {
 					color="primary"
 					type="submit"
 					fullWidth
-					style={{ marginTop: '20px' }}
+					sx={{ marginTop: '20px' }}
 					disabled={loading}
 				>
 					{loading ? <CircularProgress size={24} color="inherit" /> : 'Se connecter'}

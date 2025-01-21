@@ -1,19 +1,27 @@
 import {useState, FC, ChangeEvent, FormEvent} from 'react';
 import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
+import axiosService from "../../../services/AxiosService";
 import {AxiosError, AxiosResponse} from "axios";
-import {Category, Offer} from "../../../typings/Offer";
-import axiosService from '../../../services/AxiosService';
+import {Category, OfferFormCreate} from "../../../typings/Offer";
+import {useTheme} from "@mui/material/styles";
+import {useLocation} from "react-router-dom";
+import {useAuth} from "../../../contexts/AuthContext";
 
 const OfferForm: FC = () => {
+
+    const offer = useLocation().state?.offer;
+
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
-    const [title, setTitle] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const [title, setTitle] = useState<string>(offer?.title ?? '');
+    const [description, setDescription] = useState<string>(offer?.description ?? '');
     const [category, setCategory] = useState<{ id: number; label: string } | null>(null);
-    const [isDonation, setIsDonation] = useState<boolean>(false);
+    const [isDonation, setIsDonation] = useState<boolean>(offer?.isDonation ?? false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [errorTitle, setErrorTitle] = useState<string>('');
     const [errorDescription, setErrorDescription] = useState<string>('');
     const [errors, setErrors] = useState<string>('');
+    const theme = useTheme();
+    const { user } = useAuth();
 
     // Fonction pour gérer le changement de valeur du titre
     const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
@@ -78,8 +86,8 @@ const OfferForm: FC = () => {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const data : Offer = {
-            // "userId": 1, // TODO: Récupérer via Len
+        const data : OfferFormCreate = {
+            "userId": user?.id, // TODO: Récupérer via Len
             // "categoryId": category?.id,
             "title": title,
             "description": description,
@@ -127,78 +135,78 @@ const OfferForm: FC = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <Typography variant="h4" component="h2" gutterBottom>
-                Troquer mon objet
-            </Typography>
+             <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
+                 Troquer mon objet
+             </Typography>
 
-            <TextField
-                label="Titre de mon objet"
-                variant="outlined"
-                fullWidth
-                value={title}
-                onChange={handleChangeTitle}
-                margin="normal"
-                required={true}
-                inputProps={{
-                    maxLength: 100,
-                }}
-                errorText={errorTitle}
-            />
-            <TextField
-                label="Description de mon objet"
-                variant="outlined"
-                fullWidth
-                multiline
-                value={description}
-                onChange={handleChangeDescription}
-                margin="normal"
-                required={true}
-                inputProps={{
-                    maxLength: 1500,
-                }}
-                errorText={errorDescription}
-            />
-            <Autocomplete
-                disablePortal
-                options={aCategory}
-                renderInput={(params) => <TextField {...params} label="Choix d'une catégorie"/>}
-                value={category}
-                onChange={handleChangeCategory}
-                isOptionEqualToValue={(option, value) => option.id === value?.id}
-                style={{marginTop: '16px'}}
-            />
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={isDonation}
-                        onChange={handleChangeDonation}
-                    />
-                }
-                style={{display: 'flex', userSelect: "none"}}
-                label="Voulez-vous donner votre objet ?"
-            />
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={isVisible}
-                        onChange={handleChangeVisibility}
-                    />
-                }
-                style={{display: 'flex', userSelect: "none"}}
-                label="Votre objet devra être visible ?"
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                type={'submit'}
-            >
-                Valider
-            </Button>
-            {!!errors && (
-                <Typography variant="body1" type={'error'} style={{ marginTop: '16px' }}>
-                    {errors}
-                </Typography>
-            )}
+             <TextField
+                 label="Titre de mon objet"
+                 variant="outlined"
+                 fullWidth
+                 value={title}
+                 onChange={handleChangeTitle}
+                 margin="normal"
+                 required={true}
+                 inputProps={{
+                     maxLength: 100,
+                 }}
+                 errorText={errorTitle}
+             />
+             <TextField
+                 label="Description de mon objet"
+                 variant="outlined"
+                 fullWidth
+                 multiline
+                 value={description}
+                 onChange={handleChangeDescription}
+                 margin="normal"
+                 required={true}
+                 inputProps={{
+                     maxLength: 1500,
+                 }}
+                 errorText={errorDescription}
+             />
+             <Autocomplete
+                 disablePortal
+                 options={aCategory}
+                 renderInput={(params) => <TextField {...params} label="Choix d'une catégorie"/>}
+                 value={category}
+                 onChange={handleChangeCategory}
+                 isOptionEqualToValue={(option, value) => option.id === value?.id}
+                 style={{marginTop: '16px'}}
+             />
+             <FormControlLabel
+                 control={
+                     <Switch
+                         checked={isDonation}
+                         onChange={handleChangeDonation}
+                     />
+                 }
+                 sx={{display: 'flex', userSelect: "none", color: theme.palette.primary.main}}
+                 label="Voulez-vous donner votre objet ?"
+             />
+             <FormControlLabel
+                 control={
+                     <Switch
+                         checked={isVisible}
+                         onChange={handleChangeVisibility}
+                     />
+                 }
+                 sx={{display: 'flex', userSelect: "none", color: theme.palette.primary.main}}
+                 label="Votre objet devra être visible ?"
+             />
+             <Button
+                 variant="contained"
+                 color="primary"
+                 type={'submit'}
+             >
+                 Valider
+             </Button>
+             {!!errors && (
+                 <Typography variant="body1" type={'error'} style={{ marginTop: '16px' }}>
+                     {errors}
+                 </Typography>
+             )}
         </form>
     );
 };
