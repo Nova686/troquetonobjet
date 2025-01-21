@@ -1,8 +1,8 @@
 import {useState, FC, ChangeEvent, FormEvent} from 'react';
 import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
-import axiosService from "../../../services/AxiosService";
 import {AxiosError, AxiosResponse} from "axios";
 import {Category, Offer} from "../../../typings/Offer";
+import axiosService from '../../../services/AxiosService';
 
 const OfferForm: FC = () => {
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
