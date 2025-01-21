@@ -6,12 +6,14 @@ import {OfferCard} from "../../organisms";
 import {Typography} from "../../atoms";
 import {useTheme} from "@mui/material/styles";
 import {CreateOfferButton} from "../../molecules";
+import {useAuth} from "../../../contexts/AuthContext";
 
 const Offers: FC = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const theme = useTheme();
+    const { isConnected } = useAuth();
 
     const handleOffers = async () => {
         setLoading(true);
@@ -39,7 +41,7 @@ const Offers: FC = () => {
             <Typography component={'div'} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
                 color={theme.palette.primary.main}>
                 <h1>Listing des offres</h1>
-                <CreateOfferButton />
+                {isConnected() && <CreateOfferButton/>}
             </Typography>
 
             {loading && <p>Chargement des offres...</p>}

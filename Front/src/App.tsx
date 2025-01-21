@@ -22,13 +22,17 @@ function App() {
                         <Route path='/' element={<Layout/>}>
                             <Route index element={<Home/>}/>
                             <Route path='/auth/:type' element={<Authentication/>}/>
-                            <Route path='/offers/form' element={<CreateOffer/>}/>
                             <Route path='/offers' element={<Offers/>}/>
                             <Route path='/profile' element={
                                 <ProtectedRoute>
                                     <Profile/>
                                 </ProtectedRoute>
                             }/>
+                            <Route path='/offers/form' element={
+                                <ProtectedRoute>
+                                    <CreateOffer/>
+                                </ProtectedRoute>
+                                }/>
                         </Route>
                     </Routes>
                 </BrowserRouter>

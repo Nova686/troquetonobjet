@@ -11,6 +11,7 @@ export type OfferFormCreate = {
     city_name: string;
     longitude: number;
     latitude: number;
+    userId?: number;
 }
 
 export type Offer = {

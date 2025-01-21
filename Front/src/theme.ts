@@ -4,12 +4,14 @@ declare module '@mui/material/styles' {
     interface Palette {
         custom: {
             danger: string;
+            input: string;
         };
     }
 
     interface PaletteOptions {
         custom?: {
             danger?: string;
+            input?: string;
         };
     }
 }
@@ -27,6 +29,7 @@ const theme = createTheme({
         },
         custom: {
             danger: '#FF0000',
+            input: '#747D67',
         },
     },
     typography: {
