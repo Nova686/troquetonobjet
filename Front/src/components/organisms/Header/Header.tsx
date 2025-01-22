@@ -8,7 +8,7 @@ const Header: FC = () => {
 	const { isConnected, user } = useAuth();
 
     return (
-        <nav className="main-navbar" style={{ zIndex: 99 }}>
+        <nav className="main-navbar">
             <ul>
                 <li><Link to="/"><h3>Accueil</h3></Link></li>
                 <li><Link to="/offers"><h3>Liste des offres</h3></Link></li>
