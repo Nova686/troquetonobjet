@@ -5,14 +5,14 @@ namespace Database\Seeders;
 use App\Models\Language;
 use Illuminate\Database\Seeder;
 
-class insert_into_language extends Seeder
+class InsertIntoLanguage extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $liste = [
+        $languages = [
             ["id" => 1, "codeISO" => "fr"],
             ["id" => 2, "codeISO" => "en"],
             ["id" => 3, "codeISO" => "it"],
@@ -20,7 +20,7 @@ class insert_into_language extends Seeder
             ["id" => 5, "codeISO" => "de"]
         ];
 
-        foreach ($liste as $element) 
+        foreach ($languages as $element) 
         {
             Language::create($element);
         }

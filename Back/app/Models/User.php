@@ -27,7 +27,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property Carbon $deleted_at
  * 
  * @property Language $language
- * @property UserAddress[] $userAddress
+ * @property UserAddress[] $userAddresses
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -73,7 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'deleted_at' => 'datetime'  
     ];
 
-    public function userAddress(): HasMany
+    public function userAddresses(): HasMany
     {
         return $this->hasMany(userAddress::class);
     }
