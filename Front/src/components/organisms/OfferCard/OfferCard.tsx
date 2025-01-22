@@ -47,7 +47,7 @@ const OfferCard: FC<OfferCardProps> = ({offer}) => {
     return (
         <CardWithPictureWithoutAction
             sx={{backgroundColor: theme.palette.primary.main, padding: '4px', borderRadius: '8px', cursor: 'pointer'}}
-            cardSize={{width: 300, height: 500}} pictureHeight={385} cardContentStyle={{padding: '0'}}
+            cardSize={{height: 500}} pictureHeight={385} cardContentStyle={{padding: '0'}}
             title={detail(offer)} pictureStyle={{borderRadius: '8px', borderBottomRightRadius: '0'}}
             onClick={() => handleClick(offer)}
         />
