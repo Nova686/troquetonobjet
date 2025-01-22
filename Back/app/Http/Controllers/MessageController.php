@@ -25,18 +25,30 @@ class MessageController extends Controller
         $query = Message::query()
             ->with('sender')
             ->where('conversation_id', $conversation->id);
-        
-        if (isset($validated['before_id'])) {
-            $query->forPageBeforeId($messageLimit, $validated['before_id']);
-        } else if (isset($validated['after_id'])) {
-            $query->forPageAfterId($messageLimit, $validated['after_id']);
-        } else {
-            $query->limit($messageLimit);
+            
+            if (isset($validated['before_id'])) {
+                $query->forPageBeforeId($messageLimit, $validated['before_id']);
+            } else if (isset($validated['after_id'])) {
+                $query->forPageAfterId($messageLimit, $validated['after_id']);
+            } else {
+                $query->limit($messageLimit);
+            }
+            $messages = $query->orderByDesc('id')->get();
+
+        // TODO: Corriger l'algo pour ne pas en avoir besoin
+        if (isset($validated['after_id'])) {
+            $messages = $messages->reverse();
         }
-        $messages = $query->get();
+
+        $messageBoundary = Message::query()
+            ->selectRaw('MIN(id) as min_id, MAX(id) as max_id')
+            ->where('conversation_id', $conversation->id)
+            ->first();
 
         return Results::ok([
-            'messages' => MessageResource::collection($messages)
+            'messages' => MessageResource::collection($messages),
+            'firstMessageId' => $messageBoundary->min_id,
+            'lastMessageId' => $messageBoundary->max_id,
         ]);
     }
 

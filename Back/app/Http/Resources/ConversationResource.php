@@ -19,6 +19,12 @@ class ConversationResource extends JsonResource
             'id' => $this->id,
             'buyer' => UserResource::make($this->buyer),
             'seller' => UserResource::make($this->seller),
+            'lastMessage' => $this->when($this->message_created_at, function () {
+                return [
+                    'content' => $this->message_content,
+                    'createdAt' => $this->message_created_at
+                ];
+            }, null)
         ];
     }
 }

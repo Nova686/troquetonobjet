@@ -32,14 +32,22 @@
     width: 100%;
     text-align: center;
     margin-top: auto;
-    border-top: #242424 1px solid;
-    background-color: #e0e0e0;
     grid-area: footer;
 }
 
-.main-footer span {
-    display: block;
-    padding: 8px;
+.footer-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 32px 0;
+    color: white;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.footer-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
 }
 
 .header-auth-buttons {
