@@ -28,16 +28,13 @@ function App() {
                                     <Profile/>
                                 </ProtectedRoute>
                             }/>
-                            <Route path='/offers/form' element={
-                                <ProtectedRoute>
-                                    <CreateOffer/>
-                                </ProtectedRoute>
-                                }/>
                             <Route path='/conversations/:id?' element={
                                 <ProtectedRoute>
-                                    <Conversations />
+                                    <Conversations/>
                                 </ProtectedRoute>
-                                } />
+                            }/>
+
+                            <Route path='/offers/form' element={<CreateOffer/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>
