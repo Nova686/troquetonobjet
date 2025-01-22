@@ -1,0 +1,136 @@
+/* Styles globaux */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  /* En-tête */
+  header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+  }
+  
+  /* Conteneur principal */
+  .profile-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  /* Carte de profil */
+  .profile-card {
+    display: flex;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .profile-avatar img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-right: 1.5rem;
+  }
+  
+  .profile-info h2 {
+    margin-bottom: 0.5rem;
+    color: #4CAF50;
+  }
+  
+  .profile-info p {
+    margin-bottom: 0.3rem;
+  }
+  
+  .edit-btn {
+    margin-top: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .edit-btn:hover {
+    background-color: #45a049;
+  }
+  
+  /* Historique des annonces */
+  .history-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .history-container h3 {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .ad-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .ad-card img {
+    border-radius: 8px;
+    margin-right: 1rem;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .ad-info h4 {
+    color: #4CAF50;
+    margin-bottom: 0.3rem;
+  }
+  
+  .ad-info span {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .view-more {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display: block;
+    margin: 1rem auto;
+    border-radius: 4px;
+  }
+  
+  .view-more:hover {
+    background-color: #45a049;
+  }
+  
+  /* Pied de page */
+  footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #333;
+    color: white;
+    margin-top: 2rem;
+  }
+  
