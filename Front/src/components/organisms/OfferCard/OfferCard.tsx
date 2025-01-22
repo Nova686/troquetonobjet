@@ -1,6 +1,5 @@
 import {CardWithPictureWithoutAction} from "../../atoms";
 import {Typography} from "@mui/material";
-import formatDate from "../../../utils/dateHelper";
 import {Offer} from "../../../typings/Offer";
 import {FC} from "react";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -8,8 +7,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useTheme} from '@mui/material/styles';
 import {ChatButton, FavoriteButton} from "../../molecules";
-import {OfferForm} from "../index";
 import {useNavigate} from "react-router-dom";
+import { dateFormat } from "../../../services/FormatterService";
 
 interface OfferCardProps {
     offer: Offer;
@@ -29,7 +28,7 @@ const OfferCard: FC<OfferCardProps> = ({offer}) => {
             <Typography component={'div'} style={{display: 'flex', justifyContent: "space-between"}}>
                 <Typography variant={'body1'} component={'div'}>
                     <Typography variant={'h5'}>{offer.title}</Typography>
-                    <Typography sx={{display: 'flex', gap: '8px'}}><CalendarMonthIcon/>{formatDate(offer.createdAt)}
+                    <Typography sx={{display: 'flex', gap: '8px'}}><CalendarMonthIcon/>Le {dateFormat(offer.createdAt)}
                     </Typography>
                     <Typography sx={{display: 'flex', gap: '8px'}}><LocationOnIcon/>{offer.cityName}</Typography>
                     <Typography sx={{display: 'flex', gap: '8px'}}><AccountCircleIcon/>{offer.author.name}</Typography>

@@ -12,6 +12,7 @@ const Header: FC = () => {
             <ul>
                 <li><Link to="/"><h3>Accueil</h3></Link></li>
                 <li><Link to="/offers"><h3>Liste des offres</h3></Link></li>
+                <li><Link to="/conversations"><h3>Messages</h3></Link></li>
             </ul>
             {!isConnected() ?
                 <div className="header-auth-buttons">

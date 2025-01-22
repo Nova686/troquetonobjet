@@ -44,7 +44,7 @@ const Offers: FC = () => {
                 {isConnected() && <CreateOfferButton/>}
             </Typography>
 
-            {loading && <p>Chargement des offres...</p>}
+            {loading && <p style={{color: "white"}}>Chargement des offres...</p>}
             {error && <p style={{color: "red"}}>{error}</p>}
 
             {
