@@ -154,10 +154,10 @@ const RegisterForm: FC = () => {
 					color="primary"
 					type="submit"
 					fullWidth
-					sx={{ marginTop: '20px' }}
+					sx={{ marginTop: '20px', textTransform: 'none' }}
 					disabled={loading}
 				>
-					{loading ? <CircularProgress size={24} color="inherit" /> : 'Se connecter'}
+					{loading ? <CircularProgress size={24} color="inherit" /> : 'Crée ton compte'}
 				</Button>
 				{errors.general && (
 					<Typography variant="body1" style={{ marginTop: '16px', color: 'red' }}>
