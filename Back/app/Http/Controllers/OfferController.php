@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\Pagination;
 use App\Http\Requests\Offers\CreateOfferRequest;
 use App\Http\Requests\Offers\EditOfferRequest;
+use App\Http\Requests\PaginationRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
 use App\Library\Results;
@@ -25,20 +26,13 @@ class OfferController extends Controller
         ]);
     }
 
-    public function getOffers(Request $_request)
+    public function getOffers(PaginationRequest $request)
     {
-        $page = $_request->query->getInt("page", 1);
-        $nbPerPage = $_request->query->getInt("nbPerPage", 20);
+        $data = $request->validated();
 
-        if($nbPerPage <= 0)
-            $nbPerPage = 20;
+        $query = Offer::baseQuery(isVisible: true);
 
-        if($page <= 0)
-            $page = 1;
-
-        $query = Offer::BaseQuery(isVisible: true);
-
-        return Results::ok(Pagination::paginate($query, $page, $nbPerPage));
+        return Results::ok(Pagination::paginate($query, $data));
     }
 
     public function store(CreateOfferRequest $request)

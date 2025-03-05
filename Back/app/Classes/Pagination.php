@@ -9,19 +9,19 @@ class Pagination
     /**
      * @return PaginationExport
      */
-    public static function paginate($query, int $page, int $nbPerPage)
+    public static function paginate($query, $data)
     {
         $total = $query->count();
 
-        $list = $query->skip(($page - 1) * $nbPerPage)
-            ->take($nbPerPage)
+        $list = $query->skip(($data["page"] - 1) * $data["nb_per_page"])
+            ->take($data["nb_per_page"])
             ->get()
             ->toArray();
 
         return new PaginationExport(
             $list,
-            $page,
-            $nbPerPage,
+            $data["page"],
+            $data["nb_per_page"],
             $total
         );
     }
