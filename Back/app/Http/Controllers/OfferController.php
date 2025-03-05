@@ -32,7 +32,10 @@ class OfferController extends Controller
 
         $query = Offer::baseQuery(isVisible: true);
 
-        return Results::ok(Pagination::paginate($query, $data));
+        $p = Pagination::paginate($query, $data);
+        $p->list = OfferResource::collection($p->list);
+
+        return Results::ok($p);
     }
 
     public function store(CreateOfferRequest $request)
@@ -57,9 +60,12 @@ class OfferController extends Controller
 
     public function get(int $id)
     {
-        $result = Offer::baseQuery($id, true)->first();
+        $result = Offer::baseQuery($id)->first();
 
-        return $result !== null ? Results::ok($result) : Results::notFound();
+        if($result !== null)
+            return Results::ok(OfferResource::make($result));
+
+        return Results::notFound();
     }
 
     public function update(EditOfferRequest $request, Offer $offer)
