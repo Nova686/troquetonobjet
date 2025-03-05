@@ -1,38 +1,50 @@
-import React, {useEffect, useRef, useState} from 'react';
-import config from "../../../config.json";
-import {GoogleMap, LoadScript} from "@react-google-maps/api";
-import {DebounceInput, Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
-import axios from "axios";
-import GoogleMapAutocomplete from "../../molecules/GoogleMapAutocomplete/GoogleMapAutocomplete";
+import {useState, FC, ChangeEvent, FormEvent} from 'react';
+import {Typography, TextField, Button, Autocomplete, Switch, FormControlLabel} from "../../atoms";
+import axiosService from "../../../services/AxiosService";
+import {AxiosError, AxiosResponse} from "axios";
+import {Category, OfferFormCreate} from "../../../typings/Offer";
+import {useTheme} from "@mui/material/styles";
+import {useLocation} from "react-router-dom";
+import {useAuth} from "../../../contexts/AuthContext";
 
-const OfferForm: React.FC = () => {
+const OfferForm: FC = () => {
+
+    const offer = useLocation().state?.offer;
+
     // Utilisation du hook d'état pour gérer la valeur des champs du formulaire
-    const [title, setTitle] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const [title, setTitle] = useState<string>(offer?.title ?? '');
+    const [description, setDescription] = useState<string>(offer?.description ?? '');
     const [category, setCategory] = useState<{ id: number; label: string } | null>(null);
-    const [isDonation, setIsDonation] = useState<boolean>(false);
-    const [country, setCountry] = useState<string>('');
-    const [longitude, setLongitude] = useState<number>(2.3522);
-    const [latitude, setLatitude] = useState<number>(48.8566);
+    const [isDonation, setIsDonation] = useState<boolean>(offer?.isDonation ?? false);
+    const [isVisible, setIsVisible] = useState<boolean>(true);
+    const [errorTitle, setErrorTitle] = useState<string>('');
+    const [errorDescription, setErrorDescription] = useState<string>('');
+    const [errors, setErrors] = useState<string>('');
+    const theme = useTheme();
+    const { user } = useAuth();
 
     // Fonction pour gérer le changement de valeur du titre
-    const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
     };
     // Fonction pour gérer le changement de valeur de la description
-    const handleChangeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeDescription = (event: ChangeEvent<HTMLInputElement>) => {
         setDescription(event.target.value);
     };
     // Fonction pour gérer le changement de valeur de la catégorie
-    const handleChangeCategory = (event: React.ChangeEvent<{}>, newValue: { id: number; label: string } | null) => {
+    const handleChangeCategory = (event: ChangeEvent<{}>, newValue: { id: number; label: string } | null) => {
         setCategory(newValue);
     };
-    // Fonction pour gérer le changement de valeur de la catégorie
-    const handleChangeDonation = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Fonction pour gérer le changement de valeur de la donation
+    const handleChangeDonation = (event: ChangeEvent<HTMLInputElement>) => {
         setIsDonation(event.target.checked);
     };
+    // Fonction pour gérer le changement de valeur de la visibilitée
+    const handleChangeVisibility = (event: ChangeEvent<HTMLInputElement>) => {
+        setIsVisible(event.target.checked);
+    };
 
-    const aCategory = [
+    const aCategory : Category[] = [
         {"id": 1, "label": "Bureautique"},
         {"id": 2, "label": "Électronique"},
         {"id": 3, "label": "Informatique"},
@@ -71,146 +83,131 @@ const OfferForm: React.FC = () => {
     ];
 
     // Fonction pour gérer le clic sur le bouton "Valider"
-    const handleSubmit = () => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
 
-        console.log({
-            "userId": 314,
-            "categoryId": category?.id,
+        const data : OfferFormCreate = {
+            "userId": user?.id, // TODO: Récupérer via Len
+            // "categoryId": category?.id,
             "title": title,
             "description": description,
-            "longitude": 314, // TODO: a faire
-            "latitude": 314, // TODO: a faire
-            "cityName": 314, // TODO: a faire
-            "isDonation": isDonation,
-        });
-    };
+            "is_visible": isVisible,
+            "is_donation": isDonation,
+            "city_name": 'TestLand', // TODO: a faire
+            "longitude": Math.random(), // TODO: a faire
+            "latitude": Math.random(), // TODO: a faire
+        };
 
-    const handleSearch = async (cityName: string) => {
-        const url = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+        try {
+            const response: AxiosResponse = await axiosService.post('offers', data);
+            setErrors('');
+            setErrorTitle('');
+            setErrorDescription('');
 
-        const response = await axios.get(url, {
-            params: {
-                input: cityName,
-                types: "(cities)",
-                components: "country:fr",
-                key: apiKey,
-            },
-        });
+            if (response.status === 200)
+            {
+                console.log('Redirige sur la liste des offres pignouf') // TODO: redirection liste des offres
+            }
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                // Accéder aux propriétés spécifiques à l'erreur Axios
+                const aError = error.response?.data.errors ?? error.message;
 
-        if (response.data.status === "OK") {
-            console.log(response.data.predictions);
-        } else {
-            console.log(`Error: ${response.data.status}`);
+                for (const key in aError) {
+                    switch (key) {
+                        case 'title':
+                            setErrorTitle(aError[key].join("<br />")); // TODO: revoir en flex pour Célien
+                            break;
+                        case 'description':
+                            setErrorDescription(aError[key].join("<br />")); // TODO: revoir en flex pour Célien
+                            break;
+                        default:
+                            setErrors(aError[key]);
+                            break;
+                    }
+                }
+            } else {
+                console.error('Erreur inconnue:', error);
+                setErrors('Une erreur à été retournée, veuillez-rééssayer.');
+            }
         }
     };
-
-    const containerStyle = {
-        width: "100%",
-        height: "400px",
-    };
-
-    const center = {
-        lat: latitude, // Latitude de Paris
-        lng: longitude,  // Longitude de Paris
-    };
-
-    const apiKey = config.GOOGLE_MAPS_API_KEY;
-    const mapRef = useRef<google.maps.Map | null>(null);
-
-    useEffect(() => {
-        if (mapRef.current) {
-            new google.maps.marker.AdvancedMarkerElement({
-                position: center,
-                map: mapRef.current,
-            });
-        }
-    }, []);
-
-    const options = {
-        streetViewControl: false, // Désactive Pegman (Street View)
-        mapTypeControl: false, // Désactive le contrôle du type de carte (facultatif)
-        fullscreenControl: false, // Désactive le bouton de plein écran (facultatif)
-    };
-
 
     return (
-        <>
+        <form onSubmit={handleSubmit}>
+             <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
+                 Troquer mon objet
+             </Typography>
 
-            <div style={{margin: "50px"}}></div>
-
-            {/*<GoogleMapAutocomplete/>*/}
-
-
-            <DebounceInput
-                placeholder="Tapez quelque chose..."
-                debounceTimeout={1000}
-                handleDebounce={(value) => {
-                    fetch("https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCoyf5B-cibub2QPUUbYKAgAMfldPWM0v8&input=decines&components=country:fr&types=(cities)")
-                        .then((response) => {console.log(response)});
-                }}
-            />
-
-            {/*<LoadScript googleMapsApiKey={apiKey}>*/}
-            {/*    <GoogleMap*/}
-            {/*        mapContainerStyle={containerStyle}*/}
-            {/*        center={center}*/}
-            {/*        zoom={10}*/}
-            {/*        options={options}*/}
-            {/*        onLoad={(map) => {*/}
-            {/*            mapRef.current = map;*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*    </GoogleMap>*/}
-            {/*</LoadScript>*/}
-
-            <Typography variant="h4" component="h2" gutterBottom>
-                Troquer mon objet
-            </Typography>
-
-            <TextField
-                label="Titre de mon objet"
-                variant="outlined"
-                fullWidth
-                value={title}
-                onChange={handleChangeTitle}
-                margin="normal"
-            />
-            <TextField
-                label="Description de mon objet"
-                variant="outlined"
-                fullWidth
-                value={description}
-                onChange={handleChangeDescription}
-                margin="normal"
-                // error={true}
-                // helperText={"TEST"}
-            />
-            <Autocomplete
-                disablePortal
-                options={aCategory}
-                renderInput={(params) => <TextField {...params} label="Choix d'une catégorie"/>}
-                value={category}
-                onChange={handleChangeCategory}
-                isOptionEqualToValue={(option, value) => option.id === value?.id}
-            />
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={isDonation}
-                        onChange={handleChangeDonation}
-                    />
-                }
-                style={{display: 'flex', userSelect: "none"}}
-                label="Voulez-vous donner votre objet ?"
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-            >
-                Valider
-            </Button>
-        </>
+             <TextField
+                 label="Titre de mon objet"
+                 variant="outlined"
+                 fullWidth
+                 value={title}
+                 onChange={handleChangeTitle}
+                 margin="normal"
+                 required={true}
+                 inputProps={{
+                     maxLength: 100,
+                 }}
+                 errorText={errorTitle}
+             />
+             <TextField
+                 label="Description de mon objet"
+                 variant="outlined"
+                 fullWidth
+                 multiline
+                 value={description}
+                 onChange={handleChangeDescription}
+                 margin="normal"
+                 required={true}
+                 inputProps={{
+                     maxLength: 1500,
+                 }}
+                 errorText={errorDescription}
+             />
+             <Autocomplete
+                 disablePortal
+                 options={aCategory}
+                 renderInput={(params) => <TextField {...params} label="Choix d'une catégorie"/>}
+                 value={category}
+                 onChange={handleChangeCategory}
+                 isOptionEqualToValue={(option, value) => option.id === value?.id}
+                 style={{marginTop: '16px'}}
+             />
+             <FormControlLabel
+                 control={
+                     <Switch
+                         checked={isDonation}
+                         onChange={handleChangeDonation}
+                     />
+                 }
+                 sx={{display: 'flex', userSelect: "none", color: theme.palette.primary.main}}
+                 label="Voulez-vous donner votre objet ?"
+             />
+             <FormControlLabel
+                 control={
+                     <Switch
+                         checked={isVisible}
+                         onChange={handleChangeVisibility}
+                     />
+                 }
+                 sx={{display: 'flex', userSelect: "none", color: theme.palette.primary.main}}
+                 label="Votre objet devra être visible ?"
+             />
+             <Button
+                 variant="contained"
+                 color="primary"
+                 type={'submit'}
+             >
+                 Valider
+             </Button>
+             {!!errors && (
+                 <Typography variant="body1" type={'error'} style={{ marginTop: '16px' }}>
+                     {errors}
+                 </Typography>
+             )}
+        </form>
     );
 };
 

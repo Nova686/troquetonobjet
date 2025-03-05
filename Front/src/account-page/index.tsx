@@ -41,7 +41,7 @@ const AccountPage: React.FC = () => {
                 <div className="history-container">
                     <h3>Mes Annonces</h3>
                     <div className="ad-card">
-                        <img src="https://via.placeholder.com/100" alt="Image de l'annonce" />
+                        <img src="./gourde.jpeg" alt="Annonce 1" />  
                         <div className="ad-info">
                             <h4>Titre de l'objet</h4>
                             <p>Description courte de l'annonce...</p>
@@ -49,7 +49,7 @@ const AccountPage: React.FC = () => {
                         </div>
                     </div>
                     <div className="ad-card">
-                        <img src="https://via.placeholder.com/100" alt="Image de l'annonce" />
+                        <img src="./gourde.jpeg" alt="Annonce 2" />
                         <div className="ad-info">
                             <h4>Deuxième objet</h4>
                             <p>Description courte de l'annonce...</p>

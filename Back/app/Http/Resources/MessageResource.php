@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Http\Resources\Users\UserResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class MessageResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'content' => $this->content,
+            'sender' => UserResource::make($this->sender),
+            'createdAt' => $this->created_at,
+            'isUpdated' => $this->isUpdated,
+        ];
+    }
+}
