@@ -1,21 +1,8 @@
 import './App.css';
-import {OfferForm} from "./components/organisms";
-import {Container} from "@mui/material";
-import AccountPage from './account-page';
-
-function App() {
-  return (
-      <Container maxWidth="sm">
-        <AccountPage/>
-      </Container>
-  );
-}
-  /*
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
-import {Home, Offers, CreateOffer, Authentication, Conversations} from './components/pages';
+import {Home, Offers, CreateOffer, Authentication, Conversations, Account} from './components/pages';
 import ProtectedRoute from './components/shared/ProtectedRoute';
-import Profile from './components/pages/Profile/Profile';
 import theme from './theme';
 import {ThemeProvider, CssBaseline, Box} from "@mui/material";
 
@@ -37,7 +24,7 @@ function App() {
                             <Route path='/offers' element={<Offers/>}/>
                             <Route path='/profile' element={
                                 <ProtectedRoute>
-                                    <Profile/>
+                                    <Account/>
                                 </ProtectedRoute>
                             }/>
                             <Route path='/offers/form' element={
@@ -57,5 +44,5 @@ function App() {
         </ThemeProvider>
     );
 }
-*/
+
 export default App;
