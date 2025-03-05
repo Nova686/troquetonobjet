@@ -36,10 +36,10 @@ class OfferController extends Controller
 
         foreach ($p->list as &$element) 
         {
+            $element["user"] = ["id" => $element["userId"], "username" => $element["username"]];
+
             unset($element["userId"]);
             unset($element["username"]);
-
-            $element["user"] = ["id" => $element["userId"], "username" => $element["username"]];
         }
 
         return Results::ok($p);
@@ -72,6 +72,10 @@ class OfferController extends Controller
         if($result !== null)
         {
             $result->user = ["id" => $result->userId, "username" => $result->username];
+
+            unset($result->userId);
+            unset($result->username);
+
             return Results::ok($result);
         }
 
