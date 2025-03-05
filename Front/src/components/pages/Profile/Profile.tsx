@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import { Button, Typography } from "../../atoms";
-import ApiAuthorizationTest from "../../test/ApiAuthorizationTest";
+// import ApiAuthorizationTest from "../../test/ApiAuthorizationTest";
 import {useTheme} from "@mui/material/styles";
 
 const Profile = () => {
@@ -31,7 +31,7 @@ const Profile = () => {
 			) : (
 				<Navigate to="/auth/login" />
 			)}
-			<ApiAuthorizationTest />
+			{/* <ApiAuthorizationTest /> */}
 		</div>
 	);
 };

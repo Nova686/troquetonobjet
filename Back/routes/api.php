@@ -4,9 +4,8 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
-use App\Http\Controllers\Category\CategoryController;
-use App\Http\Controllers\Category\SubCategoryController;
 use App\Http\Controllers\FavoriteOfferController;
+use App\Http\Controllers\WishOfferController;
 
 Route::prefix('/')->group(function () {
     // Route for Users
@@ -22,17 +21,20 @@ Route::prefix('/')->group(function () {
             Route::put('', [OfferController::class, 'update']);
             Route::delete('', [OfferController::class, 'destroy']);
             Route::post('favorite', [FavoriteOfferController::class, 'favorite']);
-            
+
             Route::post('conversation', [ConversationController::class, 'create']);
+
+            Route::post('wishs', [WishOfferController::class, 'add']);
         });
+        Route::post('wishs/{idWishOffer}', [WishOfferController::class, 'remove']);
         Route::get('favorite', [FavoriteOfferController::class, 'get']);
     });
-    
+
     // Route for Conversations
     Route::prefix('conversations')->group(function () {
         Route::get('', [ConversationController::class, 'getConversations']);
         Route::post('{conversation}/close', [ConversationController::class, 'hide']);
-        
+
         Route::prefix('{conversation}')->group(function () {
             Route::prefix('messages')->group(function () {
                 Route::get('', [MessageController::class, 'get']);

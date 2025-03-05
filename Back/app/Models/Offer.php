@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -51,5 +52,10 @@ class Offer extends Model
     public function scopeIsVisible(Builder $query, bool $isVisible = true)
     {
         return $query->where('is_visible', $isVisible);
+    }
+
+    public function wishs(): HasMany
+    {
+        return $this->hasMany(WishOffer::class);
     }
 }
