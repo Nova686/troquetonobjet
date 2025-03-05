@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\SubCategoryController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\FavoriteOfferController;
 
 Route::prefix('/')->group(function () {
@@ -45,5 +46,12 @@ Route::prefix('/')->group(function () {
     Route::prefix('messages')->group(function () {
         Route::put('{message}', [MessageController::class, 'update']);
         Route::delete('{message}', [MessageController::class, 'destroy']);
+    });
+
+    //Route for Reports
+    Route::prefix('reports')->group(function () {
+        Route::post('', [ReportController::class, 'create']);
+        Route::get('', [ReportController::class, 'getReports']);
+        Route::delete('{id}', [ReportController::class, 'delete']);
     });
 });
