@@ -6,11 +6,13 @@ use App\Http\Requests\Offers\CreateOfferRequest;
 use App\Http\Requests\Offers\EditOfferRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
+use App\Library\PaginationExport;
 use App\Library\Results;
 use App\Models\Offer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OfferController extends Controller
 {
@@ -25,16 +27,18 @@ class OfferController extends Controller
         ]);
     }
 
-    public function getOffers(Request $request)
+    public function getOffers(Request $_request)
     {
-        $offers = Offer::query()
-            ->with(['user'])
-            ->isVisible()
-            ->get();
+        $page = $_request->query->getInt("page", 1);
+        $nbPerPage = $_request->query->getInt("nbPerPage", 20);
 
-        return response()->json([
-            'offers' => OfferResource::collection($offers)
-        ]);
+        if($nbPerPage <= 0)
+            $nbPerPage = 20;
+
+        if($page <= 0)
+            $page = 1;
+
+        return Results::ok(Offer::getAll($page, $nbPerPage));
     }
 
     public function store(CreateOfferRequest $request)
@@ -57,13 +61,11 @@ class OfferController extends Controller
         ]);
     }
 
-    public function get(Offer $offer)
+    public function get(int $id)
     {
-        $this->authorize('view', $offer);
+        $result = Offer::get($id);
 
-        return response()->json([
-            'offer' => OfferResource::make($offer)
-        ]);
+        return $result !== null ? Results::ok($result) : Results::notFound();
     }
 
     public function update(EditOfferRequest $request, Offer $offer)
