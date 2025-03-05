@@ -33,14 +33,7 @@ class OfferController extends Controller
         $query = Offer::baseQuery(isVisible: true);
 
         $p = Pagination::paginate($query, $data);
-
-        foreach ($p->list as &$element) 
-        {
-            $element["user"] = ["id" => $element["userId"], "username" => $element["username"]];
-
-            unset($element["userId"]);
-            unset($element["username"]);
-        }
+        $p->list = OfferResource::collection($p->list);
 
         return Results::ok($p);
     }
@@ -67,17 +60,10 @@ class OfferController extends Controller
 
     public function get(int $id)
     {
-        $result = Offer::baseQuery($id, true)->first();
+        $result = Offer::baseQuery($id)->first();
 
         if($result !== null)
-        {
-            $result->user = ["id" => $result->userId, "username" => $result->username];
-
-            unset($result->userId);
-            unset($result->username);
-
-            return Results::ok($result);
-        }
+            return Results::ok(OfferResource::make($result));
 
         return Results::notFound();
     }
