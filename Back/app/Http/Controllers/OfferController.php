@@ -33,6 +33,7 @@ class OfferController extends Controller
         $query = Offer::baseQuery(isVisible: true);
 
         $p = Pagination::paginate($query, $data);
+
         $p->list = OfferResource::collection($p->list);
 
         return Results::ok($p);
@@ -53,8 +54,10 @@ class OfferController extends Controller
         $offer->user()->associate(Auth::user()->id);
         $offer->save();
 
+        $result = Offer::baseQuery($offer->id)->first();
+
         return response()->json([
-            'offer' => OfferResource::make($offer)
+            'offer' => OfferResource::make($result)
         ]);
     }
 
@@ -75,9 +78,10 @@ class OfferController extends Controller
         $validated = $request->validated();
 
         $offer->update($validated);
+        $result = Offer::baseQuery($offer->id)->first();
 
         return response()->json([
-            'offer' => OfferResource::make($offer)
+            'offer' => OfferResource::make($result)
         ]);
     }
 
