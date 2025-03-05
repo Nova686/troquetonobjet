@@ -83,7 +83,8 @@ class Offer extends Model
             "latitude", "longitude",
             "city_name as cityName",
             "offers.created_at",
-            "offers.updated_at"
+            "offers.updated_at",
+            DB::raw("f.id IS NOT NULL as isFavorite")
         );
     }
 }
