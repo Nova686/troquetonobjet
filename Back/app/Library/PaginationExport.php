@@ -11,13 +11,13 @@ class PaginationExport
     public bool $hasNextPage;
     public int $totalPage;
 
-    public function __construct(array $_liste, int $_page, int $_nbPerPage, int $_total) 
+    public function __construct(array $liste, int $page, int $nbPerPage, int $total) 
     {
-        $this->liste = $_liste;
-        $this->page = $_page;
-        $this->nbPerPage = $_nbPerPage;
-        $this->total = $_total;
-        $this->hasNextPage = $_total > ($_page * $_nbPerPage);
-        $this->totalPage = ceil($_total / $_nbPerPage);
+        $this->liste = $liste;
+        $this->page = $page;
+        $this->nbPerPage = $nbPerPage;
+        $this->total = $total;
+        $this->hasNextPage = $total > ($page * $nbPerPage);
+        $this->totalPage = ceil($total / $nbPerPage);
     }
 }

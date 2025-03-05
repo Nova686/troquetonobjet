@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Library\PaginationExport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -56,41 +55,7 @@ class Offer extends Model
         return $query->where('is_visible', $isVisible);
     }
 
-    /**
-     * @return ?object
-     */
-    public static function get(int $_id, bool $_isVisible = true)
-    {
-        if($_id <= 0)
-            return null;
-
-        return self::BaseQuery($_id, $_isVisible)->first();
-    }
-
-    /**
-     * @return PaginationExport
-     */
-    public static function getAll(int $_page, int $_nbPerPage, bool $_isVisible = true)
-    {
-        $request = self::BaseQuery(_isVisible: $_isVisible);
-
-        $total = $request->count();
-
-        $offers = $request
-            ->skip(($_page - 1) * $_nbPerPage)
-            ->take($_nbPerPage)
-            ->get()
-            ->toArray();
-
-        return new PaginationExport(
-            $offers,
-            $_page,
-            $_nbPerPage,
-            $total
-        );
-    }
-
-    private static function BaseQuery(int $_id = 0, bool $_isVisible = true)
+    public static function baseQuery(int $id = 0, bool $isVisible = true)
     {
         return self::query()
         ->join(
@@ -101,10 +66,10 @@ class Offer extends Model
             "favorite_offers as f",
             "f.offer_id", "=", "offers.id"
         )
-        ->isVisible($_isVisible)
-        ->when($_id > 0, function($request) use ($_id)
+        ->isVisible($isVisible)
+        ->when($id > 0, function($request) use ($id)
         {
-            $request->where("offers.id", $_id);
+            $request->where("offers.id", $id);
         })
         ->select(
             "offers.id", "offers.title", "offers.description",

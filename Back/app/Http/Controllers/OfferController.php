@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Pagination;
 use App\Http\Requests\Offers\CreateOfferRequest;
 use App\Http\Requests\Offers\EditOfferRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
-use App\Library\PaginationExport;
 use App\Library\Results;
 use App\Models\Offer;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class OfferController extends Controller
 {
@@ -38,7 +36,9 @@ class OfferController extends Controller
         if($page <= 0)
             $page = 1;
 
-        return Results::ok(Offer::getAll($page, $nbPerPage));
+        $query = Offer::BaseQuery(isVisible: true);
+
+        return Results::ok(Pagination::paginate($query, $page, $nbPerPage));
     }
 
     public function store(CreateOfferRequest $request)
@@ -63,7 +63,7 @@ class OfferController extends Controller
 
     public function get(int $id)
     {
-        $result = Offer::get($id);
+        $result = Offer::baseQuery($id, true)->first();
 
         return $result !== null ? Results::ok($result) : Results::notFound();
     }
