@@ -82,8 +82,8 @@ class Offer extends Model
             "u.id as userId", "u.username", "offers.is_donation",
             "latitude", "longitude",
             "city_name as cityName",
-            DB::raw("offers.created_at != offers.updated_at as isUpdated"), 
-            "offers.created_at as createdAt"
+            "offers.created_at",
+            "offers.updated_at"
         );
     }
 }
