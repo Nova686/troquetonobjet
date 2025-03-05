@@ -71,7 +71,7 @@ class OfferController extends Controller
 
         if($result !== null)
         {
-            $result["user"] = ["id" => $result["userId"], "username" => $result["username"]];
+            $result->user = ["id" => $result->userId, "username" => $result->username];
             return Results::ok($result);
         }
 
