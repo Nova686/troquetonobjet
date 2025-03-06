@@ -117,7 +117,7 @@ class OfferController extends Controller
         if($offerId === null)
             return Results::notFound();
 
-        $response = $this->storageServ->Upload($file, "offers/$offerId", "public");
+        $response = $this->storageServ->upload($file, "offers/$offerId", "public");
 
         if($response->state == EStorageResponse::Ok)
         {
@@ -145,18 +145,12 @@ class OfferController extends Controller
             ["user_id", "=", Auth::id()]
         ]);
 
-        $imageOfferList = $query->get();
+        if(!$query->exists())
+            return Results::notFound();
 
-        if($imageOfferList->count() == 0)
-            return Results::noContent();
+        $imageOfferUrl = $query->value("url");
 
-        $offerId = $imageOfferList[0]->offer_id;
-
-        foreach ($imageOfferList as $element) 
-            Storage::delete($element->url);
-
-        if(count(Storage::disk("public")->files("offers/$offerId")) == 0)
-            Storage::disk("public")->deleteDirectory("offers/$offerId");
+        $this->storageServ->delete($imageOfferUrl);
 
         $ok = $query->delete();
 

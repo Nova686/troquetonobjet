@@ -26,7 +26,7 @@ class StorageService
      * @param string $disk emplacement du fichier (valeurs possibles => "public" ou "local")
      * @return StorageResponse
      */
-    public function Upload(?UploadedFile $file, string $path, string $disk = "local")
+    public function upload(?UploadedFile $file, string $path, string $disk = "local")
     {
         if($file === null)
             return new StorageResponse("", EStorageResponse::FileNull);
@@ -49,5 +49,39 @@ class StorageService
         $image->toWebp(60)->save(storage_path("app/".$nameGenerate));
 
         return new StorageResponse($nameGenerate, EStorageResponse::Ok);
+    }
+
+    /**
+     * Supprimer un fichier dans le storage.  
+     * Supprime le dossier si vide
+     * 
+     * @param array|string $path url ou liste url des fichiers à supprimer
+     * 
+     * @return EStorageDeleteResponse
+     */
+    public function delete(array | string $path)
+    {
+        if(empty($path))
+            return EStorageDeleteResponse::NoUrl;
+
+        $basePath = "";
+
+        if(gettype($path) == "array")
+        {
+            $basePath = dirname($path[0]);
+
+            foreach ($path as $element) 
+                Storage::delete($element);
+        }
+        else
+        {
+            $basePath = dirname($path);
+            Storage::delete($path);
+        }
+
+        if(count(Storage::files($basePath)) == 0)
+            Storage::deleteDirectory($basePath);
+
+        return EStorageDeleteResponse::Ok;
     }
 }
