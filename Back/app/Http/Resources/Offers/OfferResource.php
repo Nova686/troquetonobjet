@@ -24,20 +24,20 @@ class OfferResource extends JsonResource
             'wishs' => $this->whenLoaded('wishs', function () {
                 return WishOfferResource::collection($this->wishs);
             }),
-            'images' => $this->whenLoaded('imageOffers', function()
+            'images' => $this->whenLoaded('offerImages', function()
             {
                 $urlList = [];
-                foreach ($this->imageOffers as $element) 
+                foreach ($this->offerImages as $element) 
                 {
                     if($element->order != 0)
-                        $urlList[] = url(preg_replace("/public/", "/storage/", $element->url));
+                        $urlList[] = url("storage/".$element->url);
                 }
 
                 return $urlList;
             }),
-            'mainImage' => $this->whenLoaded('imageOffers', function () 
+            'mainImage' => $this->whenLoaded('offerImages', function () 
             {
-                foreach ($this->imageOffers as $element) 
+                foreach ($this->offerImages as $element) 
                 {
                     if($element->order == 0)
                     {
@@ -47,9 +47,9 @@ class OfferResource extends JsonResource
                 }
 
                 if(empty($url))
-                    $url = $this->imageOffers[0]->url;
+                    $url = $this->offerImages[0]->url;
 
-                return url(preg_replace("/public/", "/storage/", $url));
+                return url("storage/".$url);
             }),
             'isDonation' => $this->is_donation,
             'latitude' => $this->latitude,

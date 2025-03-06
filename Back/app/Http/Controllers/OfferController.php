@@ -138,10 +138,10 @@ class OfferController extends Controller
 
         $query = OfferImage::join(
             (new Offer())->getTable()." as o", 
-            "o.id", "=", "image_offers.offer_id"
+            "o.id", "=", "offer_images.offer_id"
         )
         ->where([
-            ["image_offers.id", "=", $fileOfferId],
+            ["offer_images.id", "=", $fileOfferId],
             ["user_id", "=", Auth::id()]
         ]);
 
@@ -150,7 +150,7 @@ class OfferController extends Controller
 
         $imageOfferUrl = $query->value("url");
 
-        $this->storageServ->delete($imageOfferUrl);
+        $this->storageServ->delete($imageOfferUrl, "public");
 
         $ok = $query->delete();
 

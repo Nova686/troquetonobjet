@@ -44,9 +44,11 @@ class StorageService
         $image = $this->manager->read($file->get());
 
         if($disk == "public")
-            $nameGenerate = "public/".$nameGenerate;
+            $path = storage_path("app/public/".$nameGenerate);
+        else
+            $path = storage_path("app/".$nameGenerate);
 
-        $image->toWebp(60)->save(storage_path("app/".$nameGenerate));
+        $image->toWebp(60)->save($path);
 
         return new StorageResponse($nameGenerate, EStorageResponse::Ok);
     }
@@ -56,13 +58,17 @@ class StorageService
      * Supprime le dossier si vide
      * 
      * @param array|string $path url ou liste url des fichiers à supprimer
+     * @param string $disk "public" ou "local"
      * 
      * @return EStorageDeleteResponse
      */
-    public function delete(array | string $path)
+    public function delete(array | string $path, string $disk)
     {
         if(empty($path))
             return EStorageDeleteResponse::NoUrl;
+
+        if($disk != "public" && $disk != "local")
+            return EStorageDeleteResponse::DiskDontExists;
 
         $basePath = "";
 
@@ -71,16 +77,16 @@ class StorageService
             $basePath = dirname($path[0]);
 
             foreach ($path as $element) 
-                Storage::delete($element);
+                Storage::disk($disk)->delete($element);
         }
         else
         {
             $basePath = dirname($path);
-            Storage::delete($path);
+            Storage::disk($disk)->delete($path);
         }
 
-        if(count(Storage::files($basePath)) == 0)
-            Storage::deleteDirectory($basePath);
+        if(count(Storage::disk($disk)->files($basePath)) == 0)
+            Storage::disk($disk)->deleteDirectory($basePath);
 
         return EStorageDeleteResponse::Ok;
     }
