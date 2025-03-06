@@ -68,10 +68,7 @@ class Offer extends Model
             (new User())->getTable()." as u", 
             "u.id", "=", "offers.user_id"
         )
-        ->leftJoin(
-            "favorite_offers as f",
-            "f.offer_id", "=", "offers.id"
-        )
+        ->leftJoin("favorite_offers as f", "f.offer_id", "=", "offers.id")
         ->isVisible($isVisible)
         ->when($id > 0, function($request) use ($id)
         {
