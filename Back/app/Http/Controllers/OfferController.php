@@ -9,12 +9,17 @@ use App\Http\Requests\PaginationRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
 use App\Library\Results;
+use App\Library\Storage\EStorageResponse;
+use App\Library\Storage\StorageService;
+use App\Models\ImageOffer;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
 {
+    public function __construct(private StorageService $storageServ) { }
+
     public function getUserOffers()
     {
         $offers = Offer::query()
@@ -95,5 +100,33 @@ class OfferController extends Controller
             ->delete();
 
         return $isDeleted ? Results::noContent() : Results::notFound();
+    }
+
+    public function fileStore(Request $request)
+    {
+        $file = $request->file("fichier");
+        $offerId = $request->input("offer_id", 0);
+        $order = $request->input("order", 0);
+
+        $offerId = Offer::where([
+            ["id", "=", $offerId],
+            ["user_id", "=", Auth::id()]
+        ])?->value("id");
+
+        if($offerId === null)
+            return Results::notFound();
+
+        $response = $this->storageServ->Upload($file, "offers/$offerId");
+
+        if($response->state == EStorageResponse::Ok)
+        {
+            ImageOffer::create([
+                "order" => $order,
+                "offer_id" => $offerId,
+                "url" => $response->url
+            ]);
+        }
+
+        return Results::badRequest(["state" => $response->state]);
     }
 }
