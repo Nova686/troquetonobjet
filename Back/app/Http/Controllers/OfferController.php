@@ -63,7 +63,9 @@ class OfferController extends Controller
 
     public function get(int $id)
     {
-        $result = Offer::baseQuery($id)->first();
+        $result = Offer::baseQuery($id)
+            ->with(['wishs.subCategory'])
+            ->first();
 
         if($result !== null)
             return Results::ok(OfferResource::make($result));

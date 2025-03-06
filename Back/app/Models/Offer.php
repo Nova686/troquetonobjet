@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -55,6 +56,11 @@ class Offer extends Model
         return $query->where('is_visible', $isVisible);
     }
 
+    public function wishs(): HasMany
+    {
+        return $this->hasMany(WishOffer::class);
+    }
+
     public static function baseQuery(int $id = 0, bool $isVisible = true)
     {
         return self::query()
@@ -62,10 +68,7 @@ class Offer extends Model
             (new User())->getTable()." as u", 
             "u.id", "=", "offers.user_id"
         )
-        ->leftJoin(
-            "favorite_offers as f",
-            "f.offer_id", "=", "offers.id"
-        )
+        ->leftJoin("favorite_offers as f", "f.offer_id", "=", "offers.id")
         ->isVisible($isVisible)
         ->when($id > 0, function($request) use ($id)
         {

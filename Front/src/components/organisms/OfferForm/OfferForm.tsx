@@ -140,7 +140,7 @@ const OfferForm: FC = () => {
                 <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
                     Troquer mon objet
                 </Typography>
-                { isConnected() && <DeleteButton url={`/offers/${offer.id}`} /> }
+                { isConnected() && offer && <DeleteButton url={`/offers/${offer.id}`} /> }
             </Typography>
 
              <TextField
