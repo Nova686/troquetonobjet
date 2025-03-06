@@ -8,8 +8,6 @@ use App\Http\Controllers\Category\SubCategoryController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\WishOfferController;
 
-Route::post("upload", [OfferController::class, 'fileStore']);
-
 // Route for Offers
 Route::prefix('offers')->group(function () {
     Route::get('', [OfferController::class, 'getOffers']);

@@ -15,6 +15,7 @@ use App\Models\ImageOffer;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class OfferController extends Controller
 {
@@ -116,7 +117,7 @@ class OfferController extends Controller
         if($offerId === null)
             return Results::notFound();
 
-        $response = $this->storageServ->Upload($file, "offers/$offerId");
+        $response = $this->storageServ->Upload($file, "offers/$offerId", "public");
 
         if($response->state == EStorageResponse::Ok)
         {
@@ -127,6 +128,38 @@ class OfferController extends Controller
             ]);
         }
 
-        return Results::badRequest(["state" => $response->state]);
+        return Results::ok(["state" => $response->state]);
+    }
+
+    public function deleteFile(int $fileOfferId)
+    {
+        if($fileOfferId <= 0)
+            return Results::notFound();
+
+        $query = ImageOffer::join(
+            (new Offer())->getTable()." as o", 
+            "o.id", "=", "image_offers.offer_id"
+        )
+        ->where([
+            ["image_offers.id", "=", $fileOfferId],
+            ["user_id", "=", Auth::id()]
+        ]);
+
+        $imageOfferList = $query->get();
+
+        if($imageOfferList->count() == 0)
+            return Results::noContent();
+
+        $offerId = $imageOfferList[0]->offer_id;
+
+        foreach ($imageOfferList as $element) 
+            Storage::delete($element->url);
+
+        if(count(Storage::disk("public")->files("offers/$offerId")) == 0)
+            Storage::disk("public")->deleteDirectory("offers/$offerId");
+
+        $ok = $query->delete();
+
+        return $ok ? Results::noContent() : Results::notFound();
     }
 }
