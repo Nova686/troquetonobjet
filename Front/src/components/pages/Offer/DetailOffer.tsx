@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from "react";
-import {createRequestHandler, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {Offer} from "../../../typings/Offer";
 import axiosService from "../../../services/AxiosService";
 import {AxiosResponse} from "axios";
@@ -19,8 +19,6 @@ const DetailOffer: FC = () =>
     {
         const response: AxiosResponse<any, any> = await axiosService.get(`offers/${id}`)
         setOffer(response.data);
-
-        console.log(response.data)
     }
 
     useEffect((): void =>

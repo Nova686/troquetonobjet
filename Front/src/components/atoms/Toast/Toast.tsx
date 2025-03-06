@@ -1,22 +1,32 @@
 import {Snackbar} from "@mui/material";
-import {useState} from "react";
+import { FC } from "react";
+import { CustomToastProps } from "../../../typings/components/CustomToastProps";
+import {useTheme} from "@mui/material/styles"
 
-const Toast = () => {
-    const [show, setShow] = useState(true);
+interface ToastProps extends CustomToastProps {
+    onClose: () => void;
+}
 
-    const handleClose = () => {
-        setShow(false);
-    }
+const Toast: FC<ToastProps> = ({ message, position, onClose, closeTime, ...other }: ToastProps) => {
+    const theme = useTheme();
 
     return (
         <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={show}
-            onClose={handleClose}
-            message="I love snacks"
-            key={'top' + 'right'}
+            anchorOrigin={{ vertical: position.vertical, horizontal: position.horizontal }}
+            open={true}
+            onClose={onClose}
+            message={message}
+            autoHideDuration={closeTime ?? 2000}
+            {...other}
+            className={"toast"}
+            sx={{
+                backgroundColor: theme.palette.secondary.main,
+                '& .MuiSnackbarContent-root': {
+                    backgroundColor: theme.palette.secondary.main,
+                },
+            }}
         />
-    )
-}
+    );
+};
 
 export default Toast;

@@ -5,6 +5,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite'; // Coeur plein
 import { useTheme } from '@mui/material/styles';
 import axiosService from "../../../services/AxiosService";
 import {AxiosResponse} from "axios";
+import {useToast} from "../../../contexts/ToastContext";
 
 interface FavoriteButtonProps {
     defaultFilled?: boolean;
@@ -15,6 +16,7 @@ interface FavoriteButtonProps {
 const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false, offerId, ...other }) => {
     const theme = useTheme();
     const [isFilled, setIsFilled] = useState(defaultFilled);
+    const { showToast } = useToast();
 
     const toggleFavorite = async (e: MouseEvent) => {
         e.stopPropagation();
@@ -22,9 +24,11 @@ const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false, offerI
         console.log('Ajout des favoris', offerId)
 
         const response: AxiosResponse = await axiosService.post(`/offers/${offerId}/favorite`);
-        console.log(response)
 
-
+        showToast({
+            message: !isFilled ? "L'annonce à été ajoutée aux favoris." : "L'annonce à été retirée des favoris.",
+            position: { vertical: "bottom", horizontal: "right" },
+        });
         setIsFilled(!isFilled);
     };
 
