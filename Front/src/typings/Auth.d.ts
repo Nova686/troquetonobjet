@@ -7,6 +7,7 @@ export type RegisterRequestModel = {
     name: string;
     email: string;
     password: string;
+    language_iso: string;
 }
 
 export interface User {

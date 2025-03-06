@@ -3,18 +3,28 @@ import {Button} from "../../atoms"
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // Coeur vide
 import FavoriteIcon from '@mui/icons-material/Favorite'; // Coeur plein
 import { useTheme } from '@mui/material/styles';
+import axiosService from "../../../services/AxiosService";
+import {AxiosResponse} from "axios";
 
 interface FavoriteButtonProps {
     defaultFilled?: boolean;
+    offerId: number;
     [key: string]: any;
 }
 
-const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false, ...other }) => {
+const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false, offerId, ...other }) => {
     const theme = useTheme();
     const [isFilled, setIsFilled] = useState(defaultFilled);
 
-    const toggleFavorite = (e: MouseEvent) => {
+    const toggleFavorite = async (e: MouseEvent) => {
         e.stopPropagation();
+
+        console.log('Ajout des favoris', offerId)
+
+        const response: AxiosResponse = await axiosService.post(`/offers/${offerId}/favorite`);
+        console.log(response)
+
+
         setIsFilled(!isFilled);
     };
 

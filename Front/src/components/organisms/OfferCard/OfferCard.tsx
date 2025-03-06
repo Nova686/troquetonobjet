@@ -9,6 +9,7 @@ import {useTheme} from '@mui/material/styles';
 import {ChatButton, FavoriteButton} from "../../molecules";
 import {useNavigate} from "react-router-dom";
 import { dateFormat } from "../../../services/FormatterService";
+import {useAuth} from "../../../contexts/AuthContext";
 
 interface OfferCardProps {
     offer: Offer;
@@ -18,9 +19,13 @@ const OfferCard: FC<OfferCardProps> = ({offer}) => {
 
     const theme = useTheme();
     const navigate = useNavigate();
+    const { isConnected, user } = useAuth();
 
     const handleClick = (offer: Offer) => {
-        navigate('/offers/form', { state: { offer } });
+        if (user?.name === offer.author.name)
+        {
+            navigate('/offers/form', { state: { offer } });
+        }
     }
 
     const detail = (offer: Offer) => {
@@ -37,8 +42,8 @@ const OfferCard: FC<OfferCardProps> = ({offer}) => {
                     backgroundColor: theme.palette.background.default, borderBottomRightRadius: '8px', padding: '2px 0',
                     display: "flex", justifyContent: "space-between", flexDirection: 'column'
                 }}>
-                    <FavoriteButton/>
-                    <ChatButton/>
+                    {isConnected() && (user?.name !== offer.author.name) && <FavoriteButton offerId={offer.id}/>}
+                    {isConnected() && (user?.name !== offer.author.name) && <ChatButton/>}
                 </Typography>
             </Typography>
         )
@@ -46,7 +51,7 @@ const OfferCard: FC<OfferCardProps> = ({offer}) => {
 
     return (
         <CardWithPictureWithoutAction
-            sx={{backgroundColor: theme.palette.primary.main, padding: '4px', borderRadius: '8px', cursor: 'pointer'}}
+            sx={{backgroundColor: theme.palette.primary.main, padding: '4px', borderRadius: '8px', cursor: user?.name === offer.author.name ? 'pointer' : 'default'}}
             cardSize={{height: 500}} pictureHeight={385} cardContentStyle={{padding: '0'}}
             title={detail(offer)} pictureStyle={{borderRadius: '8px', borderBottomRightRadius: '0'}}
             onClick={() => handleClick(offer)}

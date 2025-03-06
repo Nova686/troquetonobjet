@@ -56,7 +56,12 @@ const RegisterForm: FC = () => {
 			return;
 		}
 
-		const data: RegisterRequestModel = { name, email, password };
+		const data: RegisterRequestModel = {
+			name,
+			email,
+			password,
+			language_iso: window.navigator.language.split('-')[0]
+		};
 
 		try {
 			const response = await axiosService.post("/register", data);
