@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../config.json'
 import Cookies from 'js-cookie';
+import { getAuthRef } from '../contexts/AuthContext';
 
 const axiosService = axios.create({
 	baseURL: config.API_URL,
@@ -27,8 +28,12 @@ axiosService.interceptors.response.use(
 	(error) => {
 		if (error.response?.status === 401 && !window.location.pathname.startsWith("/auth")) {
 			console.error('Unauthorized, redirecting to login...');
+			const auth = getAuthRef().current;
+			if(auth)
+				auth?.logout();
 			window.location.href = "/auth/login";
 		}
+
 		return Promise.reject(error);
 	}
 );
