@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
- * 
  * @property int $id
  * @property string $title
  * @property string $description
@@ -62,9 +61,9 @@ class Offer extends Model
         return $this->hasMany(WishOffer::class);
     }
 
-    public function imageOffers(): HasMany
+    public function offerImages(): HasMany
     {
-        return $this->hasMany(imageOffer::class);
+        return $this->hasMany(OfferImage::class);
     }
 
     public static function baseQuery(int $id = 0, bool $isVisible = true)

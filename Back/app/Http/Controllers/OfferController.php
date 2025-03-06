@@ -11,11 +11,10 @@ use App\Http\Resources\Offers\UserOfferResource;
 use App\Library\Results;
 use App\Library\Storage\EStorageResponse;
 use App\Library\Storage\StorageService;
-use App\Models\ImageOffer;
+use App\Models\OfferImage;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class OfferController extends Controller
 {
@@ -37,7 +36,7 @@ class OfferController extends Controller
         $data = $request->validated();
 
         $query = Offer::baseQuery(isVisible: true)
-            ->with(["imageOffers"]);
+            ->with(["offerImages"]);
 
         $p = Pagination::paginate($query, $data);
 
@@ -71,7 +70,7 @@ class OfferController extends Controller
     public function get(int $id)
     {
         $result = Offer::baseQuery($id)
-            ->with(['wishs.subCategory', 'imageOffers'])
+            ->with(['wishs.subCategory', 'offerImages'])
             ->first();
 
         if($result !== null)
@@ -122,7 +121,7 @@ class OfferController extends Controller
 
         if($response->state == EStorageResponse::Ok)
         {
-            ImageOffer::create([
+            OfferImage::create([
                 "order" => $order,
                 "offer_id" => $offerId,
                 "url" => $response->url
@@ -137,7 +136,7 @@ class OfferController extends Controller
         if($fileOfferId <= 0)
             return Results::notFound();
 
-        $query = ImageOffer::join(
+        $query = OfferImage::join(
             (new Offer())->getTable()." as o", 
             "o.id", "=", "image_offers.offer_id"
         )

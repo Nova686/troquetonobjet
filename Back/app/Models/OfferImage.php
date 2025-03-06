@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * 
  * @property Offer $offer
  */
-class ImageOffer extends Model
+class OfferImage extends Model
 {
     protected $fillable = [
         "offer_id", "order", "url"
