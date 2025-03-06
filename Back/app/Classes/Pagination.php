@@ -15,8 +15,7 @@ class Pagination
 
         $list = $query->skip(($data["page"] - 1) * $data["nb_per_page"])
             ->take($data["nb_per_page"])
-            ->get()
-            ->toArray();
+            ->get();
 
         return new PaginationExport(
             $list,

@@ -24,8 +24,9 @@ class OfferResource extends JsonResource
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'cityName' => $this->city_name,
-            'isUpdated' => $this->isUpdated,
-            'createdAt' => $this->created_at
+            'isUpdated' => $this->updated_at != $this->created_at,
+            'createdAt' => $this->created_at,
+            'isFavorite' => (bool)$this->isFavorite
         ];
     }
 }

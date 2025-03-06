@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Language;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $languages = [
+            ["id" => 1, "codeISO" => "fr"],
+            ["id" => 2, "codeISO" => "en"],
+            ["id" => 3, "codeISO" => "it"],
+            ["id" => 4, "codeISO" => "es"],
+            ["id" => 5, "codeISO" => "de"]
+        ];
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($languages as $element) 
+        {
+            Language::create($element);
+        }
     }
 }
