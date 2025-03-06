@@ -36,7 +36,8 @@ class OfferController extends Controller
     {
         $data = $request->validated();
 
-        $query = Offer::baseQuery(isVisible: true);
+        $query = Offer::baseQuery(isVisible: true)
+            ->with(["imageOffers"]);
 
         $p = Pagination::paginate($query, $data);
 
@@ -70,7 +71,7 @@ class OfferController extends Controller
     public function get(int $id)
     {
         $result = Offer::baseQuery($id)
-            ->with(['wishs.subCategory'])
+            ->with(['wishs.subCategory', 'imageOffers'])
             ->first();
 
         if($result !== null)

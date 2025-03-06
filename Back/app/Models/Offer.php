@@ -62,6 +62,11 @@ class Offer extends Model
         return $this->hasMany(WishOffer::class);
     }
 
+    public function imageOffers(): HasMany
+    {
+        return $this->hasMany(imageOffer::class);
+    }
+
     public static function baseQuery(int $id = 0, bool $isVisible = true)
     {
         return self::query()

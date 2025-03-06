@@ -24,6 +24,33 @@ class OfferResource extends JsonResource
             'wishs' => $this->whenLoaded('wishs', function () {
                 return WishOfferResource::collection($this->wishs);
             }),
+            'images' => $this->whenLoaded('imageOffers', function()
+            {
+                $urlList = [];
+                foreach ($this->imageOffers as $element) 
+                {
+                    if($element->order != 0)
+                        $urlList[] = url(preg_replace("/public/", "/storage/", $element->url));
+                }
+
+                return $urlList;
+            }),
+            'mainImage' => $this->whenLoaded('imageOffers', function () 
+            {
+                foreach ($this->imageOffers as $element) 
+                {
+                    if($element->order == 0)
+                    {
+                        $url = $element->url;
+                        break;
+                    }
+                }
+
+                if(empty($url))
+                    $url = $this->imageOffers[0]->url;
+
+                return url(preg_replace("/public/", "/storage/", $url));
+            }),
             'isDonation' => $this->is_donation,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
