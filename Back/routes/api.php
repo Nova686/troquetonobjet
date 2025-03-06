@@ -17,36 +17,36 @@ Route::prefix('users')->group(function () {
 Route::prefix('offers')->group(function (): void {
     Route::post('', [OfferController::class, 'store']);
 
-        Route::prefix('{offer}')->group(function (): void {
-            Route::put('', [OfferController::class, 'update']);
-            Route::delete('', [OfferController::class, 'destroy']);
-            Route::post('favorite', [FavoriteOfferController::class, 'favorite']);
+    Route::prefix('{offer}')->group(function (): void {
+        Route::put('', [OfferController::class, 'update']);
+        Route::delete('', [OfferController::class, 'destroy']);
+        Route::post('favorite', [FavoriteOfferController::class, 'favorite']);
 
-            Route::post('conversation', [ConversationController::class, 'create']);
+        Route::post('conversation', [ConversationController::class, 'create']);
 
-            Route::post('wishs', [WishOfferController::class, 'add']);
-        });
-        Route::post('wishs/{idWishOffer}', [WishOfferController::class, 'remove']);
-        Route::get('favorite', [FavoriteOfferController::class, 'get']);
+        Route::post('wishs', [WishOfferController::class, 'add']);
     });
+    Route::delete('wishs/{idWishOffer}', [WishOfferController::class, 'remove']);
+    Route::get('favorite', [FavoriteOfferController::class, 'get']);
+});
 
-    // Route for Conversations
-    Route::prefix('conversations')->group(function () {
-        Route::get('', [ConversationController::class, 'getConversations']);
-        Route::post('{conversation}/close', [ConversationController::class, 'hide']);
+// Route for Conversations
+Route::prefix('conversations')->group(function () {
+    Route::get('', [ConversationController::class, 'getConversations']);
+    Route::post('{conversation}/close', [ConversationController::class, 'hide']);
 
-        Route::prefix('{conversation}')->group(function () {
-            Route::prefix('messages')->group(function () {
-                Route::get('', [MessageController::class, 'get']);
-                Route::post('', [MessageController::class, 'store']);
-            });
+    Route::prefix('{conversation}')->group(function () {
+        Route::prefix('messages')->group(function () {
+            Route::get('', [MessageController::class, 'get']);
+            Route::post('', [MessageController::class, 'store']);
         });
     });
+});
 
-    // Route for Messages
-    Route::prefix('messages')->group(function () {
-        Route::put('{message}', [MessageController::class, 'update']);
-        Route::delete('{message}', [MessageController::class, 'destroy']);
+// Route for Messages
+Route::prefix('messages')->group(function () {
+    Route::put('{message}', [MessageController::class, 'update']);
+    Route::delete('{message}', [MessageController::class, 'destroy']);
 
     Route::prefix('{offer}')->group(function (): void {
         Route::put('', [OfferController::class, 'update']);

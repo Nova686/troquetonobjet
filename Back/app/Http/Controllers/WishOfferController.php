@@ -46,9 +46,9 @@ class WishOfferController extends Controller
     public function remove(int $idWishOffer)
     {
         $isDeleted = WishOffer::query()
-            ->join((new Offer())->getTable() . ' as o', 'o.id', 'wish_offers.offer_id')
+            ->join((new Offer())->getTable() . ' as o', 'o.id', '=', 'wish_offers.offer_id')
             ->where('o.user_id', Auth::id())
-            ->where('id', $idWishOffer)
+            ->where('wish_offers.id', $idWishOffer)
             ->delete();
 
         return $isDeleted ? Results::noContent() : Results::notFound();
