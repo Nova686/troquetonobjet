@@ -19,7 +19,6 @@ const TextField: FC<CustomTextFieldProps> = ({errorText, ...other}) => {
     return (
         <>
             <StyledTextField
-                className={'fdp'}
                 {...other}
                 error={!!errorText}
                 sx={{

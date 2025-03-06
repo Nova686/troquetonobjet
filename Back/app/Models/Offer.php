@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 
@@ -36,6 +37,7 @@ class Offer extends Model
         'updated_at' => 'datetime',
         'is_visible' => 'boolean',
         'is_donation' => 'boolean',
+        'isUpdated' => 'boolean'
     ];
 
     public function user(): BelongsTo
@@ -51,5 +53,32 @@ class Offer extends Model
     public function scopeIsVisible(Builder $query, bool $isVisible = true)
     {
         return $query->where('is_visible', $isVisible);
+    }
+
+    public static function baseQuery(int $id = 0, bool $isVisible = true)
+    {
+        return self::query()
+        ->join(
+            (new User())->getTable()." as u", 
+            "u.id", "=", "offers.user_id"
+        )
+        ->leftJoin(
+            "favorite_offers as f",
+            "f.offer_id", "=", "offers.id"
+        )
+        ->isVisible($isVisible)
+        ->when($id > 0, function($request) use ($id)
+        {
+            $request->where("offers.id", $id);
+        })
+        ->select(
+            "offers.id", "offers.title", "offers.description",
+            "u.id as userId", "u.username", "offers.is_donation",
+            "latitude", "longitude",
+            "city_name as cityName",
+            "offers.created_at",
+            "offers.updated_at",
+            DB::raw("f.id IS NOT NULL as isFavorite")
+        );
     }
 }

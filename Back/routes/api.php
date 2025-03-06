@@ -7,16 +7,16 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\SubCategoryController;
 use App\Http\Controllers\FavoriteOfferController;
+use App\Http\Controllers\UserAddressController;
 
-Route::prefix('/')->group(function () {
-    // Route for Users
-    Route::prefix('users')->group(function () {
-        Route::get('offers', [OfferController::class, 'getUserOffers']);
-    });
+// Route for Users
+Route::prefix('users')->group(function () {
+    Route::get('offers', [OfferController::class, 'getUserOffers']);
+});
 
-    // Route for Offers
-    Route::prefix('offers')->group(function (): void {
-        Route::post('', [OfferController::class, 'store']);
+// Route for Offers
+Route::prefix('offers')->group(function (): void {
+    Route::post('', [OfferController::class, 'store']);
 
         Route::prefix('{offer}')->group(function (): void {
             Route::put('', [OfferController::class, 'update']);
@@ -45,5 +45,27 @@ Route::prefix('/')->group(function () {
     Route::prefix('messages')->group(function () {
         Route::put('{message}', [MessageController::class, 'update']);
         Route::delete('{message}', [MessageController::class, 'destroy']);
+
+    Route::prefix('{offer}')->group(function (): void {
+        Route::put('', [OfferController::class, 'update']);
+        Route::delete('', [OfferController::class, 'destroy']);
+
+        Route::post('conversation', [ConversationController::class, 'create']);
     });
 });
+
+// Route for Conversations
+Route::prefix('conversations')->group(function () {
+    Route::get('', [ConversationController::class, 'getConversations']);
+    Route::post('{conversation}/close', [ConversationController::class, 'hide']);
+});
+
+Route::prefix('user-address')
+    ->controller(UserAddressController::class)
+    ->group(function () 
+    {
+        Route::get("", "getAll");
+        Route::post("", "store");
+        Route::delete("{userAddressId}", "delete")
+            ->whereNumber("userAddressId");
+    });

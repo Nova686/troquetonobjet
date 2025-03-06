@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Pagination;
 use App\Http\Requests\Offers\CreateOfferRequest;
 use App\Http\Requests\Offers\EditOfferRequest;
+use App\Http\Requests\PaginationRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
 use App\Library\Results;
 use App\Models\Offer;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,16 +26,17 @@ class OfferController extends Controller
         ]);
     }
 
-    public function getOffers(Request $request)
+    public function getOffers(PaginationRequest $request)
     {
-        $offers = Offer::query()
-            ->with(['user'])
-            ->isVisible()
-            ->get();
+        $data = $request->validated();
 
-        return response()->json([
-            'offers' => OfferResource::collection($offers)
-        ]);
+        $query = Offer::baseQuery(isVisible: true);
+
+        $p = Pagination::paginate($query, $data);
+
+        $p->list = OfferResource::collection($p->list);
+
+        return Results::ok($p);
     }
 
     public function store(CreateOfferRequest $request)
@@ -52,18 +54,21 @@ class OfferController extends Controller
         $offer->user()->associate(Auth::user()->id);
         $offer->save();
 
+        $result = Offer::baseQuery($offer->id)->first();
+
         return response()->json([
-            'offer' => OfferResource::make($offer)
+            'offer' => OfferResource::make($result)
         ]);
     }
 
-    public function get(Offer $offer)
+    public function get(int $id)
     {
-        $this->authorize('view', $offer);
+        $result = Offer::baseQuery($id)->first();
 
-        return response()->json([
-            'offer' => OfferResource::make($offer)
-        ]);
+        if($result !== null)
+            return Results::ok(OfferResource::make($result));
+
+        return Results::notFound();
     }
 
     public function update(EditOfferRequest $request, Offer $offer)
@@ -73,9 +78,10 @@ class OfferController extends Controller
         $validated = $request->validated();
 
         $offer->update($validated);
+        $result = Offer::baseQuery($offer->id)->first();
 
         return response()->json([
-            'offer' => OfferResource::make($offer)
+            'offer' => OfferResource::make($result)
         ]);
     }
 

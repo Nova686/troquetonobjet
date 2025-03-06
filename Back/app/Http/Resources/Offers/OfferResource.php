@@ -19,13 +19,14 @@ class OfferResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'author' => UserResource::make($this->user),
-            'isDonation' => (bool)$this->is_donation,
+            'author' => ["id" => $this->userId, "username" => $this->username],
+            'isDonation' => $this->is_donation,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'cityName' => $this->city_name,
-            'isUpdated' => $this->isUpdated,
+            'isUpdated' => $this->updated_at != $this->created_at,
             'createdAt' => $this->created_at,
+            'isFavorite' => (bool)$this->isFavorite
         ];
     }
 }

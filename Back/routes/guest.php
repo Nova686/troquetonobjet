@@ -5,6 +5,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\GooglePlaceController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\SubCategoryController;
+use App\Http\Controllers\UserAddressController;
 
 // Route for Offers
 Route::prefix('offers')->group(function () {
@@ -45,3 +46,4 @@ Route::controller(SubCategoryController::class)->prefix("subcategory")->group(fu
     Route::put("/{subCategory}","update")
         ->whereNumber("subCategory");
 });
+    

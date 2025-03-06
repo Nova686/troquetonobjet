@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 Class Language extends Model
 {
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +25,8 @@ Class Language extends Model
     protected $fillable = [
         'codeISO',
     ];
+
+    public $timestamps = false;
 
     public function subCategories(){
         return $this->hasMany(SubCategory::class);
