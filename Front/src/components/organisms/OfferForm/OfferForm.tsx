@@ -6,6 +6,7 @@ import {Category, OfferFormCreate} from "../../../typings/Offer";
 import {useTheme} from "@mui/material/styles";
 import {useLocation} from "react-router-dom";
 import {useAuth} from "../../../contexts/AuthContext";
+import {DeleteButton} from "../../molecules";
 
 const OfferForm: FC = () => {
 
@@ -21,7 +22,7 @@ const OfferForm: FC = () => {
     const [errorDescription, setErrorDescription] = useState<string>('');
     const [errors, setErrors] = useState<string>('');
     const theme = useTheme();
-    const { user } = useAuth();
+    const { isConnected, user } = useAuth();
 
     // Fonction pour gérer le changement de valeur du titre
     const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
@@ -135,9 +136,12 @@ const OfferForm: FC = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-             <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
-                 Troquer mon objet
-             </Typography>
+            <Typography component={'div'} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
+                    Troquer mon objet
+                </Typography>
+                { isConnected() && offer && <DeleteButton url={`/offers/${offer.id}`} /> }
+            </Typography>
 
              <TextField
                  label="Titre de mon objet"

@@ -7,11 +7,18 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\SubCategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\WishOfferController;
 
 // Route for Offers
 Route::prefix('offers')->group(function () {
     Route::get('', [OfferController::class, 'getOffers']);
-    Route::get('{offer}', [OfferController::class, 'get']);
+
+    Route::prefix('{offer}')->group(function () {
+        Route::get('', [OfferController::class, 'get']);
+
+        Route::get('wishs', [WishOfferController::class, 'get']);
+    });
 });
 
 Route::get("auto-complete", [GooglePlaceController::class, "AutoComplete"]);

@@ -27,7 +27,7 @@ const Header: FC = () => {
                 <Link to="/profile">
                     <Box display='flex' alignItems='center'>
                         <AccountCircleIcon style={{marginRight: '0.5rem'}}/>
-                        <h3>Bienvenue, {user?.name}</h3>
+                        <h3>Bienvenue, {user?.username}</h3>
                     </Box>
                 </Link>
             }

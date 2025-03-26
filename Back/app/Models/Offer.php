@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
- * 
  * @property int $id
  * @property string $title
  * @property string $description
@@ -22,10 +24,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
+ * @property OfferImages $offerImages
+ * @property OfferImages $mainOfferImage
  */
 class Offer extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = [
         'title', 'description', 'is_visible', 'is_donation', 'longitude', 'latitude', 'city_name'
@@ -36,6 +40,7 @@ class Offer extends Model
         'updated_at' => 'datetime',
         'is_visible' => 'boolean',
         'is_donation' => 'boolean',
+        'isUpdated' => 'boolean'
     ];
 
     public function user(): BelongsTo
@@ -51,5 +56,44 @@ class Offer extends Model
     public function scopeIsVisible(Builder $query, bool $isVisible = true)
     {
         return $query->where('is_visible', $isVisible);
+    }
+
+    public function wishs(): HasMany
+    {
+        return $this->hasMany(WishOffer::class);
+    }
+
+    public function mainOfferImage()
+    {
+        return $this->hasOne(offerImage::class)->where("order", 0);
+    }
+
+    public function offerImages(): HasMany
+    {
+        return $this->hasMany(OfferImage::class);
+    }
+
+    public static function baseQuery(int $id = 0, bool $isVisible = true)
+    {
+        return self::query()
+        ->join(
+            (new User())->getTable()." as u", 
+            "u.id", "=", "offers.user_id"
+        )
+        ->leftJoin("favorite_offers as f", "f.offer_id", "=", "offers.id")
+        ->isVisible($isVisible)
+        ->when($id > 0, function($request) use ($id)
+        {
+            $request->where("offers.id", $id);
+        })
+        ->select(
+            "offers.id", "offers.title", "offers.description",
+            "u.id as userId", "u.username", "offers.is_donation",
+            "latitude", "longitude",
+            "city_name as cityName",
+            "offers.created_at",
+            "offers.updated_at",
+            DB::raw("f.id IS NOT NULL as isFavorite")
+        );
     }
 }

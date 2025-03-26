@@ -1,5 +1,5 @@
 import "./Conversations.css";
-import { useEffect, useRef, useState } from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Conversation, Message } from "../../organisms";
 import { createMessage, getConversations, getMessages } from "../../../services/messages";
@@ -10,7 +10,7 @@ import { FaFileImage } from "react-icons/fa";
 import { timestampFormat } from "../../../services/FormatterService";
 import { useAuth } from "../../../contexts/AuthContext";
 
-const Conversations: React.FC = () => {
+const Conversations: FC = () => {
     const { user } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();

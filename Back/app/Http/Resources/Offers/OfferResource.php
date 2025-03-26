@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Offers;
 
 use App\Http\Resources\Users\UserResource;
+use App\Http\Resources\WishOfferResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,13 +20,32 @@ class OfferResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'author' => UserResource::make($this->user),
-            'isDonation' => (bool)$this->is_donation,
+            'author' => ["id" => $this->userId, "username" => $this->username],
+            'wishs' => $this->whenLoaded('wishs', function () {
+                return WishOfferResource::collection($this->wishs);
+            }),
+            'images' => $this->whenLoaded('offerImages', function()
+            {
+                $urlList = [];
+                foreach ($this->offerImages as $element) 
+                {
+                    if($element->order != 0)
+                        $urlList[] = url("storage/".$element->url);
+                }
+
+                return $urlList;
+            }),
+            'mainImage' => $this->whenLoaded('offerImages', function () 
+            {
+                return url("storage/".$this->mainOfferImage->url);
+            }),
+            'isDonation' => $this->is_donation,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'cityName' => $this->city_name,
-            'isUpdated' => $this->isUpdated,
+            'isUpdated' => $this->updated_at != $this->created_at,
             'createdAt' => $this->created_at,
+            'isFavorite' => (bool)$this->isFavorite
         ];
     }
 }

@@ -7,9 +7,10 @@ import {Typography} from "../../atoms";
 import {useTheme} from "@mui/material/styles";
 import {CreateOfferButton} from "../../molecules";
 import {useAuth} from "../../../contexts/AuthContext";
+import {Pagination} from "../../../typings/Pagination";
 
 const Offers: FC = () => {
-    const [offers, setOffers] = useState<Offer[]>([]);
+    const [offers, setOffers] = useState<Pagination<Offer> | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const theme = useTheme();
@@ -19,8 +20,8 @@ const Offers: FC = () => {
         setLoading(true);
 
         try {
-            const response: AxiosResponse = await axiosService.get("offers");
-            setOffers(response.data.offers);
+            const response: AxiosResponse = await axiosService.get("offers", {params: {page: 1, nb_per_page: 20}});
+            setOffers(response.data);
             setError(null);
         } catch (err) {
             setError("Une erreur s'est produite lors du chargement des offres.");
@@ -50,7 +51,7 @@ const Offers: FC = () => {
             {
                 !loading && !error &&
                 <Typography component={'div'} sx={{display: 'flex', flexWrap: 'wrap', gap: '4.5em', justifyContent: 'center'}}>
-                    {offers.map((offer) => (
+                    {offers?.list.map((offer) => (
                         <OfferCard offer={offer} key={offer.id}/>
                     ))}
                 </Typography>

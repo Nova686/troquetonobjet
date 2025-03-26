@@ -1,47 +1,48 @@
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
-import {Home, Offers, CreateOffer, Authentication, Conversations} from './components/pages';
+import {Home, Offers, CreateOffer, Authentication, Conversations, DetailOffer} from './components/pages';
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import Profile from './components/pages/Profile/Profile';
 import theme from './theme';
 import {ThemeProvider, CssBaseline, Box} from "@mui/material";
+import {ToastProvider} from "./contexts/ToastContext";
 
 function App() {
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/> {/* Applique les styles par défaut de MUI */}
-            <Box sx={{
-                backgroundColor: 'background.default',
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh',
-            }}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path='/' element={<Layout/>}>
-                            <Route index element={<Home/>}/>
-                            <Route path='/auth/:type' element={<Authentication/>}/>
-                            <Route path='/offers' element={<Offers/>}/>
-                            <Route path='/profile' element={
-                                <ProtectedRoute>
-                                    <Profile/>
-                                </ProtectedRoute>
-                            }/>
-                            <Route path='/offers/form' element={
-                                <ProtectedRoute>
-                                    <CreateOffer/>
-                                </ProtectedRoute>
+            <ToastProvider>
+                <CssBaseline/> {/* Applique les styles par défaut de MUI */}
+                <Box sx={{
+                    backgroundColor: 'background.default',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh',
+                }}>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path='/' element={<Layout/>}>
+                                <Route index element={<Home/>}/>
+                                <Route path='/auth/:type' element={<Authentication/>}/>
+                                <Route path='/offers' element={<Offers/>}/>
+                                <Route path='/profile' element={
+                                    <ProtectedRoute>
+                                        <Profile/>
+                                    </ProtectedRoute>
                                 }/>
-                            <Route path='/conversations/:id?' element={
-                                <ProtectedRoute>
-                                    <Conversations />
-                                </ProtectedRoute>
-                                } />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
-            </Box>
+                                <Route path='/conversations/:id?' element={
+                                    <ProtectedRoute>
+                                        <Conversations/>
+                                    </ProtectedRoute>
+                                }/>
+
+                                <Route path='/offers/form' element={<CreateOffer/>}/>
+                                <Route path='/offers/:id' element={<DetailOffer/>}/>
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </Box>
+            </ToastProvider>
         </ThemeProvider>
     );
 }

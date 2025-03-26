@@ -17,13 +17,14 @@ export type OfferFormCreate = {
 export type Offer = {
     author : {
         id : number;
-        name : string;
+        username : string;
     }
     cityName : string;
     createdAt : string;
     description : string;
     id : number;
     isDonation : boolean;
+    isFavorite: boolean;
     isUpdated : boolean;
     latitude : number;
     longitude : number;
