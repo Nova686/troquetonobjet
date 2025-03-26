@@ -12,6 +12,7 @@ use App\Http\Controllers\WishOfferController;
 // Route for Users
 Route::prefix('users')->group(function () {
     Route::put('update', [UserController::class, 'update']);
+    Route::delete('delete', [UserController::class, 'delete']);
     Route::get('offers', [OfferController::class, 'getUserOffers']);
 });
 

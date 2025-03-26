@@ -28,7 +28,7 @@ class UserController extends Controller
 
         $urlFileList = OfferImage::query()
             ->join(
-                "offer as o",
+                "offers as o",
                 "o.id", "=", "offer_images.offer_id"
             )
             ->pluck("url")
