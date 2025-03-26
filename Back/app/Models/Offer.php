@@ -51,11 +51,6 @@ class Offer extends Model
         return $this->updated_at->getTimestamp() !== $this->created_at->getTimestamp();
     }
 
-    public function getUrlAttribute(): bool
-    {
-        return $this->url->getTimestamp();
-    }
-
     public function scopeIsVisible(Builder $query, bool $isVisible = true)
     {
         return $query->where('is_visible', $isVisible);
