@@ -37,7 +37,7 @@ class OfferResource extends JsonResource
             }),
             'mainImage' => $this->whenLoaded('offerImages', function () 
             {
-                return url("storage/".$this->mainOfferImage->url);
+                return $this->mainOfferImage ? url("storage/".$this->mainOfferImage->url) : null;
             }),
             'isDonation' => $this->is_donation,
             'latitude' => $this->latitude,
