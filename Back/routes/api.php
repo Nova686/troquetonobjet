@@ -16,6 +16,9 @@ Route::prefix('users')->group(function () {
 // Route for Offers
 Route::prefix('offers')->group(function (): void {
     Route::post('', [OfferController::class, 'store']);
+    Route::post("upload", [OfferController::class, 'fileStore']);
+    Route::delete("delete-file/{fileOfferId}", [OfferController::class, 'deleteFile'])
+        ->whereNumber("fileOfferId");
 
     Route::prefix('{offer}')->group(function (): void {
         Route::put('', [OfferController::class, 'update']);
