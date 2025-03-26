@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReportResource extends JsonResource
+class LanguageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,10 @@ class ReportResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "userId" => $this->user_id,
-            "offerId" => $this->offer_id,
-            "reason" => $this->reason,
-            "createdAt" => $this->created_at,
-            "updatedAt" => $this->updated_at,
+            "codeISO" => $this->codeISO,
+            "categories" => $this->categories,
+            "subCategories" => $this->subCategories,
+            "languageTrad" => $this->languageTrad,
         ];
     }
 }

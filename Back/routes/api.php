@@ -47,11 +47,4 @@ Route::prefix('/')->group(function () {
         Route::put('{message}', [MessageController::class, 'update']);
         Route::delete('{message}', [MessageController::class, 'destroy']);
     });
-
-    //Route for Reports
-    Route::prefix('reports')->group(function () {
-        Route::post('', [ReportController::class, 'create']);
-        Route::get('', [ReportController::class, 'getReports']);
-        Route::delete('{id}', [ReportController::class, 'delete']);
-    });
 });

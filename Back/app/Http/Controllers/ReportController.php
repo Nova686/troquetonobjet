@@ -37,7 +37,21 @@ class ReportController extends Controller
         ]);
     }
 
-    function getReports(Request $request){
+    function getReport($id){
+        $report = Report::find($id);
+        return response()->json([
+            "report"=>ReportResource::make($report),
+        ]);
+    }
+
+    function getReportsByUser($id){
+        $reports = Report::where('user_id', $id)->get();
+        return response()->json([
+            "reports"=>ReportResource::collection($reports),
+        ]);
+    }
+
+    function getReports(){
         $reports = Report::all();
         return response()->json([
             "reports"=>ReportResource::collection($reports),
