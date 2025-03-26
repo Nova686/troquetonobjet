@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
+ * @property OfferImages $offerImages
+ * @property OfferImages $mainOfferImage
  */
 class Offer extends Model
 {
@@ -59,6 +61,11 @@ class Offer extends Model
     public function wishs(): HasMany
     {
         return $this->hasMany(WishOffer::class);
+    }
+
+    public function mainOfferImage()
+    {
+        return $this->hasOne(offerImage::class)->where("order", 0);
     }
 
     public function offerImages(): HasMany
