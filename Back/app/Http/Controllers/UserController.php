@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserUpdateRequest;
 use App\Library\Results;
 use App\Library\Storage\StorageService;
-use App\Models\Offer;
 use App\Models\OfferImage;
 use App\Models\User;
-use App\Models\UserAddress;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
