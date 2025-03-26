@@ -2,6 +2,7 @@ import {Card, CardContent, CardMedia, SxProps, Theme} from "@mui/material";
 import {Typography} from "../index";
 import {FC, ReactNode} from "react";
 import {styled} from "@mui/system";
+import "./CardWithPictureWithoutAction.css";
 
 interface CustomCardProps {
     cardSize?: { width?: number; height?: number };
@@ -46,9 +47,9 @@ const CardWithPictureWithoutAction: FC<CustomCardProps> = ({
                 image={"/Images/gourde.jpeg"}
                 alt={altPicture}
             />
-            <CardContent sx={{flexGrow: 1, ...cardContentStyle}}>
-                <Typography component={'div'}>
-                    {title && <Typography variant="h6">{title}</Typography>}
+            <CardContent sx={{flexGrow: 1, height: "100%", ...cardContentStyle}} className={"card-body"}>
+                <Typography component={'div'} sx={{height: "100%"}}>
+                    {title && <Typography variant="h6" sx={{height: "100%"}}>{title}</Typography>}
                     {description && <Typography variant="body2">{description}</Typography>}
                 </Typography>
             </CardContent>

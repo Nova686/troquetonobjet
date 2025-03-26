@@ -8,12 +8,12 @@ import { useAuth } from "../../../contexts/AuthContext";
 import {useTheme} from "@mui/material/styles";
 
 const RegisterForm: FC = () => {
-	const [name, setName] = useState('');
+	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [errors, setErrors] = useState({
-		name: '',
+		username: '',
 		email: '',
 		password: '',
 		confirmPassword: '',
@@ -49,14 +49,19 @@ const RegisterForm: FC = () => {
 		e.preventDefault();
 		setLoading(true);
 
-		setErrors({ name: '', email: '', password: '', confirmPassword: '', general: '' });
+		setErrors({ username: '', email: '', password: '', confirmPassword: '', general: '' });
 
 		if (!validateForm()) {
 			setLoading(false);
 			return;
 		}
 
-		const data: RegisterRequestModel = { name, email, password };
+		const data: RegisterRequestModel = {
+			username,
+			email,
+			password,
+			language_iso: window.navigator.language.split('-')[0]
+		};
 
 		try {
 			const response = await axiosService.post("/register", data);
@@ -71,7 +76,7 @@ const RegisterForm: FC = () => {
 				const apiErrors = error.response?.data.errors ?? { general: error.message };
 				setErrors(prevErrors => ({
 					...prevErrors,
-					name: apiErrors.name ? apiErrors.name[0] : '',
+					username: apiErrors.username ? apiErrors.username[0] : '',
 					email: apiErrors.email ? apiErrors.email[0] : '',
 					password: apiErrors.password ? apiErrors.password[0] : '',
 				  }));
@@ -107,10 +112,10 @@ const RegisterForm: FC = () => {
 					fullWidth
 					margin="normal"
 					type="text"
-					value={name}
-					onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+					value={username}
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
 					required
-					errorText={errors.name}
+					errorText={errors.username}
 					disabled={loading}
 				/>
 				<TextField

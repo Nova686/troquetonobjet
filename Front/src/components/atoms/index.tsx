@@ -8,6 +8,7 @@ import FormControlLabel from "./FormControlLabel/FormControlLabel";
 import CardWithPictureWithoutAction from './Cards/CardWithPictureWithoutAction'
 import Link from "./Link/Link";
 import LinkButton from "./LinkButton/LinkButton";
+import Toast from "./Toast/Toast";
 
 export {
     DebounceInput,
@@ -19,5 +20,6 @@ export {
     FormControlLabel,
     CardWithPictureWithoutAction,
     Link,
-    LinkButton
+    LinkButton,
+    Toast
 };

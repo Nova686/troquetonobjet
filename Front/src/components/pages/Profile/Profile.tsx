@@ -13,7 +13,7 @@ const Profile = () => {
 			{isConnected() ? (
 				<>
 					<Typography variant="h5" gutterBottom color={theme.palette.primary.main}>
-						Salut {user?.name}
+						Salut {user?.username}
 					</Typography>
 					<p style={{color: theme.palette.primary.main}}>Email: {user?.email}</p>
 					<p style={{color: theme.palette.primary.main}}>Email vérifié : {user?.email_verified_at != null ? "oui" : "non"}</p>
