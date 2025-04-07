@@ -13,10 +13,11 @@ import {useAuth} from "../../../contexts/AuthContext";
 
 interface OfferCardProps
 {
-    offer: Offer;
+    offer: Offer,
+    key?: unknown
 }
 
-const OfferCard: FC<OfferCardProps> = ({offer}) =>
+const OfferCard: FC<OfferCardProps> = ({offer, key}) =>
 {
 
     const theme = useTheme();
@@ -35,7 +36,7 @@ const OfferCard: FC<OfferCardProps> = ({offer}) =>
     }
 
     const detail = (offer: Offer) =>
-    {
+    {// TODO: attendre que le back renvoie l'auteur
         return (
             <Typography component={'div'} style={{display: 'flex', justifyContent: "space-between", height: "100%"}}>
                 <Typography variant={'body1'} component={'div'}>
@@ -44,17 +45,17 @@ const OfferCard: FC<OfferCardProps> = ({offer}) =>
                     </Typography>
                     {offer.cityName &&
                         <Typography sx={{display: 'flex', gap: '8px'}}><LocationOnIcon/>{offer.cityName}</Typography>}
-                    <Typography sx={{display: 'flex', gap: '8px'}}><AccountCircleIcon/>{offer.author.username}
+                    <Typography sx={{display: 'flex', gap: '8px'}}><AccountCircleIcon/>{offer?.author?.username}
                     </Typography>
                 </Typography>
                 <Typography variant={'body1'} component={'div'} style={{
                     backgroundColor: theme.palette.background.default, borderBottomRightRadius: '8px', padding: '2px 0',
                     display:         "flex", justifyContent: "space-between", flexDirection: 'column', height: "100%"
                 }}>
-                    {isConnected() && (user?.username !== offer.author.username) &&
+                    {isConnected() && (user?.username !== offer?.author?.username) &&
                         <FavoriteButton offerId={offer.id} defaultFilled={offer.isFavorite}/>
                     }
-                    {isConnected() && (user?.username !== offer.author.username) && <ChatButton/>}
+                    {isConnected() && (user?.username !== offer?.author?.username) && <ChatButton/>}
                 </Typography>
             </Typography>
         )
