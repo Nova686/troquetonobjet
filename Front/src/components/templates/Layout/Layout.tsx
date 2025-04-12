@@ -9,7 +9,7 @@ const Layout: FC = () => {
     return (
         <>
             <Navbar />
-                <Container>
+                <Container sx={{ minHeight: '100vh' }}>
                     <div className="main-content">
                         <Outlet />
                     </div>

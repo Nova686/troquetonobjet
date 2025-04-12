@@ -8,6 +8,7 @@ import {useTheme} from "@mui/material/styles";
 import {CreateOfferButton} from "../../molecules";
 import {useAuth} from "../../../contexts/AuthContext";
 import {Pagination} from "../../../typings/Pagination";
+import { Box } from "@mui/material";
 
 const Offers: FC = () => {
     const [offers, setOffers] = useState<Pagination<Offer> | null>(null);
@@ -37,26 +38,27 @@ const Offers: FC = () => {
     }, []);
 
     return (
-        <Typography component={'div'}>
+        <div style={{ marginBottom: '64px' }}>
 
             <Typography component={'div'} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
                 color={theme.palette.primary.main}>
-                <h1>Listing des offres</h1>
+                <h1>Les dernières annonces</h1>
                 {isConnected() && <CreateOfferButton/>}
             </Typography>
 
             {loading && <p style={{color: "white"}}>Chargement des offres...</p>}
             {error && <p style={{color: "red"}}>{error}</p>}
 
-            {
-                !loading && !error &&
-                <Typography component={'div'} sx={{display: 'flex', flexWrap: 'wrap', gap: '4.5em', justifyContent: 'center'}}>
+            {!loading && !error &&
+                <Box display={'flex'} justifyContent={'space-between'} gap="12px" flexWrap="wrap">
                     {offers?.list.map((offer) => (
-                        <OfferCard offer={offer} key={offer.id}/>
+                        <div key={offer.id} style={{ width: 'calc(25% - 12px)' }}>
+                            <OfferCard offer={offer}/>
+                        </div>
                     ))}
-                </Typography>
+                </Box>
             }
-        </Typography>
+        </div>
     );
 };
 
