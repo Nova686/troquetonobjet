@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles';
 declare module '@mui/material/styles' {
     interface Palette {
         custom: {
+            textColor: string;
             danger: string;
             input: string;
         };
@@ -10,6 +11,7 @@ declare module '@mui/material/styles' {
 
     interface PaletteOptions {
         custom?: {
+            textColor?: string;
             danger?: string;
             input?: string;
         };
@@ -28,6 +30,7 @@ const theme = createTheme({
             default: '#172601',
         },
         custom: {
+            textColor: '#F4F3ED',
             danger: '#FF0000',
             input: '#747D67',
         },

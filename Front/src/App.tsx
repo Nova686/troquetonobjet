@@ -1,7 +1,7 @@
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
-import {Home, Offers, CreateOffer, Authentication, Conversations, DetailOffer} from './components/pages';
+import {Home, Offers, CreateOffer, Authentication, Conversations, DetailOffer, Favorite} from './components/pages';
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import Profile from './components/pages/Profile/Profile';
 import theme from './theme';
@@ -33,6 +33,11 @@ function App() {
                                 <Route path='/conversations/:id?' element={
                                     <ProtectedRoute>
                                         <Conversations/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path='/favorite' element={
+                                    <ProtectedRoute>
+                                        <Favorite/>
                                     </ProtectedRoute>
                                 }/>
 
