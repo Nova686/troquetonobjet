@@ -1,7 +1,5 @@
 .main-navbar {
     text-align: center;
-    border-bottom: #242424 1px solid;
-    background-color: #e0e0e0;
     grid-area: header;
     padding: 12px 84px;
     display: flex;
@@ -34,6 +32,7 @@
     text-align: center;
     margin-top: auto;
     grid-area: footer;
+    background-color: #00000020;
 }
 
 .footer-container {

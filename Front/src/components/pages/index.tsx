@@ -4,5 +4,7 @@ import Offers from "./Offer/Offers";
 import CreateOffer from "./Offer/CreateOffer";
 import Conversations from "./Conversations/Conversations";
 import Account from "./Account/Account";
+import DetailOffer from "./Offer/DetailOffer";
+import Favorite from './Favorite/Favorite';
 
-export { Authentication, Home, Offers, CreateOffer, Conversations, Account };
+export { Authentication, Home, Offers, CreateOffer, Conversations, DetailOffer, Favorite, Account };

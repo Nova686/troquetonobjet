@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
- * 
  * @property int $id
  * @property string $title
  * @property string $description
@@ -23,10 +24,12 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
+ * @property OfferImages $offerImages
+ * @property OfferImages $mainOfferImage
  */
 class Offer extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = [
         'title', 'description', 'is_visible', 'is_donation', 'longitude', 'latitude', 'city_name'
@@ -55,6 +58,21 @@ class Offer extends Model
         return $query->where('is_visible', $isVisible);
     }
 
+    public function wishs(): HasMany
+    {
+        return $this->hasMany(WishOffer::class);
+    }
+
+    public function mainOfferImage()
+    {
+        return $this->hasOne(offerImage::class)->where("order", 0);
+    }
+
+    public function offerImages(): HasMany
+    {
+        return $this->hasMany(OfferImage::class);
+    }
+
     public static function baseQuery(int $id = 0, bool $isVisible = true)
     {
         return self::query()
@@ -62,10 +80,7 @@ class Offer extends Model
             (new User())->getTable()." as u", 
             "u.id", "=", "offers.user_id"
         )
-        ->leftJoin(
-            "favorite_offers as f",
-            "f.offer_id", "=", "offers.id"
-        )
+        ->leftJoin("favorite_offers as f", "f.offer_id", "=", "offers.id")
         ->isVisible($isVisible)
         ->when($id > 0, function($request) use ($id)
         {

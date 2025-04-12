@@ -8,37 +8,54 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useTheme} from '@mui/material/styles';
 import {ChatButton, FavoriteButton} from "../../molecules";
 import {useNavigate} from "react-router-dom";
-import { dateFormat } from "../../../services/FormatterService";
+import {dateFormat} from "../../../services/FormatterService";
+import {useAuth} from "../../../contexts/AuthContext";
 
-interface OfferCardProps {
-    offer: Offer;
+interface OfferCardProps
+{
+    offer: Offer,
+    key?: unknown
 }
 
-const OfferCard: FC<OfferCardProps> = ({offer}) => {
+const OfferCard: FC<OfferCardProps> = ({offer, key}) =>
+{
 
     const theme = useTheme();
     const navigate = useNavigate();
+    const {isConnected, user} = useAuth();
 
-    const handleClick = (offer: Offer) => {
-        navigate('/offers/form', { state: { offer } });
+    const handleClick = (offer: Offer) =>
+    {
+        if (user?.username === offer.author.username)
+        {
+            navigate('/offers/form', {state: {offer}});
+        } else
+        {
+            navigate(`/offers/${offer.id}`)
+        }
     }
 
-    const detail = (offer: Offer) => {
+    const detail = (offer: Offer) =>
+    {// TODO: attendre que le back renvoie l'auteur
         return (
-            <Typography component={'div'} style={{display: 'flex', justifyContent: "space-between"}}>
+            <Typography component={'div'} style={{display: 'flex', justifyContent: "space-between", height: "100%"}}>
                 <Typography variant={'body1'} component={'div'}>
                     <Typography variant={'h5'}>{offer.title}</Typography>
                     <Typography sx={{display: 'flex', gap: '8px'}}><CalendarMonthIcon/>Le {dateFormat(offer.createdAt)}
                     </Typography>
-                    <Typography sx={{display: 'flex', gap: '8px'}}><LocationOnIcon/>{offer.cityName}</Typography>
-                    <Typography sx={{display: 'flex', gap: '8px'}}><AccountCircleIcon/>{offer.author.name}</Typography>
+                    {offer.cityName &&
+                        <Typography sx={{display: 'flex', gap: '8px'}}><LocationOnIcon/>{offer.cityName}</Typography>}
+                    <Typography sx={{display: 'flex', gap: '8px'}}><AccountCircleIcon/>{offer?.author?.username}
+                    </Typography>
                 </Typography>
                 <Typography variant={'body1'} component={'div'} style={{
                     backgroundColor: theme.palette.background.default, borderBottomRightRadius: '8px', padding: '2px 0',
-                    display: "flex", justifyContent: "space-between", flexDirection: 'column'
+                    display:         "flex", justifyContent: "space-between", flexDirection: 'column', height: "100%"
                 }}>
-                    <FavoriteButton/>
-                    <ChatButton/>
+                    {isConnected() && (user?.username !== offer?.author?.username) &&
+                        <FavoriteButton offerId={offer.id} defaultFilled={offer.isFavorite}/>
+                    }
+                    {isConnected() && (user?.username !== offer?.author?.username) && <ChatButton/>}
                 </Typography>
             </Typography>
         )
@@ -46,8 +63,14 @@ const OfferCard: FC<OfferCardProps> = ({offer}) => {
 
     return (
         <CardWithPictureWithoutAction
-            sx={{backgroundColor: theme.palette.primary.main, padding: '4px', borderRadius: '8px', cursor: 'pointer'}}
-            cardSize={{height: 500}} pictureHeight={385} cardContentStyle={{padding: '0'}}
+            sx={{
+                backgroundColor: theme.palette.primary.main,
+                padding:         '4px',
+                borderRadius:    '8px',
+                cursor:          'pointer',
+                height:          "100%"
+            }}
+            cardSize={{height: 524}} pictureHeight={385} cardContentStyle={{padding: '0'}}
             title={detail(offer)} pictureStyle={{borderRadius: '8px', borderBottomRightRadius: '0'}}
             onClick={() => handleClick(offer)}
         />

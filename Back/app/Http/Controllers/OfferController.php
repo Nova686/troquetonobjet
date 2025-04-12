@@ -9,12 +9,17 @@ use App\Http\Requests\PaginationRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
 use App\Library\Results;
+use App\Library\Storage\EStorageResponse;
+use App\Library\Storage\StorageService;
+use App\Models\OfferImage;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
 {
+    public function __construct(private StorageService $storageServ) { }
+
     public function getUserOffers()
     {
         $offers = Offer::query()
@@ -30,7 +35,8 @@ class OfferController extends Controller
     {
         $data = $request->validated();
 
-        $query = Offer::baseQuery(isVisible: true);
+        $query = Offer::baseQuery(isVisible: true)
+            ->with(["offerImages"]);
 
         $p = Pagination::paginate($query, $data);
 
@@ -63,7 +69,9 @@ class OfferController extends Controller
 
     public function get(int $id)
     {
-        $result = Offer::baseQuery($id)->first();
+        $result = Offer::baseQuery($id)
+            ->with(['wishs.subCategory', 'offerImages'])
+            ->first();
 
         if($result !== null)
             return Results::ok(OfferResource::make($result));
@@ -93,5 +101,59 @@ class OfferController extends Controller
             ->delete();
 
         return $isDeleted ? Results::noContent() : Results::notFound();
+    }
+
+    public function fileStore(Request $request)
+    {
+        $file = $request->file("fichier");
+        $offerId = $request->input("offer_id", 0);
+        $order = $request->input("order", 0);
+
+        $offerId = Offer::where([
+            ["id", "=", $offerId],
+            ["user_id", "=", Auth::id()]
+        ])?->value("id");
+
+        if($offerId === null)
+            return Results::notFound();
+
+        $response = $this->storageServ->upload($file, "offers/$offerId", "public");
+
+        if($response->state == EStorageResponse::Ok)
+        {
+            OfferImage::create([
+                "order" => $order,
+                "offer_id" => $offerId,
+                "url" => $response->url
+            ]);
+        }
+
+        return Results::ok(["state" => $response->state]);
+    }
+
+    public function deleteFile(int $fileOfferId)
+    {
+        if($fileOfferId <= 0)
+            return Results::notFound();
+
+        $query = OfferImage::join(
+            (new Offer())->getTable()." as o", 
+            "o.id", "=", "offer_images.offer_id"
+        )
+        ->where([
+            ["offer_images.id", "=", $fileOfferId],
+            ["user_id", "=", Auth::id()]
+        ]);
+
+        if(!$query->exists())
+            return Results::notFound();
+
+        $imageOfferUrl = $query->value("url");
+
+        $this->storageServ->delete($imageOfferUrl, "public");
+
+        $ok = $query->delete();
+
+        return $ok ? Results::noContent() : Results::notFound();
     }
 }
