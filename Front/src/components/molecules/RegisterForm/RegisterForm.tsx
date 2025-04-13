@@ -69,7 +69,7 @@ const RegisterForm: FC = () => {
 			if (!responseData?.user || !responseData?.token) throw new Error();
 
 			login(responseData.user, responseData.token, () => {
-				window.location.href = '/profile';
+				window.location.href = '/';
 			});
 		} catch (error) {
 			if (axios.isAxiosError(error)) {

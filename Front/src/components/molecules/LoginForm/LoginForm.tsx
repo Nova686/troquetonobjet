@@ -32,7 +32,7 @@ const LoginForm: FC = () => {
 				throw new Error();
 
 			login(reponseData.user, reponseData.token, () => {
-				window.location.href = '/profile';
+				window.location.href = '/';
 			});
 		} catch (error) {
 			setErrors('Une erreur à été retournée, veuillez-rééssayer.');

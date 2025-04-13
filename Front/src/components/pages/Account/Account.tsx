@@ -3,29 +3,36 @@ import { AxiosError } from 'axios';
 import { useAuth } from '../../../contexts/AuthContext';
 import axiosService from '../../../services/AxiosService';
 import { Offer } from '../../../typings/Offer';
-import { Box, IconButton, Snackbar, SnackbarContent } from '@mui/material';
+import { Box, colors, IconButton, Snackbar, SnackbarContent, Tab, Tabs } from '@mui/material';
 import theme from '../../../theme';
 import { Avatar, Typography, Button } from '../../atoms';
-import { AddCircle, Circle, Edit, Logout, PlusOneRounded, Square } from '@mui/icons-material';
+import { AddCircle, Edit, Logout } from '@mui/icons-material';
+import { OfferCard } from '../../organisms';
+
+enum DisplayOfferType {
+	Owned = 0,
+	Favorite = 1
+}
 
 const Account: FC = () => {
 	const { user, logout } = useAuth();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 	const [userOffers, setUserOffers] = useState<Offer[]>([]);
 	const [favoriteOffers, setFavoriteOffers] = useState<Offer[]>([]);
+	const [displayedOffers, setDisplayedOffers] = useState(DisplayOfferType.Owned);
 
 	useEffect(() => {
 		(async () => {
-			axiosService.get<Offer[]>("users/offers").then((resp) => {
-				setUserOffers(resp.data);
+			axiosService.get<{ offers: Offer[] }>("users/offers").then((resp) => {
+				setUserOffers(resp.data.offers);
 			}).catch((resp: AxiosError) => {
 				console.log(resp.message);
 				if (!snackbarOpen)
 					setSnackbarOpen(true);
 			});
 
-			axiosService.get("offers/favorite").then((resp) => {
-				setFavoriteOffers(resp.data);
+			axiosService.get<{ offers: Offer[] }>("offers/favorite").then((resp) => {
+				setFavoriteOffers(resp.data.offers);
 			}).catch((resp: AxiosError) => {
 				console.log(resp.message);
 				if (!snackbarOpen)
@@ -43,16 +50,17 @@ const Account: FC = () => {
 		// You can navigate to the edit profile page or open a modal
 	};
 
-	// Function to handle profile edit button click
 	const handleEditProfile = () => {
 		alert("Modifier le profil cliqué !");
 		// You can navigate to the edit profile page or open a modal
 	};
 
-	// Function to handle view more button click
-	const handleViewMore = () => {
-		alert("Voir plus d'annonces !");
-		// Logic to load more ads or redirect
+	const handleLogout = () => {
+		logout(() => window.location.href = "/");
+	};
+
+	const handleDisplayedOffersChange = (event: React.SyntheticEvent, newValue: number) => {
+		setDisplayedOffers(newValue);
 	};
 
 	return (
@@ -79,7 +87,7 @@ const Account: FC = () => {
 									<Edit fontSize='inherit' sx={{ marginRight: '0.5rem' }} />
 									<Typography variant='caption'>Modifier le profil</Typography>
 								</Button>
-								<Button color="secondary" size='small' variant='contained' onClick={logout} sx={{ paddingX: '1rem' }}>
+								<Button color="secondary" size='small' variant='contained' onClick={handleLogout} sx={{ paddingX: '1rem' }}>
 									<Logout fontSize='inherit' sx={{ marginRight: '0.5rem' }} />
 									<Typography variant='caption'>Se déconnecter</Typography>
 								</Button>
@@ -88,41 +96,60 @@ const Account: FC = () => {
 					</Box>
 					<Box display='flex' flexDirection='column' fontSize='80px'>
 						<svg width="180" height="180" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M44 0C41.7909 0 40 1.79086 40 4V32C40 34.2091 41.7909 36 44 36H72C74.2091 36 76 34.2091 76 32V4C76 1.79086 74.2091 0 72 0H44ZM51 5C48.7909 5 47 6.79086 47 9V24C47 26.2091 48.7909 28 51 28H66C68.2091 28 70 26.2091 70 24V9C70 6.79086 68.2091 5 66 5H51Z" fill="#F2DC6B" />
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M4 40C1.79086 40 0 41.7909 0 44V72C0 74.2091 1.79086 76 4 76H32C34.2091 76 36 74.2091 36 72V44C36 41.7909 34.2091 40 32 40H4ZM11 45C8.79086 45 7 46.7909 7 49V64C7 66.2091 8.79086 68 11 68H26C28.2091 68 30 66.2091 30 64V49C30 46.7909 28.2091 45 26 45H11Z" fill="#F2DC6B" />
+							<path fillRule="evenodd" clipRule="evenodd" d="M44 0C41.7909 0 40 1.79086 40 4V32C40 34.2091 41.7909 36 44 36H72C74.2091 36 76 34.2091 76 32V4C76 1.79086 74.2091 0 72 0H44ZM51 5C48.7909 5 47 6.79086 47 9V24C47 26.2091 48.7909 28 51 28H66C68.2091 28 70 26.2091 70 24V9C70 6.79086 68.2091 5 66 5H51Z" fill="#F2DC6B" />
+							<path fillRule="evenodd" clipRule="evenodd" d="M4 40C1.79086 40 0 41.7909 0 44V72C0 74.2091 1.79086 76 4 76H32C34.2091 76 36 74.2091 36 72V44C36 41.7909 34.2091 40 32 40H4ZM11 45C8.79086 45 7 46.7909 7 49V64C7 66.2091 8.79086 68 11 68H26C28.2091 68 30 66.2091 30 64V49C30 46.7909 28.2091 45 26 45H11Z" fill="#F2DC6B" />
 							<circle cx="58" cy="58" r="18" fill="#D99E89" />
 							<circle cx="18" cy="18" r="18" fill="#D99E89" />
 						</svg>
 
 					</Box>
 				</Box>
+				<Box mt={10}>
+					<Tabs
+						value={displayedOffers}
+						onChange={handleDisplayedOffersChange}
+						aria-label="Type d'offres">
+						<Tab sx={{ color: displayedOffers === DisplayOfferType.Owned ? theme.palette.primary.light : theme.palette.primary.dark }} label={`Mes annonces publiées (${userOffers.length})`} value={DisplayOfferType.Owned} />
+						<Tab sx={{ color: displayedOffers === DisplayOfferType.Favorite ? theme.palette.primary.light : theme.palette.primary.dark }} label={`Mes annonces favorites (${favoriteOffers.length})`} value={DisplayOfferType.Favorite} />
+					</Tabs>
 
-				<div className="history-container">
-					<h3>Mes Annonces</h3>
-					<div className="ad-card">
-						<img src="/Images/gourde.jpeg" alt="Annonce 1" />
-						<div className="ad-info">
-							<h4>Titre de l'objet</h4>
-							<p>Description courte de l'annonce...</p>
-							<span>Date : 12/06/2024</span>
-						</div>
-					</div>
-					<div className="ad-card">
-						<img src="/Images/gourde.jpeg" alt="Annonce 2" />
-						<div className="ad-info">
-							<h4>Deuxième objet</h4>
-							<p>Description courte de l'annonce...</p>
-							<span>Date : 10/06/2024</span>
-						</div>
-					</div>
-					<button className="view-more" onClick={handleViewMore}>
-						Voir plus
-					</button>
-				</div>
+					{displayedOffers === DisplayOfferType.Owned && (
+						<Box display="flex" flexDirection="column" alignItems="center" mt={10}>
+							{userOffers.length === 0 ? (
+								<Typography variant="body1">
+									Aucune annonce publiée pour le moment.
+								</Typography>
+							) : (
+								<Box display="flex" justifyContent="space-between" flexWrap="wrap" width="100%">
+									{userOffers.map((offer: Offer) => (
+										<OfferCard offer={offer} key={offer.id} />
+									))}
+								</Box>
+							)}
+						</Box>
+					)}
+
+					{displayedOffers === DisplayOfferType.Favorite && (
+						<Box display="flex" flexDirection="column" alignItems="center" mt={10}>
+							{favoriteOffers.length === 0 ? (
+								<Typography variant="body1">
+									Aucune annonce favorite pour le moment.
+								</Typography>
+							) : (
+								<Box display="flex" justifyContent="space-between" flexWrap="wrap" width="100%">
+									{favoriteOffers.map((offer: Offer) => (
+										<OfferCard offer={offer} key={offer.id} />
+									))}
+								</Box>
+							)}
+						</Box>
+					)}
+
+				</Box>
 			</Box>
 			<Snackbar
 				open={snackbarOpen}
-				autoHideDuration={6000}
+				autoHideDuration={3000}
 				onClose={handleSnackbarClose}
 			>
 				<SnackbarContent

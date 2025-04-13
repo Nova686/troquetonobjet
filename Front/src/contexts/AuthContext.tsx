@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 interface AuthContextProps {
 	user: User | null;
 	login: (user: User, token: string, afterLogin: () => void) => void;
-	logout: () => void;
+	logout: (afterLogout: () => void) => void;
 	isConnected: () => boolean;
 }
 
@@ -26,10 +26,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		afterLogin();
 	};
 	
-	const logout = () => {
+	const logout = (afterLogout: () => void) => {
 		setUser(null);
 		localStorage.removeItem("user");
 		Cookies.remove("auth_token");
+		afterLogout();
 	};
 	
 	const isConnected = () => {
