@@ -7,7 +7,7 @@ type AvatarProps = {
 
 const Avatar: React.FC<AvatarProps> = ({ url, size }) => {
     return (
-        <div style={{ width: size * 4, height: size * 4 }} className="avatar-container">
+        <div style={{ width: size, height: size }} className="avatar-container">
             {url && 
                 <img src={url} className="avatar-image" alt="" />
             }
