@@ -26,8 +26,6 @@ class RegisteredUserController extends Controller
 
         $request->validate([
             'language_iso' => ["required", "exists:languages,codeISO"],
-            'first_name' => ["required", "max:300"],
-            'last_name' => ["required", "max:300"],
             'phone' => ["nullable", "max:20"],
             'username' => ['required', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:' . User::class],
@@ -40,8 +38,6 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'language_id' => $languageId,
             'phone' => $request->phone,
-            'last_name' => $request->last_name,
-            'first_name' => $request->first_name,
             'username' => $request->username,
             'email' => $request->email,
             "phone" => $request->phone,
@@ -54,7 +50,7 @@ class RegisteredUserController extends Controller
 
         return Results::created([
             'token' => $token,
-            'username' => $user->username
+            'user' => $user
         ]);
     }
 }

@@ -162,7 +162,7 @@ const RegisterForm: FC = () => {
 					sx={{ marginTop: '20px' }}
 					disabled={loading}
 				>
-					{loading ? <CircularProgress size={24} color="inherit" /> : 'Se connecter'}
+					{loading ? <CircularProgress size={24} color="inherit" /> : 'Créer mon compte'}
 				</Button>
 				{errors.general && (
 					<Typography variant="body1" style={{ marginTop: '16px', color: 'red' }}>
