@@ -1,14 +1,13 @@
 import {FC, useEffect, useState} from "react";
 import {useTheme} from "@mui/material/styles";
-import {Box} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import {AxiosResponse} from "axios";
 import axiosService from "../../../services/AxiosService";
 import {OfferCard} from "../../organisms";
-import {Pagination} from "../../../typings/Pagination";
 import {Offer} from "../../../typings/Offer";
+import { Link } from "react-router-dom";
 
-const Home: FC = () =>
-{
+const Home: FC = () => {
     const [offers, setOffers] = useState<Offer[]>([])
 
     const theme = useTheme();
@@ -25,8 +24,8 @@ const Home: FC = () =>
 
     return (
         <>
-            <Box display={'flex'} alignItems={'center'} marginTop={'16px'}>
-                <div style={{flex: '1'}}>
+            <Box display={'flex'} alignItems={'center'} marginTop={'16px'} gap={16}>
+                <div style={{ width: '50%' }}>
                     <h2 style={{
                         color:         theme.palette.primary.main,
                         fontSize:      '32px',
@@ -39,11 +38,11 @@ const Home: FC = () =>
                         Troc ton Objet, une plateforme communautaire de dons et d’échanges d'objets français !
                     </p>
                 </div>
-                <img src="/Images/home.svg" alt="Image d'habillage de la home" style={{flex: '1'}}/>
+                <img src="/Images/home.svg" alt="home" style={{ width: '50%' }}/>
             </Box>
 
-            <div style={{ backgroundColor: theme.palette.primary.main, padding: '24px', marginTop: '48px' }}>
-                <h2 style={{ textAlign: 'center' }}>Le troc comme tu ne l’a jamais connu !</h2>
+            <div style={{ backgroundColor: theme.palette.primary.main, padding: '32px', marginTop: '48px', fontWeight: 'bold' }}>
+                <div style={{ textAlign: 'center', paddingBottom: '32px', fontSize: '24px' }}>Le troc comme tu ne l’as jamais connu !</div>
 
                 <Box display={'flex'} alignItems={'center'} gap={'12px'} justifyContent={'space-around'}>
                     <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
@@ -65,12 +64,21 @@ const Home: FC = () =>
                 </Box>
             </div>
 
-            <div style={{color: theme.palette.primary.main, marginTop: '48px'}}>
-                <h3>Liste des dernières annonces</h3>
-                <Box display={'flex'} justifyContent={'space-between'}>
+            <div style={{color: theme.palette.primary.main, marginTop: '48px', marginBottom: '64px'}}>
+                <div style={{ fontWeight: 'bold', fontSize: '24px', }}>Dernières annonces en ligne</div>
+                <Box display={'flex'} justifyContent={'space-between'} gap={4} marginTop={2}>
                     {offers.map((offer: Offer) => (
-                        <OfferCard offer={offer} key={offer.id}/>
+                        <div key={offer.id} style={{ width: '25%' }}>
+                            <OfferCard offer={offer}/>
+                        </div>
                     ))}
+                </Box>
+                <Box display="flex" justifyContent="center" marginTop="32px">
+                    <Link to="/offers">
+                        <Button variant="contained" color="primary" type="submit">
+                            Voir plus d'offres
+                        </Button>
+                    </Link>
                 </Box>
             </div>
         </>

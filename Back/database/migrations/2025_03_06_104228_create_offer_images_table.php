@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('offer_images', function (Blueprint $table) 
         {
             $table->id();
-            $table->foreignId('offer_id')->constrained();
+            $table->foreignId('offer_id')->constrained()->cascadeOnDelete();
             $table->integer("order");
             $table->string("url", 1_000);
         });
