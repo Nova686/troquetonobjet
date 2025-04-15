@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserUpdateRequest;
 use App\Library\Results;
 use App\Library\Storage\StorageService;
+use App\Models\Offer;
 use App\Models\OfferImage;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -19,23 +21,37 @@ class UserController extends Controller
 
         $nb = User::where("id", Auth::user()->id)->update($data);
 
-        return $nb > 0 ? Results::noContent() : Results::notFound();
+        return $nb ? Results::noContent() : Results::notFound();
     }
 
     public function delete()
     {
-        $userId = Auth::user()->id;
+        $userId = Auth::id();
+
+        Offer::where("user_id", $userId)->delete();
 
         $urlFileList = OfferImage::query()
             ->join(
                 "offers as o",
                 "o.id", "=", "offer_images.offer_id"
             )
+            ->where("user_id", $userId)
             ->pluck("url")
             ->toArray();
 
         $this->storageServ->delete($urlFileList, "public");
 
-        User::where("id", $userId)->delete();
+        $nb = User::where("user_id", $userId)->update([
+            "username" => "Anonyme",
+            "first_name" => "Anonyme",
+            "last_name" => "Anonyme",
+            "email" => "Anonyme",
+            "password" => "",
+            "phone" => null,
+            "is_admin" => false,
+            "deleted_at" => Carbon::now()
+        ]);
+
+        return $nb ? Results::noContent() : Results::notFound();
     }
 }
