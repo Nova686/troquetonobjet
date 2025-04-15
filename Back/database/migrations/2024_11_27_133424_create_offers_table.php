@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100)->nullable(false);
             $table->string('description', 1500)->nullable();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->boolean('is_visible')->default(true);
             $table->boolean('is_donation')->default(false);
 
