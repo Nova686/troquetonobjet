@@ -62,7 +62,7 @@ const Header: FC = () => {
                             <Box display='flex' alignItems='center' flexDirection={"column"}
                                 color={theme.palette.custom.textColor}>
                                 <AccountCircleIcon/>
-                                {user?.username}
+                                Mon compte
                             </Box>
                         </Link>
                     </>
