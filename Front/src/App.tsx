@@ -16,8 +16,7 @@ function App() {
                 <Box sx={{
                     backgroundColor: 'background.default',
                     display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100vh',
+                    flexDirection: 'column'
                 }}>
                     <BrowserRouter>
                         <Routes>
