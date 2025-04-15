@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('favorite_offers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('offer_id')->constrained('offers');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('offer_id')->constrained('offers')->cascadeOnDelete();
             $table->timestamps();
         });
     }

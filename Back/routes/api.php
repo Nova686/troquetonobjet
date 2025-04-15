@@ -6,10 +6,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\FavoriteOfferController;
 use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishOfferController;
 
 // Route for Users
 Route::prefix('users')->group(function () {
+    Route::put('', [UserController::class, 'update']);
+    Route::delete('', [UserController::class, 'delete']);
     Route::get('offers', [OfferController::class, 'getUserOffers']);
 });
 
