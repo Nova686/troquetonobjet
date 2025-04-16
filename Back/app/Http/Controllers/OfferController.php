@@ -36,7 +36,8 @@ class OfferController extends Controller
         $data = $request->validated();
 
         $query = Offer::baseQuery(isVisible: true)
-            ->with(["offerImages"]);
+            ->with(["offerImages", 'subCategory'])
+            ->orderBy('created_at');
 
         $p = Pagination::paginate($query, $data);
 
@@ -57,7 +58,8 @@ class OfferController extends Controller
         $offer->city_name = $validated['city_name'];
         $offer->longitude = $validated['longitude'];
         $offer->latitude = $validated['latitude'];
-        $offer->user()->associate(Auth::user()->id);
+        $offer->user()->associate(Auth::id());
+        $offer->subCategory()->associate($validated['sub_category_id']);
         $offer->save();
 
         $result = Offer::baseQuery($offer->id)->first();

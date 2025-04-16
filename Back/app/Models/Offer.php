@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
+ * @property SubCategory $subCategory
  * @property OfferImage $offerImages
  * @property OfferImage $mainOfferImage
  */
@@ -46,6 +47,11 @@ class Offer extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subCategory(): BelongsTo
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 
     public function getIsUpdatedAttribute(): bool

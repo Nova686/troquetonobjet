@@ -6,11 +6,11 @@ export type Category = {
 export type OfferFormCreate = {
     title: string;
     description: string;
-    is_visible: boolean;
-    is_donation: boolean;
-    city_name: string;
-    longitude: number;
-    latitude: number;
+    subCategoryId: null|number;
+    isVisible: boolean;
+    isDonation: boolean;
+    cityName: string;
+    placeId: string;
     userId?: number;
 }
 

@@ -21,6 +21,9 @@ class OfferResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'author' => ["id" => $this->userId, "username" => $this->username],
+            'subCategory' => $this->when($this->subCategory, function () {
+                return ['id' => $this->subCategory->id, 'label' => $this->subCategory->name];
+            }, null),
             'wishs' => $this->whenLoaded('wishs', function () {
                 return WishOfferResource::collection($this->wishs);
             }),
