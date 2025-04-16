@@ -57,7 +57,7 @@ const OfferCard: FC<OfferCardProps> = ({offer, key}) => {
                     {isConnected() && (user?.username !== offer?.author?.username) &&
                         <>
                             <FavoriteButton offerId={offer.id} defaultFilled={offer.isFavorite}/>
-                            <ChatButton/>
+                            <ChatButton offerId={offer.id}/>
                         </>
                     }
                 </Typography>

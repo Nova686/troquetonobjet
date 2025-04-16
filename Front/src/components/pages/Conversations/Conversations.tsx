@@ -131,7 +131,7 @@ const Conversations: FC = () => {
                         {conversations.length > 0 && currentConversation ? (
                             <>
                                 <div className="message-reveicer">
-                                    { currentConversation.seller.name }
+                                    { currentConversation.seller.username }
                                 </div>
                                 <div className="messages-padding">
                                     <div onScroll={handleScroll} className="messages-scroll">
@@ -144,7 +144,7 @@ const Conversations: FC = () => {
                                                             Bonjour,
                                                             </div>
                                                             <div className="conversation-info">
-                                                            Ceci est le début de votre conversation avec {currentConversation.buyer.name}
+                                                            Ceci est le début de votre conversation avec {currentConversation.buyer.username}
                                                             </div>
                                                         </div>
                                                     )}
