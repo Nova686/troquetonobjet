@@ -5,23 +5,24 @@ import {Offer} from "../../../typings/Offer";
 import {OfferCard} from "../../organisms";
 import {Typography} from "../../atoms";
 import {useTheme} from "@mui/material/styles";
-import {CreateOfferButton} from "../../molecules";
+import {CreateOfferButton, Pagination} from "../../molecules";
 import {useAuth} from "../../../contexts/AuthContext";
-import {Pagination} from "../../../typings/Pagination";
+import {Pagination as PaginationType} from "../../../typings/Pagination";
 import { Box } from "@mui/material";
 
 const Offers: FC = () => {
-    const [offers, setOffers] = useState<Pagination<Offer> | null>(null);
+    const [offers, setOffers] = useState<PaginationType<Offer> | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const theme = useTheme();
     const { isConnected } = useAuth();
+    const [page, setPage] = useState<number>(1);
 
     const handleOffers = async () => {
         setLoading(true);
 
         try {
-            const response: AxiosResponse = await axiosService.get("offers", {params: {page: 1, nb_per_page: 20}});
+            const response: AxiosResponse = await axiosService.get("offers", {params: {page: page, nb_per_page: 20}});
             setOffers(response.data);
             setError(null);
         } catch (err) {
@@ -35,7 +36,7 @@ const Offers: FC = () => {
     // Appeler handleOffers une fois au montage du composant
     useEffect(() => {
         handleOffers();
-    }, []);
+    }, [page]);
 
     return (
         <div style={{ marginBottom: '64px' }}>
@@ -58,6 +59,8 @@ const Offers: FC = () => {
                     ))}
                 </Box>
             }
+
+            {offers && <Pagination onPageChange={setPage} currentPage={offers!.page} totalPage={offers!.totalPage}/>}
         </div>
     );
 };
