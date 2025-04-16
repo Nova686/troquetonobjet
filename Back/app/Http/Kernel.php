@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         'snakecase' => \App\Http\Middleware\SnakeCaseConverter::class,
+        'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class
     ];
 }
