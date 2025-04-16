@@ -1,17 +1,16 @@
 import {AxiosResponse} from "axios";
 import {FC, useEffect, useState} from "react";
 import axiosService from "../../../services/AxiosService";
-import {Offer} from "../../../typings/Offer";
-import {OfferCard} from "../../organisms";
-import {Typography} from "../../atoms";
-import {useTheme} from "@mui/material/styles";
-import {CreateOfferButton, Pagination} from "../../molecules";
-import {useAuth} from "../../../contexts/AuthContext";
-import {Pagination as PaginationType} from "../../../typings/Pagination";
+import { Offer } from "../../../typings/Offer";
+import { OffersList } from "../../organisms";
+import { useTheme } from "@mui/material/styles";
+import { CreateOfferButton, Pagination as PaginationItem } from "../../molecules";
+import { useAuth } from "../../../contexts/AuthContext";
+import { Pagination } from "../../../typings/Pagination";
 import { Box } from "@mui/material";
 
 const Offers: FC = () => {
-    const [offers, setOffers] = useState<PaginationType<Offer> | null>(null);
+    const [offers, setOffers] = useState<Pagination<Offer> | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const theme = useTheme();
@@ -22,7 +21,7 @@ const Offers: FC = () => {
         setLoading(true);
 
         try {
-            const response: AxiosResponse = await axiosService.get("offers", {params: {page: page, nb_per_page: 20}});
+            const response: AxiosResponse = await axiosService.get("offers", { params: { page: page, nb_per_page: 20 } });
             setOffers(response.data);
             setError(null);
         } catch (err) {
@@ -41,28 +40,22 @@ const Offers: FC = () => {
     return (
         <div style={{ marginBottom: '64px' }}>
 
-            <Typography component={'div'} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-                color={theme.palette.primary.main}>
+            <Box
+                display='flex'
+                justifyContent='space-between'
+                alignItems='center'
+                color={theme.palette.primary.main}
+            >
                 <h1>Les dernières annonces</h1>
-                {isConnected() && <CreateOfferButton/>}
-            </Typography>
+                {isConnected() && <CreateOfferButton />}
+            </Box>
 
-            {loading && <p style={{color: "white"}}>Chargement des offres...</p>}
-            {error && <p style={{color: "red"}}>{error}</p>}
+            <OffersList offers={offers?.list} loading={loading} error={error} />
 
-            {!loading && !error &&
-                <Box display={'flex'} justifyContent={'space-between'} gap="12px" flexWrap="wrap">
-                    {offers?.list.map((offer) => (
-                        <div key={offer.id} style={{ width: 'calc(25% - 12px)' }}>
-                            <OfferCard offer={offer}/>
-                        </div>
-                    ))}
-                </Box>
-            }
-
-            {offers && <Pagination onPageChange={setPage} currentPage={offers!.page} totalPage={offers!.totalPage}/>}
+            {offers && <PaginationItem onPageChange={setPage} currentPage={offers!.page} totalPage={offers!.totalPage}/>}
         </div>
     );
+
 };
 
 export default Offers;
