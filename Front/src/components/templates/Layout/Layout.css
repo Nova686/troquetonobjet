@@ -9,6 +9,19 @@
     z-index: 99;
 }
 
+@media screen and (max-width: 1200px) {
+    .main-navbar {
+        margin: 0;
+        padding: 0 16px 8px;
+    }
+}
+
+@media screen and (max-width: 1064px) {
+    .create-offer {
+        display: none;
+    }
+}
+
 .main-navbar h3,
 .main-navbar h4,
 .main-navbar .h4 {
