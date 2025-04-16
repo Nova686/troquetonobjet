@@ -4,6 +4,7 @@ import CreateOfferButton from './CreateOfferButton/CreateOfferButton'
 import DeleteButton from "./DeleteButton/DeleteButton";
 import LoginForm from "./LoginForm/LoginForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
+import Pagination from "./Pagination/Pagination";
 
 export
 {
@@ -12,5 +13,6 @@ export
     CreateOfferButton,
     DeleteButton,
     RegisterForm,
-    LoginForm
+    LoginForm,
+    Pagination
 }
