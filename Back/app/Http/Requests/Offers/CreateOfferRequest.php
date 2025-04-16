@@ -19,8 +19,9 @@ class CreateOfferRequest extends FormRequest
             'is_visible' => ['required', 'boolean'],
             'is_donation' => ['required', 'boolean'],
             'city_name' => ['required', 'string', 'max:100'],
-            'longitude' => ['required', 'numeric'],
-            'latitude' => ['required', 'numeric'],
+            'longitude' => ['nullable', 'numeric'],
+            'latitude' => ['nullable', 'numeric'],
+            'place_id' => ['nullable']
         ];
     }
 }
