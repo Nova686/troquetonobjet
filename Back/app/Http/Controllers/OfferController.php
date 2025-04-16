@@ -62,19 +62,16 @@ class OfferController extends Controller
 
         if($validated["place_id"] != null)
         {
-            $result = $this->googlePlaceServ->Location($validated["place_id"]);
+            $location = $this->googlePlaceServ->Location($validated["place_id"]);
 
-            if($result == null)
+            if($location == null)
                 return Results::badRequest(["message" => "Le place id n'existe pas"]);
 
-            $offer->longitude = $result->longitude;
-            $offer->latitude = $result->latitude;
+            $offer->longitude = $location->longitude;
+            $offer->latitude = $location->latitude;
         }
         else
         {
-            if($validated['latitude'] == null || $validated['longitude'])
-                return Results::badRequest(["message" => "latitude et longitude obligatoire si pas de place id"]);
-
             $offer->longitude = $validated['longitude'];
             $offer->latitude = $validated['latitude'];
         }
