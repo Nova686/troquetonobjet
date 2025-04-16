@@ -6,5 +6,6 @@ import Login from "./Login/Login";
 import OfferCard from "./OfferCard/OfferCard";
 import Conversation from "./Conversation/Conversation";
 import Message from "./Message/Message";
+import OffersList from "./OffersList/OffersList";
 
-export { Footer, Header, OfferForm, Register, Login, OfferCard, Conversation, Message };
+export { Footer, Header, OfferForm, Register, Login, OfferCard, Conversation, Message, OffersList };

@@ -20,7 +20,9 @@ const Header: FC = () => {
                 <Link to={'/'}>
                     <img src="/Images/logo.svg" width="175" alt="logo"/>
                 </Link>
-                <CreateOfferButton/>
+                <Box className="create-offer">
+                    <CreateOfferButton/>
+                </Box>
             </Box>
             <Box display={'flex'} flexDirection={"row"} alignItems='center' gap={'32px'} flexWrap={'wrap'}>
                 {!isConnected() ?
