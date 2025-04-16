@@ -5,7 +5,6 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\GooglePlaceController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\SubCategoryController;
-use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\WishOfferController;
 
 // Route for Offers
