@@ -1,12 +1,32 @@
 .main-navbar {
     text-align: center;
     grid-area: header;
-    margin: 0 84px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     position: sticky;
     top: 0;
     z-index: 99;
+}
+
+.main-navbar nav
+{
+    max-width: 1152px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+    .main-navbar {
+        margin: 0;
+        padding: 0 16px 8px;
+    }
+}
+
+@media screen and (max-width: 1064px) {
+    .create-offer {
+        display: none;
+    }
 }
 
 .main-navbar h3,

@@ -4,7 +4,7 @@ import axiosService from "../../../services/AxiosService";
 import { Offer } from "../../../typings/Offer";
 import { OffersList } from "../../organisms";
 import { useTheme } from "@mui/material/styles";
-import { CreateOfferButton } from "../../molecules";
+import { CreateOfferButton, Pagination as PaginationItem } from "../../molecules";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Pagination } from "../../../typings/Pagination";
 import { Box } from "@mui/material";
@@ -15,12 +15,13 @@ const Offers: FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const theme = useTheme();
 	const { isConnected } = useAuth();
+  const [page, setPage] = useState<number>(1);
 
 	const handleOffers = async () => {
 		setLoading(true);
 
 		try {
-			const response: AxiosResponse = await axiosService.get("offers", { params: { page: 1, nb_per_page: 20 } });
+			const response: AxiosResponse = await axiosService.get("offers", { params: { page: page, nb_per_page: 20 } });
 			setOffers(response.data);
 			setError(null);
 		} catch (err) {
@@ -34,7 +35,7 @@ const Offers: FC = () => {
 	// Appeler handleOffers une fois au montage du composant
 	useEffect(() => {
 		handleOffers();
-	}, []);
+	}, [page]);
 
 	return (
 		<div style={{ marginBottom: '64px' }}>
@@ -50,6 +51,7 @@ const Offers: FC = () => {
 			</Box>
 
 			<OffersList offers={offers?.list} loading={loading} error={error} />
+      {offers && <PaginationItem onPageChange={setPage} currentPage={offers!.page} totalPage={offers!.totalPage}/>}
 		</div>
 	);
 };

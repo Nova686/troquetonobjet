@@ -1,5 +1,5 @@
 import "./Conversations.css";
-import {FC, useEffect, useRef, useState} from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Conversation, Message } from "../../organisms";
 import { createMessage, getConversations, getMessages } from "../../../services/messages";
@@ -11,22 +11,22 @@ import { timestampFormat } from "../../../services/FormatterService";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const Conversations: FC = () => {
-    const { user } = useAuth();
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [conversations, setConversations] = useState<Array<ConversationType>>([]);
-    const [currentConversation, setCurrentConversation] = useState<ConversationType | null>(null);
-    const [pageIsLoad, setPageIsLoad] = useState<boolean>(false);
-    const [messages, setMessages] = useState<Array<MessageType>>([]);
-    const [messageBoundary, setMessageBoundary] = useState<any>({
-        first: null,
-        last: null,
-    });
-    const [messageIsLoading, setMessageIsLoading] = useState<boolean>(false);
-    const [messageContent, setMessageContent] = useState<string>("");
-    const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [fileName, setFileName] = useState<string>("");
+	const { user } = useAuth();
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const [conversations, setConversations] = useState<Array<ConversationType>>([]);
+	const [currentConversation, setCurrentConversation] = useState<ConversationType | null>(null);
+	const [pageIsLoad, setPageIsLoad] = useState<boolean>(false);
+	const [messages, setMessages] = useState<Array<MessageType>>([]);
+	const [messageBoundary, setMessageBoundary] = useState<any>({
+		first: null,
+		last: null,
+	});
+	const [messageIsLoading, setMessageIsLoading] = useState<boolean>(false);
+	const [messageContent, setMessageContent] = useState<string>("");
+	const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const [fileName, setFileName] = useState<string>("");
 
 	const selectConversation = async (conversation: ConversationType) => {
 		setMessages([]);
@@ -131,7 +131,7 @@ const Conversations: FC = () => {
 						{conversations.length > 0 && currentConversation ? (
 							<>
 								<div className="message-reveicer">
-									{currentConversation.seller.name}
+									{currentConversation.seller.username}
 								</div>
 								<div className="messages-padding">
 									<div onScroll={handleScroll} className="messages-scroll">
@@ -144,7 +144,7 @@ const Conversations: FC = () => {
 																Bonjour,
 															</div>
 															<div className="conversation-info">
-																Ceci est le début de votre conversation avec {currentConversation.buyer.name}
+																Ceci est le début de votre conversation avec {currentConversation.buyer.username}
 															</div>
 														</div>
 													)}

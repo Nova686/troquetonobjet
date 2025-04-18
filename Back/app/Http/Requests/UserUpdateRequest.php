@@ -14,7 +14,8 @@ class UserUpdateRequest extends FormRequest
             "username" => ["string", "max:255"],
             "phone" => ["nullable", "max:20", "string"],
 			"avatar" => ["integer", "nullable", "min:1", "max:8"], 
-            "language_id" => ["integer", "exists:languages,id"]
+            "language_id" => ["integer", "exists:languages,id"],
+			"two_fa_activated" => ["required", "boolean"]
         ];
     }
 }

@@ -27,7 +27,7 @@ const OfferCard: FC<OfferCardProps> = ({ offer }) => {
 			navigate(`/offers/${offer.id}`)
 		}
 	}
-
+  
 	const detail = (offer: Offer) => {
 		// TODO: attendre que le back renvoie l'auteur
 		return (
@@ -56,7 +56,7 @@ const OfferCard: FC<OfferCardProps> = ({ offer }) => {
 					{isConnected() && (user?.username !== offer?.author?.username) &&
 						<>
 							<FavoriteButton offerId={offer.id} defaultFilled={offer.isFavorite} />
-							<ChatButton />
+							<ChatButton offerId={offer.id}/>
 						</>
 					}
 				</Typography>

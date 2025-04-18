@@ -19,7 +19,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $email
  * @property string $password
  * @property ?string $phone
+ * @property ?string $code_two_fa
  * @property bool $is_admin
+ * @property bool $two_fa_activated
  * 
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -43,7 +45,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
 		'avatar',
         'email',
-        'password'
+        'password',
+        'deleted_at',
+        'code_two_fa',
+        'two_fa_activated'
     ];
 
     /**
@@ -54,6 +59,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'deleted_at',
+        'code_two_fa'
     ];
 
     /**
@@ -65,6 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'two_fa_activated' => 'boolean',
         'created_at' => 'datetime',  
         'updated_at' => 'datetime',  
         'deleted_at' => 'datetime'  
