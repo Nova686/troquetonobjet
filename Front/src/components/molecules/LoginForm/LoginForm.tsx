@@ -4,8 +4,7 @@ import { ChangeEvent, FC, useState } from "react";
 import { LoginRequestModel } from "../../../typings/Auth";
 import axiosService from "../../../services/AxiosService";
 import { useAuth } from "../../../contexts/AuthContext";
-import theme from "../../../theme";
-import {useTheme} from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
 
@@ -33,7 +32,7 @@ const LoginForm: FC = () => {
 				throw new Error();
 
 			login(reponseData.user, reponseData.token, () => {
-				window.location.href = '/';
+				window.location.href = "/";
 			});
 		} catch (error) {
 			setErrors('Une erreur à été retournée, veuillez-rééssayer.');
@@ -46,25 +45,25 @@ const LoginForm: FC = () => {
 		<Container maxWidth="md" style={{ marginTop: '32px', marginBottom: '64px' }}>
 			<div style={{ marginBottom: '48px' }}>
 				<div style={{
-					color:         theme.palette.primary.main,
-					fontSize:      '32px',
+					color: theme.palette.primary.main,
+					fontSize: '32px',
 					textTransform: 'uppercase',
-					fontWeight:    800
+					fontWeight: 800
 				}}>
 					Connecte-toi
 				</div>
 				<div style={{
-					color:         theme.palette.primary.main,
-					fontSize:      '32px',
+					color: theme.palette.primary.main,
+					fontSize: '32px',
 					textTransform: 'uppercase',
-					fontWeight:    800
+					fontWeight: 800
 				}}>
-					ou Créer ton compte Troc ton Objet
+					ou Crée ton compte Troc ton Objet
 				</div>
 			</div>
 			<Box display={'flex'} gap={8}>
-				<form onSubmit={handleSubmit} style={{ width: '80%'}}>
-					<Typography variant="h5" gutterBottom sx={{color: theme.palette.primary.main, fontWeight: 'bold'}}>
+				<form onSubmit={handleSubmit} style={{ width: '80%' }}>
+					<Typography variant="h5" gutterBottom sx={{ color: theme.palette.primary.main, fontWeight: 'bold' }}>
 						Connecte-toi pour mettre une annonce !
 					</Typography>
 					<TextField
@@ -105,7 +104,7 @@ const LoginForm: FC = () => {
 						Tu n'as pas encore de compte ?
 						<Link to="/auth/register">
 							<span style={{ color: theme.palette.primary.main, marginLeft: '4px' }}>
-								Créer le ici
+								Crée le ici
 							</span>
 						</Link>
 					</span>
@@ -116,7 +115,7 @@ const LoginForm: FC = () => {
 					)}
 				</form>
 				<div style={{ width: '20%', display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'end', justifyContent: 'center' }}>
-					<img src="/Images/logo_part_square.svg" width="125" alt="square"/>
+					<img src="/Images/logo_part_square.svg" width="125" alt="square" />
 					<img src="/Images/logo_part_circle.svg" width="125" alt="circle" />
 				</div>
 			</Box>

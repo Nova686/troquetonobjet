@@ -29,6 +29,9 @@ const theme = createTheme({
         background: {
             default: '#172601',
         },
+		success: {
+			main: '#28A745'
+		},
         custom: {
             textColor: '#F4F3ED',
             danger: '#FF0000',

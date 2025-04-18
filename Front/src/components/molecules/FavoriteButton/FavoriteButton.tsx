@@ -28,6 +28,7 @@ const FavoriteButton: FC<FavoriteButtonProps> = ({ defaultFilled = false, offerI
         showToast({
             message: !isFilled ? "L'annonce à été ajoutée aux favoris." : "L'annonce à été retirée des favoris.",
             position: { vertical: "bottom", horizontal: "right" },
+			type: 'success'
         });
         setIsFilled(!isFilled);
     };

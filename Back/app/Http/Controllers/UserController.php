@@ -43,11 +43,10 @@ class UserController extends Controller
 
         $nb = User::where("user_id", $userId)->update([
             "username" => "Anonyme",
-            "first_name" => "Anonyme",
-            "last_name" => "Anonyme",
             "email" => "Anonyme",
             "password" => "",
             "phone" => null,
+			"avatar" => null,
             "is_admin" => false,
             "deleted_at" => Carbon::now()
         ]);
