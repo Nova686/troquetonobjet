@@ -5,7 +5,6 @@ import { Offer } from "../../../typings/Offer";
 import { OffersList } from "../../organisms";
 import { useTheme } from "@mui/material/styles";
 import { CreateOfferButton, Pagination as PaginationItem } from "../../molecules";
-import { CreateOfferButton } from "../../molecules";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Pagination } from "../../../typings/Pagination";
 import { Box } from "@mui/material";
