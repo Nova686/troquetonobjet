@@ -50,7 +50,6 @@ const Header: FC = () =>
                                         Toutes les offres
                                     </Box>
                                 </Link>
-
                                 <Link to="/conversations">
                                     <Box display='flex' alignItems='center' flexDirection={"column"}
                                          color={theme.palette.custom.textColor}>
@@ -81,7 +80,7 @@ const Header: FC = () =>
                                     <Box display='flex' alignItems='center' flexDirection={"column"}
                                          color={theme.palette.custom.textColor}>
                                         <AccountCircleIcon/>
-                                        {user?.username}
+                                        Mon compte
                                     </Box>
                                 </Link>
                             </>

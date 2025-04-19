@@ -21,7 +21,6 @@ const Home: FC = () => {
 		setLoadingOffers(false);
 	};
 
-	// Appeler handleOffers une fois au montage du composant
 	useEffect(() => {
 		handleLastOffers();
 	}, []);
@@ -38,9 +37,12 @@ const Home: FC = () => {
 					}}>
 						Donne et échange tes objets près de chez toi
 					</Typography>
-					<p style={{ fontSize: '18px', color: theme.palette.custom.textColor }}>
+					<Typography
+						variant="body1"
+						sx={{ fontSize: '18px', color: theme.palette.custom.textColor }}
+					>
 						Troc ton Objet, une plateforme communautaire de dons et d’échanges d'objets français !
-					</p>
+					</Typography>
 				</div>
 				<img src="/Images/home.svg" alt="home" style={{ width: '50%' }} />
 			</Box>

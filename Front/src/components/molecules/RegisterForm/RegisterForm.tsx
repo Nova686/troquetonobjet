@@ -3,7 +3,7 @@ import { ChangeEvent, FC, useState } from "react";
 import { TextField, Typography } from "../../atoms";
 import { RegisterRequestModel } from "../../../typings/Auth";
 import axiosService from "../../../services/AxiosService";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 import {useTheme} from "@mui/material/styles";
 import { Link } from "react-router-dom";
@@ -70,7 +70,7 @@ const RegisterForm: FC = () => {
 			if (!responseData?.user || !responseData?.token) throw new Error();
 
 			login(responseData.user, responseData.token, () => {
-				window.location.href = '/profile';
+				window.location.href = '/';
 			});
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
@@ -127,7 +127,7 @@ const RegisterForm: FC = () => {
 						Créer ton compte gratuitement !
 					</Typography>
 					<TextField
-						label="Nom"
+						label="Pseudonyme"
 						variant="outlined"
 						fullWidth
 						margin="normal"

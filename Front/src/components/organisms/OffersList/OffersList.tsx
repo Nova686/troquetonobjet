@@ -3,16 +3,16 @@ import { FC, useEffect, useRef, useState } from "react";
 import { OfferCard } from "..";
 import { Offer } from "../../../typings/Offer";
 
-interface OffersList {
+interface OffersListProps {
 	offers: Offer[] | null | undefined;
 	loading?: boolean;
 	error?: string | null;
 }
 
-const CARD_WIDTH = 250;
+const CARD_WIDTH = 350;
 const GAP = 16;
 
-const OffersList: FC<OffersList> = ({ offers, loading, error }) => {
+const OffersList: FC<OffersListProps> = ({ offers, loading, error }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [offersPerRow, setOffersPerRow] = useState<number>(1);
 
@@ -53,8 +53,8 @@ const OffersList: FC<OffersList> = ({ offers, loading, error }) => {
 				{offers?.map((offer, i) => {
 					const isInLastRow = i >= lastRowStartIndex;
 					return(
-						<div style={{ justifySelf: isInLastRow ? "start" : "center" }}>
-							<OfferCard offer={offer} key={offer.id} />
+						<div style={{ justifySelf: isInLastRow ? "start" : "center", width: '100%' }} key={offer.id}>
+							<OfferCard offer={offer} />
 						</div>
 					);
 				})}
