@@ -33,7 +33,7 @@ class CreateOfferRequest extends FormRequest
                 'required_without:place_id',
                 'required_with:longitude'
             ],
-            'place_id' => ['nullable', 'required_without_all:longitude,latitude']
+            'place_id' => ['nullable', 'string', 'required_without_all:longitude,latitude']
         ];
     }
 }

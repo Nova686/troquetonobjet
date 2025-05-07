@@ -16,7 +16,10 @@ class EditOfferRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'min:5', 'max:100'],
             'description' => ['required', 'string', 'max:1500'],
-            'is_visible' => ['required', 'boolean']
+            'is_visible' => ['required', 'boolean'],
+            'longitude' => ['nullable', 'numeric'],
+            'latitude' => ['nullable', 'numeric'],
+            'place_id' => ['nullable', 'string']
         ];
     }
 }

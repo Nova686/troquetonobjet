@@ -4,13 +4,13 @@ export type Category = {
 }
 
 export type OfferFormCreate = {
-    title: string;
-    description: string;
-    subCategoryId: null|number;
+    title: string|null;
+    description: string|null;
+    subCategoryId: number|null;
     isVisible: boolean;
     isDonation: boolean;
-    cityName: string;
-    placeId: string;
+    cityName: string|null;
+    placeId: string|null;
     userId?: number;
 }
 
@@ -24,7 +24,9 @@ export type Offer = {
     cityName : string;
     description : string;
     isDonation : boolean;
+    isVisible : boolean;
     isFavorite: boolean;
+    subCategory: {id: number, label: string};
     latitude : number;
     longitude : number;
     images : Array<string>;

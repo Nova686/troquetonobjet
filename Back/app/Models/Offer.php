@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -87,7 +88,12 @@ class Offer extends Model
             "u.id", "=", "offers.user_id"
         )
         ->leftJoin("favorite_offers as f", "f.offer_id", "=", "offers.id")
-        ->isVisible($isVisible)
+        ->where(function ($q) use ($isVisible) {
+            $q->where('u.id', Auth::id())
+                ->orWhere(function ($q) use ($isVisible) {
+                    $q->isVisible($isVisible);
+                });
+        })
         ->when($id > 0, function($request) use ($id)
         {
             $request->where("offers.id", $id);

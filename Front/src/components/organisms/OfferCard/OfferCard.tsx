@@ -22,7 +22,7 @@ const OfferCard: FC<OfferCardProps> = ({ offer }) => {
 
 	const handleClick = (offer: Offer) => {
 		if (user?.username === offer.author.username) {
-			navigate('/offers/form', { state: { offer } });
+			navigate(`/offers/${offer.id}/edit`);
 		} else {
 			navigate(`/offers/${offer.id}`)
 		}

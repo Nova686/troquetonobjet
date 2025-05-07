@@ -5,7 +5,6 @@ import { Offer } from "../../../typings/Offer";
 import { OffersList } from "../../organisms";
 import { useTheme } from "@mui/material/styles";
 import { CreateOfferButton, Pagination as PaginationItem } from "../../molecules";
-import { CreateOfferButton } from "../../molecules";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Pagination } from "../../../typings/Pagination";
 import { Box } from "@mui/material";
@@ -16,7 +15,7 @@ const Offers: FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const theme = useTheme();
 	const { isConnected } = useAuth();
-  const [page, setPage] = useState<number>(1);
+  	const [page, setPage] = useState<number>(1);
 
 	const handleOffers = async () => {
 		setLoading(true);
