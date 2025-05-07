@@ -17,7 +17,7 @@ const Conversation: FC<ConversationProps> = ({ conversation, isSelected, onClick
         <div className={`conversation-container ${isSelected ? "conversation-selected" : "conversation-unselected"}`}
              onClick={() => onClick(conversation)}>
             <div className="conversation-wrapper">
-                <div className="conversation-user">{user && user.id === conversation.buyer.id ? conversation.seller.name : conversation.buyer.name}</div>
+                <div className="conversation-user">{user && user.id === conversation.buyer.id ? conversation.seller.username : conversation.buyer.username}</div>
                 {conversation.lastMessage &&
                     <div>
                         <div style={{ fontSize: '0.75rem' }}>{ conversation.lastMessage.content }</div>

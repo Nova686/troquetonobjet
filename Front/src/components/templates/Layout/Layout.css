@@ -1,15 +1,32 @@
 .main-navbar {
     text-align: center;
-    border-bottom: #242424 1px solid;
-    background-color: #e0e0e0;
     grid-area: header;
-    padding: 12px 84px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     position: sticky;
     top: 0;
-    width: 100%;
     z-index: 99;
+}
+
+.main-navbar nav
+{
+    max-width: 1152px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+    .main-navbar {
+        margin: 0;
+        padding: 0 16px 8px;
+    }
+}
+
+@media screen and (max-width: 1064px) {
+    .create-offer {
+        display: none;
+    }
 }
 
 .main-navbar h3,
@@ -50,12 +67,4 @@
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 12px;
-}
-
-.header-auth-buttons {
-    display: flex;
-}
-
-.header-auth-buttons h3 {
-    padding: 0 0.3em;
 }

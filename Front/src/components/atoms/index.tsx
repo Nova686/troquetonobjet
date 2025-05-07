@@ -9,6 +9,7 @@ import CardWithPictureWithoutAction from './Cards/CardWithPictureWithoutAction'
 import Link from "./Link/Link";
 import LinkButton from "./LinkButton/LinkButton";
 import Toast from "./Toast/Toast";
+import Avatar from "./Avatar/Avatar";
 
 export {
     DebounceInput,
@@ -21,5 +22,6 @@ export {
     CardWithPictureWithoutAction,
     Link,
     LinkButton,
-    Toast
+    Toast,
+	Avatar
 };

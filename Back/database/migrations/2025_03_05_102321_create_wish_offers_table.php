@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('wish_offers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_id')->constrained();
+            $table->foreignId('offer_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sub_category_id')->constrained();
             $table->text('text');
             $table->timestamps();

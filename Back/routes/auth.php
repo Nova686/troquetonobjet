@@ -35,3 +35,6 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth:sanctum')
                 ->name('logout');
+
+Route::post("verification-2fa", [AuthenticatedSessionController::class, "verif2fa"])
+                ->middleware(['auth:sanctum', "ability:2fa"]);

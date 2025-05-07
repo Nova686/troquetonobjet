@@ -27,7 +27,7 @@ class OfferResource extends JsonResource
             'images' => $this->whenLoaded('offerImages', function()
             {
                 $urlList = [];
-                foreach ($this->offerImages as $element) 
+                foreach ($this->offerImages as $element)
                 {
                     if($element->order != 0)
                         $urlList[] = url("storage/".$element->url);
@@ -35,9 +35,9 @@ class OfferResource extends JsonResource
 
                 return $urlList;
             }),
-            'mainImage' => $this->whenLoaded('offerImages', function () 
+            'mainImage' => $this->whenLoaded('offerImages', function ()
             {
-                return $this->mainOfferImage ? url("storage/".$this->mainOfferImage->url) : null;
+                return $this->mainOfferImage ? url("storage/" . $this->mainOfferImage->url) : null;
             }),
             'isDonation' => $this->is_donation,
             'latitude' => $this->latitude,

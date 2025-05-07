@@ -24,8 +24,8 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
- * @property OfferImages $offerImages
- * @property OfferImages $mainOfferImage
+ * @property OfferImage $offerImages
+ * @property OfferImage $mainOfferImage
  */
 class Offer extends Model
 {

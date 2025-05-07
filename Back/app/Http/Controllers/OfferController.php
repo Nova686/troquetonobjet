@@ -8,6 +8,7 @@ use App\Http\Requests\Offers\EditOfferRequest;
 use App\Http\Requests\PaginationRequest;
 use App\Http\Resources\Offers\OfferResource;
 use App\Http\Resources\Offers\UserOfferResource;
+use App\Library\GooglePlace\IGooglePlaceService;
 use App\Library\Results;
 use App\Library\Storage\EStorageResponse;
 use App\Library\Storage\StorageService;
@@ -18,7 +19,10 @@ use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
 {
-    public function __construct(private StorageService $storageServ) { }
+    public function __construct(
+        private StorageService $storageServ,
+        private IGooglePlaceService $googlePlaceServ
+    ) { }
 
     public function getUserOffers()
     {
@@ -55,8 +59,23 @@ class OfferController extends Controller
         $offer->is_visible = $validated['is_visible'];
         $offer->is_donation = $validated['is_donation'];
         $offer->city_name = $validated['city_name'];
-        $offer->longitude = $validated['longitude'];
-        $offer->latitude = $validated['latitude'];
+
+        if($validated["place_id"] != null)
+        {
+            $location = $this->googlePlaceServ->Location($validated["place_id"]);
+
+            if($location == null)
+                return Results::badRequest(["message" => "Le place id n'existe pas"]);
+
+            $offer->longitude = $location->longitude;
+            $offer->latitude = $location->latitude;
+        }
+        else
+        {
+            $offer->longitude = $validated['longitude'];
+            $offer->latitude = $validated['latitude'];
+        }
+
         $offer->user()->associate(Auth::user()->id);
         $offer->save();
 

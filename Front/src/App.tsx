@@ -1,9 +1,8 @@
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
-import {Home, Offers, CreateOffer, Authentication, Conversations, DetailOffer} from './components/pages';
+import {Home, Offers, CreateOffer, Authentication, Conversations, DetailOffer, Favorite, Account} from './components/pages';
 import ProtectedRoute from './components/shared/ProtectedRoute';
-import Profile from './components/pages/Profile/Profile';
 import theme from './theme';
 import {ThemeProvider, CssBaseline, Box} from "@mui/material";
 import {ToastProvider} from "./contexts/ToastContext";
@@ -16,8 +15,7 @@ function App() {
                 <Box sx={{
                     backgroundColor: 'background.default',
                     display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100vh',
+                    flexDirection: 'column'
                 }}>
                     <BrowserRouter>
                         <Routes>
@@ -27,7 +25,7 @@ function App() {
                                 <Route path='/offers' element={<Offers/>}/>
                                 <Route path='/profile' element={
                                     <ProtectedRoute>
-                                        <Profile/>
+                                        <Account/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path='/conversations/:id?' element={
@@ -35,7 +33,11 @@ function App() {
                                         <Conversations/>
                                     </ProtectedRoute>
                                 }/>
-
+                                <Route path='/favorite' element={
+                                    <ProtectedRoute>
+                                        <Favorite/>
+                                    </ProtectedRoute>
+                                }/>
                                 <Route path='/offers/form' element={<CreateOffer/>}/>
                                 <Route path='/offers/:id' element={<DetailOffer/>}/>
                             </Route>

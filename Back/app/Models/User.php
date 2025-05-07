@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -15,12 +16,12 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int $id
  * @property int $language_id
  * @property string $username
- * @property string $first_name
- * @property string $last_name
  * @property string $email
  * @property string $password
  * @property ?string $phone
+ * @property ?string $code_two_fa
  * @property bool $is_admin
+ * @property bool $two_fa_activated
  * 
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -31,7 +32,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use SoftDeletes, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -41,12 +42,13 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'language_id',
         'username',
-        'first_name',
-        'last_name',
         'phone',
-        'is_admin',
+		'avatar',
         'email',
-        'password'
+        'password',
+        'deleted_at',
+        'code_two_fa',
+        'two_fa_activated'
     ];
 
     /**
@@ -57,6 +59,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'deleted_at',
+        'code_two_fa'
     ];
 
     /**
@@ -68,6 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'two_fa_activated' => 'boolean',
         'created_at' => 'datetime',  
         'updated_at' => 'datetime',  
         'deleted_at' => 'datetime'  
