@@ -7,6 +7,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\FavoriteOfferController;
 use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishOfferController;
 
 // Route for Users

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Report;
 use App\Http\Resources\ReportResource;
+use Illuminate\Support\Facades\Mail;
 
 class ReportController extends Controller
 {
@@ -32,6 +33,27 @@ class ReportController extends Controller
         $report->offer_id = $request->offer_id;
         $report->reason = $request->reason;
         $report->save();
+
+        return response()->json([
+            "report"=>ReportResource::make($report),
+        ]);
+    }
+
+    function update(Request $request, $id){
+        $report = Report::find($id);
+        if(!$report){
+            return response()->json([
+                "message"=>"Report not found",
+            ], 404);
+        }
+
+        $request->validate([
+            "reason"=>"required",
+        ]);
+
+        $report->reason = $request->reason;
+        $report->save();
+
         return response()->json([
             "report"=>ReportResource::make($report),
         ]);

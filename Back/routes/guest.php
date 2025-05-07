@@ -8,6 +8,7 @@ use App\Http\Controllers\Category\SubCategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishOfferController;
 
 // Route for Offers
@@ -60,6 +61,8 @@ Route::controller(ReportController::class)->prefix("report")->group(function () 
     Route::post('', 'create');
     Route::delete('{id}', 'delete')
         ->whereNumber("id");
+    Route::put('{id}', 'update')
+        ->whereNumber("id");
 });
 
 Route::controller(LanguageController::class)->prefix("language")->group(function () {
@@ -69,4 +72,8 @@ Route::controller(LanguageController::class)->prefix("language")->group(function
         ->whereNumber("language");
     Route::put('/{language}', 'update')
         ->whereNumber("language");
+});
+
+Route::controller(UserController::class)->prefix("users")->group(function () {
+    Route::get('/all', 'getAllUsers');
 });

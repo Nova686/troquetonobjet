@@ -45,7 +45,8 @@ class OfferResource extends JsonResource
             'cityName' => $this->city_name,
             'isUpdated' => $this->updated_at != $this->created_at,
             'createdAt' => $this->created_at,
-            'isFavorite' => (bool)$this->isFavorite
+            'isFavorite' => (bool)$this->isFavorite,
+            'reportNumber' => $this->reports()->count(),
         ];
     }
 }
