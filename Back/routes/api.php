@@ -15,6 +15,7 @@ Route::prefix('users')->group(function () {
     Route::put('', [UserController::class, 'update']);
     Route::delete('', [UserController::class, 'delete']);
     Route::get('offers', [OfferController::class, 'getUserOffers']);
+    Route::get('all', [UserController::class, 'getAllUsers']);
 });
 
 // Route for Offers

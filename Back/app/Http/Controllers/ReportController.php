@@ -7,25 +7,22 @@ use Illuminate\Http\Request;
 use App\Models\Report;
 use App\Http\Resources\ReportResource;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Offer;
 
 class ReportController extends Controller
 {
     function create(Request $request){
         $request->validate([
-            "user_id"=>"required",
-            "offer_id"=>"required",
+            "user_id"=>["required", "exists:users,id"],
+            "offer_id"=>["required", "exists:offers,id"],
             "reason"=>"required",
         ]);
 
-        $existingReport = Report::where('user_id', $request->user_id)
-                            ->where('offer_id', $request->offer_id)
-                            ->first();
-
-        if ($existingReport) {
-            $existingReport->delete();
+        $offer = Offer::find($request->offer_id);
+        if($offer->user_id == $request->user_id){
             return response()->json([
-                "message" => "Report removed successfully",
-            ]);
+                "message"=>"You cannot report your own offer",
+            ], 400);
         }
 
         $report = new Report();

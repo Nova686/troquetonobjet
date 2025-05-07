@@ -73,7 +73,3 @@ Route::controller(LanguageController::class)->prefix("language")->group(function
     Route::put('/{language}', 'update')
         ->whereNumber("language");
 });
-
-Route::controller(UserController::class)->prefix("users")->group(function () {
-    Route::get('/all', 'getAllUsers');
-});
