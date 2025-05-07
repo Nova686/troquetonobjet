@@ -46,7 +46,6 @@ class OfferResource extends JsonResource
             'isUpdated' => $this->updated_at != $this->created_at,
             'createdAt' => $this->created_at,
             'isFavorite' => (bool)$this->isFavorite,
-            'reportNumber' => $this->reports()->count(),
         ];
     }
 }
