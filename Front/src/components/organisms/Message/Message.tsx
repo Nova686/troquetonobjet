@@ -41,7 +41,7 @@ export const Message: FC<MessageProps> = ({ message, withAvatar, isCurrentUser }
         <div className={`message-container ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
             <div className={`message-item ${isCurrentUser ? 'flex-row-reverse' : ''}`}>
                 {withAvatar ?
-                    <Avatar url={null} size={12} />
+                    <Avatar url={null} size="12px" />
                 :
                     <div style={{ width: 48, height: 48 }}></div>
                 }

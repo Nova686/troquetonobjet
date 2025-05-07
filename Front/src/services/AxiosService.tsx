@@ -30,8 +30,7 @@ axiosService.interceptors.response.use(
 			console.error('Unauthorized, redirecting to login...');
 			const auth = getAuthRef().current;
 			if(auth)
-				auth?.logout();
-			window.location.href = "/auth/login";
+				auth?.logout(() => window.location.href = "/auth/login");
 		}
 
 		return Promise.reject(error);

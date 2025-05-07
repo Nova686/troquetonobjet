@@ -1,9 +1,8 @@
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
-import {Home, Offers, Authentication, Conversations, DetailOffer, Favorite} from './components/pages';
+import {Home, Offers, Authentication, Conversations, DetailOffer, Favorite, Account} from './components/pages';
 import ProtectedRoute from './components/shared/ProtectedRoute';
-import Profile from './components/pages/Profile/Profile';
 import theme from './theme';
 import {ThemeProvider, CssBaseline, Box} from "@mui/material";
 import {ToastProvider} from "./contexts/ToastContext";
@@ -27,7 +26,7 @@ function App() {
                                 <Route path='/offers' element={<Offers/>}/>
                                 <Route path='/profile' element={
                                     <ProtectedRoute>
-                                        <Profile/>
+                                        <Account/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path='/conversations/:id?' element={

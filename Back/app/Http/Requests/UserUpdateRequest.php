@@ -11,10 +11,11 @@ class UserUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "username" => ["required", "max:300", "string"],
+            "username" => ["string", "max:255"],
             "phone" => ["nullable", "max:20", "string"],
+			"avatar" => ["integer", "nullable", "min:1", "max:8"], 
             "language_id" => ["integer", "exists:languages,id"],
-            "two_fa_activated" => ["required", "boolean"]
+			"two_fa_activated" => ["required", "boolean"]
         ];
     }
 }

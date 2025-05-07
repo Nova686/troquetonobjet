@@ -31,7 +31,7 @@ const OfferCard: FC<OfferCardProps> = ({ offer }) => {
 	const detail = (offer: Offer) => {
 		// TODO: attendre que le back renvoie l'auteur
 		return (
-			<Typography style={{ display: 'flex', justifyContent: "space-between", height: "100%" }}>
+			<Typography component={'div'} style={{ display: 'flex', justifyContent: "space-between", height: "100%" }}>
 				<Typography variant={'body1'} component={'div'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 					<div>
 						<div style={{ fontSize: '16px', fontWeight: 'bold' }}>{offer.title}</div>

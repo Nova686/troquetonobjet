@@ -21,6 +21,7 @@ class UserFactory extends Factory
             'password' => bcrypt('admin'),
             'email_verified_at' => now(),
             'phone' => $faker->e164PhoneNumber(),
+			'avatar' => rand(0, 1) == 1 ? rand(1, 8) : null,
             'language_id' => 1,
             'remember_token' => null,
         ];
