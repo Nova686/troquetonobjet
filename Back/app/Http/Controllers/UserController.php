@@ -10,6 +10,8 @@ use App\Models\OfferImage;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Report;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -52,5 +54,16 @@ class UserController extends Controller
         ]);
 
         return $nb ? Results::noContent() : Results::notFound();
+    }
+
+    public function getAllUsers(Request $request)
+    {
+        $reports = Report::query()
+        ->with("offer.user")
+        ->get();
+
+        return response()->json([
+            "reports" => $reports,
+        ]);
     }
 }
