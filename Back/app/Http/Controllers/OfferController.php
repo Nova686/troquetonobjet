@@ -27,6 +27,7 @@ class OfferController extends Controller
     public function getUserOffers()
     {
         $offers = Offer::query()
+            ->with(['offerImages', 'user'])
             ->where('user_id', Auth::user()->id)
             ->get();
 
@@ -88,7 +89,7 @@ class OfferController extends Controller
     {
         Auth::shouldUse('sanctum');
         $result = Offer::baseQuery($id)
-            ->with(['wishs.subCategory', 'offerImages'])
+            ->with(['wishs.subCategory', 'offerImages', 'subCategory.category'])
             ->first();
 
         if($result !== null)
@@ -112,7 +113,7 @@ class OfferController extends Controller
 
             $offer->longitude = $location->longitude;
             $offer->latitude = $location->latitude;
-        } else {
+        } else if (isset($validated['longitude']) && isset($validated['latitude'])) {
             $offer->longitude = $validated['longitude'];
             $offer->latitude = $validated['latitude'];
         }
@@ -128,8 +129,10 @@ class OfferController extends Controller
     public function destroy(int $idOffer)
     {
         $isDeleted = Offer::query()
-        ->where('id', $idOffer)
-            ->where('user_id', Auth::user()->id)
+            ->where('id', $idOffer)
+            ->when(!Auth::user()->is_admin, function ($q) {
+                $q->where('user_id', Auth::user()->id);
+            })
             ->delete();
 
         return $isDeleted ? Results::noContent() : Results::notFound();

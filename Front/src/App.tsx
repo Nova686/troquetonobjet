@@ -1,4 +1,5 @@
 import './App.css';
+import 'leaflet/dist/leaflet.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
 import {Home, Offers, Authentication, Conversations, DetailOffer, Favorite, Account} from './components/pages';

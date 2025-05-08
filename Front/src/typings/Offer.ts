@@ -27,6 +27,8 @@ export type Offer = {
     isVisible : boolean;
     isFavorite: boolean;
     subCategory: {id: number, label: string};
+    category: {id: number, label: string};
+    wishs: Array<{text: string}>;
     latitude : number;
     longitude : number;
     images : Array<string>;

@@ -19,8 +19,7 @@ const ChatButton: FC<ChatButtonProps> = ({offerId}: ChatButtonProps) => {
 
         const response: AxiosResponse = await axiosService.post(`/offers/${offerId}/conversation`);
 
-        if (response.status === 200)
-        {
+        if (response.status === 200) {
             window.location.href = `/conversations/${response.data.conversation.id}`;
         }
     };

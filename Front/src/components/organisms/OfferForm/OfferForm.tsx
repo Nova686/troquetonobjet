@@ -4,17 +4,20 @@ import axiosService from "../../../services/AxiosService";
 import {AxiosError} from "axios";
 import {Category, Offer, OfferFormCreate} from "../../../typings/Offer";
 import {useTheme} from "@mui/material/styles";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useAuth} from "../../../contexts/AuthContext";
 import {DeleteButton} from "../../molecules";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
+import { useToast } from '../../../contexts/ToastContext';
 // import { debounce } from '@mui/material/utils'
 
 const OfferForm: FC = () => {
     const offerId = useParams().id || null;
 
     const theme = useTheme();
+    const { showToast } = useToast();
+    const navigate = useNavigate();
     const { isConnected, user } = useAuth();
 
     const [title, setTitle] = useState<string>('');
@@ -78,14 +81,19 @@ const OfferForm: FC = () => {
             axiosService.get(`/offers/${offerId}`).then((res) => {
                 const offer: Offer = res.data
                 
-                setTitle(offer.title)
-                setDescription(offer.description)
-                setSubCategory(offer.subCategory)
-                setIsDonation(offer.isDonation)
-                setIsVisible(offer.isVisible)
-                setCityName(offer.cityName)
-                setImages([offer.mainImage, ...offer.images])
-                setIsLoading(false)
+                setTitle(offer.title);
+                setDescription(offer.description);
+                setCategory(offer.category);
+                setSubCategory(offer.subCategory);
+                setIsDonation(offer.isDonation);
+                setIsVisible(offer.isVisible);
+                setCityName(offer.cityName);
+                const img = offer.images;
+                if (offer.mainImage) {
+                    img.push(offer.mainImage);
+                }
+                setImages(img);
+                setIsLoading(false);
             });
         }
     }, []);
@@ -131,6 +139,11 @@ const OfferForm: FC = () => {
                     order++;
                 }
             }
+            showToast({
+                message: "Annonce modifié avec succès",
+                position: { vertical: "bottom", horizontal: "right" },
+                type: 'success'
+            });
         } catch (error) {
             if (error instanceof AxiosError) {
                 // Accéder aux propriétés spécifiques à l'erreur Axios
@@ -147,12 +160,19 @@ const OfferForm: FC = () => {
         return <div>Chargement...</div>
     }
     return (
-        <form onSubmit={handleSubmit}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <form onSubmit={handleSubmit} style={{ marginBottom: 32 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="h4" component="h2" gutterBottom color={theme.palette.primary.main}>
                     Déposer une annonce
                 </Typography>
-                { offerId && isConnected() && <DeleteButton url={`/offers/${offerId}`} /> }
+                {offerId && isConnected() && 
+                    <div>
+                        <Button variant="contained" color="primary" sx={{ marginRight: 4 }} onClick={() => navigate(`/offers/${offerId}`)}>
+                            Voir mon offre
+                        </Button>
+                        <DeleteButton url={`/offers/${offerId}`} />
+                    </div>
+                }
             </div>
 
             <div style={{ textAlign: 'center', color: 'white', marginBottom: '8px' }}>
@@ -224,7 +244,7 @@ const OfferForm: FC = () => {
                     sx={{ marginTop: 2 }}
                     fullWidth />
             <Box display="flex" justifyContent="center" gap={2} marginTop={4} marginBottom={4}>
-                {((files && files.length > 0) || images.length) && 
+                {((files && files.length > 0) || images.length > 0) && 
                     <Box display="flex" gap={2} height="200px">
                         {images.map((image, index) => 
                             <div key={index} style={{ position: 'relative' }}>

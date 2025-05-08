@@ -100,11 +100,14 @@ class Offer extends Model
         })
         ->select(
             "offers.id", "offers.title", "offers.description",
-            "u.id as userId", "u.username", "offers.is_donation",
+            "u.id as userId", "u.username", "u.avatar as avatar",
+            "offers.is_donation",
             "latitude", "longitude",
-            "city_name as cityName",
+            "city_name as city_name",
+            "offers.sub_category_id",
             "offers.created_at",
             "offers.updated_at",
+            "offers.is_visible",
             DB::raw("f.id IS NOT NULL as isFavorite")
         );
     }

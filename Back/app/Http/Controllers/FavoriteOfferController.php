@@ -34,7 +34,7 @@ class FavoriteOfferController extends Controller
          */
         $user = Auth::user();
         $offers = $user->favoriteOffers()
-            ->with(['user'])
+            ->with(['offerImages', 'user'])
             ->isVisible()->get();
 
         return Results::ok([
