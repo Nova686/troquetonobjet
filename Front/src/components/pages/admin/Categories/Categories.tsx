@@ -34,7 +34,17 @@ const Categories = () =>
         try
         {
             setIsSubmitting(prev => ({...prev, [id]: true}));
-            await axiosService.put(`category/${id}`, {name: newName});
+
+            if (newName === '')
+            {
+                await axiosService.delete(`category/${id}`);
+
+                setCategories(prev => prev.filter(cat => cat.id !== id));
+            }
+            else
+            {
+                await axiosService.put(`category/${id}`, {name: newName});
+            }
 
             showToast({
                 message:  `La catégorie ${newName} a bien été modifiée.`,
@@ -124,7 +134,7 @@ const Categories = () =>
         const subCategory = categories.find(c => c.id === categoryId)?.subCategories.find(c => c.id === subCategoryId);
         if (subCategory)
         {
-            updateSubCategory(subCategoryId, subCategory.name);
+            updateSubCategory(subCategoryId, subCategory.name, categoryId);
         }
     };
 
@@ -133,33 +143,53 @@ const Categories = () =>
         id: number,
         isSubCategory: boolean = false,
         categoryId?: number
-    ) => {
-        if (e.key === 'Enter') {
+    ) =>
+    {
+        if (e.key === 'Enter')
+        {
             e.preventDefault();
             const input = e.currentTarget;
             input.dataset.suppressBlur = 'true';
 
-            if (isSubCategory && categoryId) {
+            if (isSubCategory && categoryId)
+            {
                 handleSubCategorySubmit(categoryId, id);
-            } else {
+            } else
+            {
                 handleCategorySubmit(id);
             }
 
-            setTimeout(() => {
+            setTimeout(() =>
+            {
                 input.dataset.suppressBlur = 'false';
                 input.blur();
             }, 100);
         }
     };
 
-    const updateSubCategory = async (subCategoryId: number, newName: string) =>
+    const updateSubCategory = async (subCategoryId: number, newName: string, categoryId: number) =>
     {
         try
         {
-            await axiosService.put(`subcategory/${subCategoryId}`, {name: newName});
+            if (newName === '')
+            {
+                await axiosService.delete(`subcategory/${subCategoryId}`);
+
+                setCategories(prev => prev.map(cat =>
+                {
+                    if (cat.id !== categoryId) return cat;
+                    return {
+                        ...cat,
+                        subCategories: cat.subCategories.filter(sub => sub.id !== subCategoryId)
+                    };
+                }));
+            } else
+            {
+                await axiosService.put(`subcategory/${subCategoryId}`, {name: newName});
+            }
 
             showToast({
-                message:  `La sous-catégorie ${newName} a bien été modifiée.`,
+                message:  `La sous-catégorie ${newName} a bien été ${newName === '' ? 'suprimée' : 'modifiée'}.`,
                 position: {vertical: "bottom", horizontal: "right"},
                 type:     'success'
             });
@@ -169,13 +199,16 @@ const Categories = () =>
         }
     };
 
-    const handleBlur = (id: number, isSubCategory: boolean, categoryId?: number) => {
+    const handleBlur = (id: number, isSubCategory: boolean, categoryId?: number) =>
+    {
         const input = inputRefs.current[id];
         if (input?.dataset.suppressBlur === 'true') return;
 
-        if (isSubCategory && categoryId) {
+        if (isSubCategory && categoryId)
+        {
             handleSubCategorySubmit(categoryId, id);
-        } else {
+        } else
+        {
             handleCategorySubmit(id);
         }
     };
