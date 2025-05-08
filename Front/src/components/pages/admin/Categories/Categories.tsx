@@ -9,9 +9,93 @@ import {useToast} from "../../../../contexts/ToastContext";
 const Categories = () =>
 {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [isSubmitting, setIsSubmitting] = useState<Record<number, boolean>>({});
     const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
     const {showToast} = useToast();
+    const [newCategoryName, setNewCategoryName] = useState("");
+    const [newSubCategoryNames, setNewSubCategoryNames] = useState<Record<number, string>>({});
+
+    const addNewCategory = async () => {
+
+        const category = categories.find(c => c.name === newCategoryName);
+
+        if (category)
+        {
+            showToast({
+                message: `La catégorie "${newCategoryName}" existe déjà.`,
+                position: { vertical: "bottom", horizontal: "right" },
+                type: 'error'
+            });
+            return;
+        }
+
+        if (!newCategoryName.trim() || category) return;
+
+        try {
+            const response = await axiosService.post('category', { name: newCategoryName, language_id: 1 });
+            setCategories(prev => [...prev, { ...response.data.category }]);
+            setNewCategoryName("");
+            showToast({
+                message: `Catégorie "${newCategoryName}" créée avec succès`,
+                position: { vertical: "bottom", horizontal: "right" },
+                type: 'success'
+            });
+        } catch (error) {
+            console.error("Error creating category:", error);
+            showToast({
+                message: "Erreur lors de la création de la catégorie",
+                position: { vertical: "bottom", horizontal: "right" },
+                type: 'error'
+            });
+        }
+    };
+
+    const addNewSubCategory = async (categoryId: number) => {
+        const subCategoryName = newSubCategoryNames[categoryId];
+        const subCategory = categories.find(c => c.id === categoryId)?.subCategories.find(c => c.name === subCategoryName);
+
+        if (subCategory)
+        {
+            showToast({
+                message: `La sous-catégorie "${subCategoryName}" existe déjà.`,
+                position: { vertical: "bottom", horizontal: "right" },
+                type: 'error'
+            });
+        }
+
+        if (!subCategoryName?.trim() || subCategory) return;
+
+        try {
+            const response = await axiosService.post('subcategory', {
+                name: subCategoryName,
+                category_id: categoryId,
+                language_id: 1
+            });
+
+            setCategories(prev => prev.map(cat =>
+                cat.id === categoryId
+                    ? { ...cat, subCategories: [...cat.subCategories, response.data.subCategory] }
+                    : cat
+            ));
+
+            setNewSubCategoryNames(prev => ({ ...prev, [categoryId]: "" }));
+            showToast({
+                message: `Sous-catégorie "${subCategoryName}" créée avec succès`,
+                position: { vertical: "bottom", horizontal: "right" },
+                type: 'success'
+            });
+        } catch (error) {
+            console.error("Error creating subcategory:", error);
+            showToast({
+                message: "Erreur lors de la création de la sous-catégorie",
+                position: { vertical: "bottom", horizontal: "right" },
+                type: 'error'
+            });
+        }
+    };
+
+    const handleNewSubCategoryChange = (categoryId: number, value: string) => {
+        setNewSubCategoryNames(prev => ({ ...prev, [categoryId]: value }));
+    };
 
     const loadCategories = async () =>
     {
@@ -33,8 +117,6 @@ const Categories = () =>
     {
         try
         {
-            setIsSubmitting(prev => ({...prev, [id]: true}));
-
             if (newName === '')
             {
                 await axiosService.delete(`category/${id}`);
@@ -54,9 +136,6 @@ const Categories = () =>
         } catch (error)
         {
             console.error("Error updating category:", error);
-        } finally
-        {
-            setIsSubmitting(prev => ({...prev, [id]: false}));
         }
     };
 
@@ -120,8 +199,6 @@ const Categories = () =>
 
     const handleCategorySubmit = (id: number) =>
     {
-        if (isSubmitting[id]) return;
-
         const category = categories.find(c => c.id === id);
         if (category)
         {
@@ -199,20 +276,6 @@ const Categories = () =>
         }
     };
 
-    const handleBlur = (id: number, isSubCategory: boolean, categoryId?: number) =>
-    {
-        const input = inputRefs.current[id];
-        if (input?.dataset.suppressBlur === 'true') return;
-
-        if (isSubCategory && categoryId)
-        {
-            handleSubCategorySubmit(categoryId, id);
-        } else
-        {
-            handleCategorySubmit(id);
-        }
-    };
-
     useEffect(() =>
     {
         loadCategories();
@@ -223,8 +286,17 @@ const Categories = () =>
             <h1 style={{color: theme.palette.custom.textColor, marginBottom: "8px"}}>Gestion des catégories et sous
                 catégories</h1>
             <div style={{color: theme.palette.custom.danger, marginBottom: "24px"}}><strong>ATTENTION</strong> Pour
-                valider vos changement il suffit d'appuyer sur "Entrer" ou désélectionner le champ après modification.
+                valider vos changement il suffit d'appuyer sur "Entrer" après modification.
             </div>
+
+            <TextField
+                key={-1}
+                value={newCategoryName}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCategoryName(e.target.value)}
+                placeholder="Nouvelle catégorie"
+                onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addNewCategory()}
+                sx={{ width: '60%' }}
+            />
 
             <div style={{width: '60%'}}>
                 {categories.map((category: Category) => (
@@ -236,7 +308,6 @@ const Categories = () =>
                             }}
                             value={category.name}
                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleCategoryChange(category.id, e.target.value)}
-                            onBlur={() => handleBlur(category.id, false)}
                             onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, category.id, false)}
                             sx={{width: '100%'}}
                         />
@@ -247,11 +318,18 @@ const Categories = () =>
                                     key={subCategory.id}
                                     value={subCategory.name}
                                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleSubCategoryChange(category.id, subCategory.id, e.target.value)}
-                                    onBlur={() => handleBlur(subCategory.id, true, category.id)}
                                     onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, subCategory.id, true, category.id)}
                                     sx={{width: '90%', mt: 1}}
                                 />
                             ))}
+
+                            <TextField
+                                value={newSubCategoryNames[category.id] || ""}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => handleNewSubCategoryChange(category.id, e.target.value)}
+                                placeholder="Nouvelle sous-catégorie"
+                                onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addNewSubCategory(category.id)}
+                                sx={{ width: '90%' }}
+                            />
                         </div>
                     </div>
                 ))}
