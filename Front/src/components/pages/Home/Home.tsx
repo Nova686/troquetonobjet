@@ -16,7 +16,7 @@ const Home: FC = () => {
 
 	const handleLastOffers = async () => {
 		setLoadingOffers(true);
-		const response: AxiosResponse = await axiosService.get("offers", { params: { page: 1, nb_per_page: 8 } });
+		const response: AxiosResponse = await axiosService.get("offers", { params: { page: 1, nb_per_page: 6 } });
 		setOffers(response.data.list);
 		setLoadingOffers(false);
 	};
