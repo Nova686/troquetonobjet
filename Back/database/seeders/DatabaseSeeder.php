@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $user->id
             ]);
 
-            // Create Offers 
+            // Create Offers
             Offer::factory(rand(0, 5))->create([
                 'user_id' => $user->id,
             ])->each(function ($offer) use ($offers, $users) {

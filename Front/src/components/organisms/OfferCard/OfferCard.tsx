@@ -1,7 +1,7 @@
-import { CardWithPictureWithoutAction } from "../../atoms";
+import {Button, CardWithPictureWithoutAction} from "../../atoms";
 import { Typography } from "@mui/material";
 import { Offer } from "../../../typings/Offer";
-import { FC } from "react";
+import {FC, FormEvent} from "react";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -10,21 +10,50 @@ import { ChatButton, FavoriteButton } from "../../molecules";
 import { useNavigate } from "react-router-dom";
 import { dateFormat } from "../../../services/FormatterService";
 import { useAuth } from "../../../contexts/AuthContext";
+import DeleteIcon from '@mui/icons-material/Delete';
+import axiosService from "../../../services/AxiosService";
+import {useToast} from "../../../contexts/ToastContext";
 
 interface OfferCardProps {
 	offer: Offer;
+	isAdminPage: boolean;
 }
 
-const OfferCard: FC<OfferCardProps> = ({ offer }) => {
+const OfferCard: FC<OfferCardProps> = ({ offer, isAdminPage = false }) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const { isConnected, user } = useAuth();
+	const {showToast} = useToast();
 
 	const handleClick = (offer: Offer) => {
+		if (isAdminPage) return;
 		if (user?.username === offer.author.username) {
 			navigate('/offers/form', { state: { offer } });
 		} else {
 			navigate(`/offers/${offer.id}`)
+		}
+	}
+
+	const handleDelete = async (e: FormEvent) => {
+		e.preventDefault();
+		try
+		{
+			await axiosService.delete(`offers/${offer.id}`);
+
+			showToast({
+				message:  "L'annonce à été suprimée avec succès.",
+				position: {vertical: "bottom", horizontal: "right"},
+				type:     'success'
+			});
+		}
+		catch (e)
+		{
+			console.log('Une erreur à été soulevée', e)
+			showToast({
+				message:  "Une erreur est survenu lors de la supression de l'annonce.",
+				position: {vertical: "bottom", horizontal: "right"},
+				type:     'error'
+			});
 		}
 	}
   
@@ -53,7 +82,20 @@ const OfferCard: FC<OfferCardProps> = ({ offer }) => {
 					backgroundColor: theme.palette.background.default, borderBottomRightRadius: '8px', padding: '2px 0',
 					display: "flex", justifyContent: 'space-around', flexDirection: 'column', height: "100%"
 				}}>
-					{isConnected() && (user?.username !== offer?.author?.username) &&
+					{isAdminPage &&
+						<>
+							<Button sx={{
+								zIndex: 999,
+								border:      '1px solid',
+								borderColor: theme.palette.custom.danger
+							}}
+									onClick={handleDelete}
+							>
+								<DeleteIcon sx={{color: theme.palette.custom.danger}}/>
+							</Button>
+						</>
+					}
+					{!isAdminPage && isConnected() && (user?.username !== offer?.author?.username) &&
 						<>
 							<FavoriteButton offerId={offer.id} defaultFilled={offer.isFavorite} />
 							<ChatButton offerId={offer.id}/>
@@ -70,7 +112,7 @@ const OfferCard: FC<OfferCardProps> = ({ offer }) => {
 				backgroundColor: theme.palette.primary.main,
 				padding: '4px',
 				borderRadius: '8px',
-				cursor: 'pointer',
+				cursor: isAdminPage ? 'default' : 'pointer',
 				height: "100%"
 			}}
 			cardContentStyle={{ padding: '0' }}

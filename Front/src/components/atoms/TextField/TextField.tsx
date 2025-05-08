@@ -13,41 +13,47 @@ const StyledTextField = styled(MuiTextField)({
     marginBottom: '0px',
 });
 
-const TextField: FC<CustomTextFieldProps> = ({errorText, ...other}) => {
+const TextField: FC<CustomTextFieldProps> = ({errorText, sx, ...other}) => {
     const theme = useTheme();
+    const defaultStyle = {
+        bgcolor: theme.palette.custom.input, // Fond personnalisé
+        color: 'white', // Couleur générale
+        '& .MuiInputBase-input': {
+            color: 'white', // Texte de l'input
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'white', // Bordure normale
+            },
+            '&:hover fieldset': {
+                borderColor: 'white', // Bordure au survol
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'white', // Bordure quand focus
+            },
+        },
+        '& .MuiInputLabel-root': {
+            color: 'white', // Couleur du label au repos
+        },
+        '& .MuiInputLabel-root:hover': {
+            color: 'white', // Couleur du label au survol
+        },
+        '& .MuiInputLabel-root.Mui-focused': {
+            color: 'white', // Couleur du label quand focus
+        },
+    };
+
+    const mergedStyles = {
+        ...defaultStyle,
+        ...(sx || {}),
+    };
 
     return (
         <>
             <StyledTextField
                 {...other}
                 error={!!errorText}
-                sx={{
-                    bgcolor: theme.palette.custom.input, // Fond personnalisé
-                    color: 'white', // Couleur générale
-                    '& .MuiInputBase-input': {
-                        color: 'white', // Texte de l'input
-                    },
-                    '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                            borderColor: 'white', // Bordure normale
-                        },
-                        '&:hover fieldset': {
-                            borderColor: 'white', // Bordure au survol
-                        },
-                        '&.Mui-focused fieldset': {
-                            borderColor: 'white', // Bordure quand focus
-                        },
-                    },
-                    '& .MuiInputLabel-root': {
-                        color: 'white', // Couleur du label au repos
-                    },
-                    '& .MuiInputLabel-root:hover': {
-                        color: 'white', // Couleur du label au survol
-                    },
-                    '& .MuiInputLabel-root.Mui-focused': {
-                        color: 'white', // Couleur du label quand focus
-                    },
-                }}
+                sx={mergedStyles}
             />
 
             <Typography

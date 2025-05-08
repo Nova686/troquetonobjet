@@ -7,12 +7,13 @@ interface OffersListProps {
 	offers: Offer[] | null | undefined;
 	loading?: boolean;
 	error?: string | null;
+	isAdminPage?: boolean;
 }
 
 const CARD_WIDTH = 350;
 const GAP = 16;
 
-const OffersList: FC<OffersListProps> = ({ offers, loading, error }) => {
+const OffersList: FC<OffersListProps> = ({ offers, loading, error, isAdminPage = false }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [offersPerRow, setOffersPerRow] = useState<number>(1);
 
@@ -54,7 +55,7 @@ const OffersList: FC<OffersListProps> = ({ offers, loading, error }) => {
 					const isInLastRow = i >= lastRowStartIndex;
 					return(
 						<div style={{ justifySelf: isInLastRow ? "start" : "center", width: '100%' }} key={offer.id}>
-							<OfferCard offer={offer} />
+							<OfferCard offer={offer} isAdminPage={isAdminPage}/>
 						</div>
 					);
 				})}
