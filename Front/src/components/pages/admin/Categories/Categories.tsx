@@ -102,10 +102,7 @@ const Categories = () =>
         try
         {
             const response = await axiosService.get('category/all/1');
-            const data = Array.isArray(response.data.categories)
-                ? response.data.categories.map((c: Category) => ({...c, isEditing: false}))
-                : [];
-            setCategories(data);
+            setCategories(response.data.categories);
         } catch (error)
         {
             console.error("Error fetching categories:", error);
