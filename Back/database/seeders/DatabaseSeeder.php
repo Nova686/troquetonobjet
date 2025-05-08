@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@tto.fr',
         ],
         [
-            'username' => 'Admin',
+            'username' => 'admin',
             'password' => bcrypt('admin'),
             'email_verified_at' => now(),
             'phone' => 3630,
@@ -40,12 +40,12 @@ class DatabaseSeeder extends Seeder
         $offers = collect();
         $users->each(function ($user) use ($offers, $users) {
 
-            // Create User Addresses
+            // Create Users Addresses
             UserAddress::factory(rand(0, 2))->create([
                 'user_id' => $user->id
             ]);
 
-            // Create Offers 
+            // Create Offers
             Offer::factory(rand(0, 5))->create([
                 'user_id' => $user->id,
             ])->each(function ($offer) use ($offers, $users) {

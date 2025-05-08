@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				email_verified_at: user.email_verified_at,
 				created_at: user.created_at,
 				updated_at: user.updated_at,
+				is_admin: user.is_admin
 			}
 			localStorage.setItem("user", JSON.stringify(editedUser));
 			setUser(editedUser);

@@ -2,6 +2,7 @@ import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
 import {Home, Offers, CreateOffer, Authentication, Conversations, DetailOffer, Favorite, Account} from './components/pages';
+import {Users as AdminUsers, Categories as AdminCategories} from './components/pages/admin'
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import theme from './theme';
 import {ThemeProvider, CssBaseline, Box} from "@mui/material";
@@ -40,6 +41,18 @@ function App() {
                                 }/>
                                 <Route path='/offers/form' element={<CreateOffer/>}/>
                                 <Route path='/offers/:id' element={<DetailOffer/>}/>
+
+                                {/* Page administration */}
+                                <Route path='/admin/users' element={
+                                    <ProtectedRoute adminRoute={true}>
+                                        <AdminUsers/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path='/admin/categories' element={
+                                    <ProtectedRoute adminRoute={true}>
+                                        <AdminCategories/>
+                                    </ProtectedRoute>
+                                }/>
                             </Route>
                         </Routes>
                     </BrowserRouter>
