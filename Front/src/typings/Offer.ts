@@ -28,11 +28,16 @@ export type Offer = {
     isFavorite: boolean;
     subCategory: {id: number, label: string};
     category: {id: number, label: string};
-    wishs: Array<{text: string}>;
+    wishs: Array<Wish>;
     latitude : number;
     longitude : number;
     images : Array<string>;
     mainImage : string;
     isUpdated : boolean;
     createdAt : string;
+}
+
+export type Wish = {
+    id : number;
+    text: string;
 }

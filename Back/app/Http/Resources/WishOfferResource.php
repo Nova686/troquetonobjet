@@ -17,7 +17,7 @@ class WishOfferResource extends JsonResource
         return [
             'id' => $this->id,
             'text' => $this->text,
-            'subCategory' => SubCategoryResource::make($this->subCategory)
+            'subCategory' => $this->subCategory ? SubCategoryResource::make($this->subCategory) : null
         ];
     }
 }

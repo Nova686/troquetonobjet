@@ -4,7 +4,7 @@ import {Offer} from "../../../typings/Offer";
 import axiosService from "../../../services/AxiosService";
 import {AxiosResponse} from "axios";
 import {Avatar, Button, Typography} from "../../atoms";
-import {FavoriteButton} from "../../molecules";
+import {DeleteButton, FavoriteButton} from "../../molecules";
 import {useTheme} from "@mui/material/styles";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {dateFormat} from "../../../services/FormatterService";
@@ -120,6 +120,11 @@ const DetailOffer: FC = () => {
                     </div>
                 </div>
                 <MapView latitude={offer.latitude} longitude={offer.longitude} style={{ height: "200px", width: "100%", zIndex: 0 }}/>
+                {user?.is_admin &&
+                    <div style={{ display: "flex", justifyContent: 'end', marginTop: 16 }}>
+                        <DeleteButton url={`/offers/${offer.id}`} callable={() => navigate('/offers')} />
+                    </div>
+                }
             </div>
         </div>
     );
