@@ -5,6 +5,10 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\GooglePlaceController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Category\SubCategoryController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishOfferController;
 
 // Route for Offers
@@ -51,4 +55,21 @@ Route::controller(SubCategoryController::class)->prefix("subcategory")->group(fu
     Route::put("/{subCategory}","update")
         ->whereNumber("subCategory");
 });
-    
+
+Route::controller(ReportController::class)->prefix("report")->group(function () {
+    Route::get('', 'getReports');
+    Route::post('', 'create');
+    Route::delete('{id}', 'delete')
+        ->whereNumber("id");
+    Route::put('{id}', 'update')
+        ->whereNumber("id");
+});
+
+Route::controller(LanguageController::class)->prefix("language")->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'create');
+    Route::get('/{language}', 'show')
+        ->whereNumber("language");
+    Route::put('/{language}', 'update')
+        ->whereNumber("language");
+});
