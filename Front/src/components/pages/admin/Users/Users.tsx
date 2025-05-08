@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {Button} from "../../../atoms";
 import {useTheme} from "@mui/material/styles";
 import {useToast} from "../../../../contexts/ToastContext";
+import theme from "../../../../theme";
 
 const Categories = () =>
 {
@@ -73,6 +74,8 @@ const Categories = () =>
 
     return (
         <>
+            <h1 style={{color: theme.palette.custom.textColor}}>Tableau des utilisateurs report</h1>
+
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableHead>

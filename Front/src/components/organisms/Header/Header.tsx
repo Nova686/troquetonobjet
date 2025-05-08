@@ -74,7 +74,7 @@ const Header: FC = () =>
                                             MenuListProps={{'aria-labelledby': 'basic-button'}}
                                         >
                                             <MenuItem><Link to="/admin/users">Utilisateurs</Link></MenuItem>
-                                            <MenuItem><Link to="">Annonces</Link></MenuItem>
+                                            <MenuItem><Link to="/admin/offers">Annonces</Link></MenuItem>
                                             <MenuItem><Link to="/admin/categories">Catégories</Link></MenuItem>
                                         </Menu>
                                     </>
