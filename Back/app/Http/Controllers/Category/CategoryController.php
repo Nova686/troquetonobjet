@@ -28,7 +28,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $validated=$request->validate([
-            "name"=>["max:255", "required", "unique:".((new Category())->getTable()).",name"],
+            "name"=>["max:255", "required", "unique:".((new Category())->getTable()).",name,NULL,id,deleted_at,NULL"],
             "language_id"=>["exists:".((new Language())->getTable()).",id","integer"]
         ]);
 
