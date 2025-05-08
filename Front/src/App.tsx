@@ -3,6 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
 import {Home, Offers, Authentication, Conversations, DetailOffer, Favorite, Account} from './components/pages';
+import {Users as AdminUsers, Categories as AdminCategories, Offers as AdminOffers} from './components/pages/admin'
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import theme from './theme';
 import {ThemeProvider, CssBaseline, Box} from "@mui/material";
@@ -44,6 +45,23 @@ function App() {
                                 <Route path='/offers/:id/edit' element={<OfferForm/>}/>
                                 <Route path='/offers/create' element={<OfferForm/>}/>
                                 <Route path='/offers/:id' element={<DetailOffer/>}/>
+
+                                {/* Page administration */}
+                                <Route path='/admin/users' element={
+                                    <ProtectedRoute adminRoute={true}>
+                                        <AdminUsers/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path='/admin/categories' element={
+                                    <ProtectedRoute adminRoute={true}>
+                                        <AdminCategories/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path='/admin/offers' element={
+                                    <ProtectedRoute adminRoute={true}>
+                                        <AdminOffers/>
+                                    </ProtectedRoute>
+                                }/>
                             </Route>
                         </Routes>
                     </BrowserRouter>

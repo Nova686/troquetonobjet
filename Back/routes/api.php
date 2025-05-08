@@ -4,6 +4,7 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\FavoriteOfferController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\UserController;
@@ -14,6 +15,7 @@ Route::prefix('users')->group(function () {
     Route::put('', [UserController::class, 'update']);
     Route::delete('', [UserController::class, 'delete']);
     Route::get('offers', [OfferController::class, 'getUserOffers']);
+    Route::get('all', [UserController::class, 'getAllUsers']);
 });
 
 // Route for Offers

@@ -10,6 +10,7 @@ use App\Models\Offer;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\WishOffer;
+use App\Models\Report;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -45,7 +46,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $user->id
             ]);
 
-            // Create Offers 
+            // Create Offers
             Offer::factory(rand(0, 5))->create([
                 'user_id' => $user->id,
             ])->each(function ($offer) use ($offers, $users) {
@@ -80,6 +81,15 @@ class DatabaseSeeder extends Seeder
         // Create Favorite Offers
         $users->each(function ($user) use ($offers) {
             $user->favoriteOffers()->attach($offers->random());
+        });
+
+        // Create Reports
+        Report::factory(5)->create(function () use ($offers, $users) {
+            $offer = $offers->random();
+            return [
+                'offer_id' => $offer->id,  // Assign the offer ID
+                'user_id' => $users->filter(fn ($u) => $u->id !== $offer->user_id)->random()->id,  // Filter users dynamically based on the offer's owner
+            ];
         });
     }
 }

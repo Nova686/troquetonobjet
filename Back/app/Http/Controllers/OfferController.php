@@ -172,7 +172,7 @@ class OfferController extends Controller
             return Results::notFound();
 
         $query = OfferImage::join(
-            (new Offer())->getTable()." as o", 
+            (new Offer())->getTable()." as o",
             "o.id", "=", "offer_images.offer_id"
         )
         ->where([

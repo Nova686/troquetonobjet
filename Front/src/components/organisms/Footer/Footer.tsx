@@ -33,7 +33,7 @@ const Footer: FC = () => {
                     </div>
                     <div>
                         <FiMail size={16} style={{ marginRight: '8px'}} />
-                        contact@troquetonobject.fr
+                        contact@troctonobject.fr
                     </div>
                     <div>
                         <HiOutlineLocationMarker size={16} style={{ marginRight: '8px'}} />
