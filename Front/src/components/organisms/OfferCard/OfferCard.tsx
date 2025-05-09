@@ -28,7 +28,7 @@ const OfferCard: FC<OfferCardProps> = ({ offer, isAdminPage = false }) => {
 	const handleClick = (offer: Offer) => {
 		if (isAdminPage) return;
 		if (user?.username === offer.author.username) {
-			navigate('/offers/form', { state: { offer } });
+			navigate(`/offers/${offer.id}/edit`);
 		} else {
 			navigate(`/offers/${offer.id}`)
 		}
@@ -83,17 +83,9 @@ const OfferCard: FC<OfferCardProps> = ({ offer, isAdminPage = false }) => {
 					display: "flex", justifyContent: 'space-around', flexDirection: 'column', height: "100%"
 				}}>
 					{isAdminPage &&
-						<>
-							<Button sx={{
-								zIndex: 999,
-								border:      '1px solid',
-								borderColor: theme.palette.custom.danger
-							}}
-									onClick={handleDelete}
-							>
-								<DeleteIcon sx={{color: theme.palette.custom.danger}}/>
-							</Button>
-						</>
+						<Button onClick={handleDelete}>
+							<DeleteIcon sx={{ color: theme.palette.secondary.main }}/>
+						</Button>
 					}
 					{!isAdminPage && isConnected() && (user?.username !== offer?.author?.username) &&
 						<>

@@ -15,11 +15,11 @@ class GooglePlaceController extends Controller
     public function AutoComplete(Request $request)
     {
         $validated = $request->validate([
-            "searchTerm" => ["required", "min:2"]
+            "search_term" => ["required", "min:2"]
         ]);
 
         $result = $this->googlePlaceServ->AutoComplete(
-            $validated["searchTerm"]
+            $validated["search_term"]
         );
 
         return Results::ok($result);

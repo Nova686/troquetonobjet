@@ -35,7 +35,9 @@ class WishOfferController extends Controller
         $wish = new WishOffer();
         $wish->text = $validated['text'];
         $wish->offer()->associate($offer);
-        $wish->subCategory()->associate($validated['sub_category_id']);
+        if (isset($validated['sub_category_id'])) {
+            $wish->subCategory()->associate($validated['sub_category_id']);
+        }
         $wish->save();
 
         return Results::ok([

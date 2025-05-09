@@ -15,13 +15,13 @@ const Offers: FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const theme = useTheme();
 	const { isConnected } = useAuth();
-  const [page, setPage] = useState<number>(1);
+  	const [page, setPage] = useState<number>(1);
 
 	const handleOffers = async () => {
 		setLoading(true);
 
 		try {
-			const response: AxiosResponse = await axiosService.get("offers", { params: { page: page, nb_per_page: 20 } });
+			const response: AxiosResponse = await axiosService.get("offers", { params: { page: page, nb_per_page: 18 } });
 			setOffers(response.data);
 			setError(null);
 		} catch (err) {

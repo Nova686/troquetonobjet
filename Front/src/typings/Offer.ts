@@ -4,13 +4,13 @@ export type Category = {
 }
 
 export type OfferFormCreate = {
-    title: string;
-    description: string;
-    is_visible: boolean;
-    is_donation: boolean;
-    city_name: string;
-    longitude: number;
-    latitude: number;
+    title: string|null;
+    description: string|null;
+    subCategoryId: number|null;
+    isVisible: boolean;
+    isDonation: boolean;
+    cityName: string|null;
+    placeId: string|null;
     userId?: number;
 }
 
@@ -24,11 +24,20 @@ export type Offer = {
     cityName : string;
     description : string;
     isDonation : boolean;
+    isVisible : boolean;
     isFavorite: boolean;
+    subCategory: {id: number, label: string};
+    category: {id: number, label: string};
+    wishs: Array<Wish>;
     latitude : number;
     longitude : number;
     images : Array<string>;
     mainImage : string;
     isUpdated : boolean;
     createdAt : string;
+}
+
+export type Wish = {
+    id : number;
+    text: string;
 }

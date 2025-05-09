@@ -27,6 +27,7 @@ class OfferController extends Controller
     public function getUserOffers()
     {
         $offers = Offer::query()
+            ->with(['offerImages', 'user'])
             ->where('user_id', Auth::user()->id)
             ->get();
 
@@ -40,7 +41,8 @@ class OfferController extends Controller
         $data = $request->validated();
 
         $query = Offer::baseQuery(isVisible: true)
-            ->with(["offerImages"]);
+            ->with(["offerImages", 'subCategory'])
+            ->orderBy('created_at');
 
         $p = Pagination::paginate($query, $data);
 
@@ -60,8 +62,7 @@ class OfferController extends Controller
         $offer->is_donation = $validated['is_donation'];
         $offer->city_name = $validated['city_name'];
 
-        if($validated["place_id"] != null)
-        {
+        if($validated["place_id"] != null) {
             $location = $this->googlePlaceServ->Location($validated["place_id"]);
 
             if($location == null)
@@ -69,14 +70,12 @@ class OfferController extends Controller
 
             $offer->longitude = $location->longitude;
             $offer->latitude = $location->latitude;
-        }
-        else
-        {
+        } else {
             $offer->longitude = $validated['longitude'];
             $offer->latitude = $validated['latitude'];
         }
-
-        $offer->user()->associate(Auth::user()->id);
+        $offer->user()->associate(Auth::id());
+        $offer->subCategory()->associate($validated['sub_category_id']);
         $offer->save();
 
         $result = Offer::baseQuery($offer->id)->first();
@@ -88,8 +87,9 @@ class OfferController extends Controller
 
     public function get(int $id)
     {
+        Auth::shouldUse('sanctum');
         $result = Offer::baseQuery($id)
-            ->with(['wishs.subCategory', 'offerImages'])
+            ->with(['wishs.subCategory', 'offerImages', 'subCategory.category'])
             ->first();
 
         if($result !== null)
@@ -105,7 +105,21 @@ class OfferController extends Controller
         $validated = $request->validated();
 
         $offer->update($validated);
-        $result = Offer::baseQuery($offer->id)->first();
+        if($validated["place_id"] != null) {
+            $location = $this->googlePlaceServ->Location($validated["place_id"]);
+
+            if($location == null)
+                return Results::badRequest(["message" => "Le place id n'existe pas"]);
+
+            $offer->longitude = $location->longitude;
+            $offer->latitude = $location->latitude;
+        } else if (isset($validated['longitude']) && isset($validated['latitude'])) {
+            $offer->longitude = $validated['longitude'];
+            $offer->latitude = $validated['latitude'];
+        }
+        $offer->save();
+
+        $result = Offer::baseQuery($offer->id, $offer->is_visible)->first();
 
         return response()->json([
             'offer' => OfferResource::make($result)

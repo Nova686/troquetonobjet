@@ -1,12 +1,14 @@
 import './App.css';
+import 'leaflet/dist/leaflet.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Layout from './components/templates/Layout/Layout';
-import {Home, Offers, CreateOffer, Authentication, Conversations, DetailOffer, Favorite, Account} from './components/pages';
+import {Home, Offers, Authentication, Conversations, DetailOffer, Favorite, Account} from './components/pages';
 import {Users as AdminUsers, Categories as AdminCategories, Offers as AdminOffers} from './components/pages/admin'
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import theme from './theme';
 import {ThemeProvider, CssBaseline, Box} from "@mui/material";
 import {ToastProvider} from "./contexts/ToastContext";
+import { OfferForm } from './components/organisms';
 
 function App() {
     return (
@@ -39,7 +41,9 @@ function App() {
                                         <Favorite/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path='/offers/form' element={<CreateOffer/>}/>
+
+                                <Route path='/offers/:id/edit' element={<OfferForm/>}/>
+                                <Route path='/offers/create' element={<OfferForm/>}/>
                                 <Route path='/offers/:id' element={<DetailOffer/>}/>
 
                                 {/* Page administration */}

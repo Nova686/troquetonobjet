@@ -5,69 +5,79 @@ import { RegisterRequestModel } from "../../../typings/Auth";
 import axiosService from "../../../services/AxiosService";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
-import {useTheme} from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
 const RegisterForm: FC = () => {
-	const [username, setUsername] = useState('');
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
-	const [errors, setErrors] = useState({
-		username: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-		general: ''
-	});
-	const [loading, setLoading] = useState(false);
-	const { login } = useAuth();
-	const theme = useTheme();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    general: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const theme = useTheme();
 
-	const validateForm = (): boolean => {
-		return validatePassword() && validateConfirmPassword();
-	};
+  const validateForm = (): boolean => {
+    return validatePassword() && validateConfirmPassword();
+  };
 
-	const validatePassword = (): boolean => {
-		const isPasswordValid = password.length >= 8;
-		setErrors(prevErrors => ({
-			...prevErrors,
-			password: isPasswordValid ? '' : 'Le texte mot de passe doit contenir au moins 8 caractères.'
-		}));
-		return isPasswordValid;
-	};
+  const validatePassword = (): boolean => {
+    const isPasswordValid = password.length >= 8;
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      password: isPasswordValid
+        ? ""
+        : "Le texte mot de passe doit contenir au moins 8 caractères.",
+    }));
+    return isPasswordValid;
+  };
 
-	const validateConfirmPassword = (): boolean => {
-		const arePasswordsIdentical = password === confirmPassword;
-		setErrors(prevErrors => ({
-			...prevErrors,
-			confirmPassword: arePasswordsIdentical ? '' : 'La confirmation doit être identique au mot de passe'
-		}));
-		return arePasswordsIdentical;
-	};
+  const validateConfirmPassword = (): boolean => {
+    const arePasswordsIdentical = password === confirmPassword;
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      confirmPassword: arePasswordsIdentical
+        ? ""
+        : "La confirmation doit être identique au mot de passe",
+    }));
+    return arePasswordsIdentical;
+  };
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-		setErrors({ username: '', email: '', password: '', confirmPassword: '', general: '' });
+    setErrors({
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      general: "",
+    });
 
-		if (!validateForm()) {
-			setLoading(false);
-			return;
-		}
+    if (!validateForm()) {
+      setLoading(false);
+      return;
+    }
 
-		const data: RegisterRequestModel = {
-			username,
-			email,
-			password,
-			language_iso: window.navigator.language.split('-')[0]
-		};
+    const data: RegisterRequestModel = {
+      username,
+      email,
+      password,
+      language_iso: window.navigator.language.split("-")[0],
+    };
 
-		try {
-			const response = await axiosService.post("/register", data);
-			const responseData = response?.data;
-			if (!responseData?.user || !responseData?.token) throw new Error();
+    try {
+      const response = await axiosService.post("/register", data);
+      const responseData = response?.data;
+      if (!responseData?.user || !responseData?.token) throw new Error();
 
 			login(responseData.user, responseData.token, () => {
 				window.location.href = '/';
@@ -93,13 +103,13 @@ const RegisterForm: FC = () => {
 		}
 	};
 
-	const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setConfirmPassword(value);
-		if (value === password && errors.confirmPassword) {
-			setErrors(prevErrors => ({ ...prevErrors, confirmPassword: '' }));
-		}
-	};
+  const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    if (value === password && errors.confirmPassword) {
+      setErrors((prevErrors) => ({ ...prevErrors, confirmPassword: "" }));
+    }
+  };
 
 	return (
 		<Container maxWidth="md" style={{ marginTop: '32px', marginBottom: '64px' }}>
@@ -207,6 +217,5 @@ const RegisterForm: FC = () => {
 		</Container>
 	);
 };
-
 
 export default RegisterForm;

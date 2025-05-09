@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
+ * @property SubCategory $subCategory
  * @property OfferImage $offerImages
  * @property OfferImage $mainOfferImage
  */
@@ -48,10 +50,15 @@ class Offer extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function subCategory(): BelongsTo
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
     public function reports()
-{
-    return $this->hasMany(Report::class);
-}
+    {
+        return $this->hasMany(Report::class);
+    }
 
     public function getIsUpdatedAttribute(): bool
     {
@@ -86,18 +93,26 @@ class Offer extends Model
             "u.id", "=", "offers.user_id"
         )
         ->leftJoin("favorite_offers as f", "f.offer_id", "=", "offers.id")
-        ->isVisible($isVisible)
+        ->where(function ($q) use ($isVisible) {
+            $q->where('u.id', Auth::id())
+                ->orWhere(function ($q) use ($isVisible) {
+                    $q->isVisible($isVisible);
+                });
+        })
         ->when($id > 0, function($request) use ($id)
         {
             $request->where("offers.id", $id);
         })
         ->select(
             "offers.id", "offers.title", "offers.description",
-            "u.id as userId", "u.username", "offers.is_donation",
+            "u.id as userId", "u.username", "u.avatar as avatar",
+            "offers.is_donation",
             "latitude", "longitude",
-            "city_name as cityName",
+            "city_name as city_name",
+            "offers.sub_category_id",
             "offers.created_at",
             "offers.updated_at",
+            "offers.is_visible",
             DB::raw("f.id IS NOT NULL as isFavorite")
         );
     }

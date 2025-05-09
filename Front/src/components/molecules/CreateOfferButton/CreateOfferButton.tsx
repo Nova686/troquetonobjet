@@ -17,7 +17,7 @@ const CreateOfferButton: FC = () => {
     };
 
     return (
-        <Link href={"/offers/form"} sx={style}>
+        <Link href={"/offers/create"} sx={style}>
             + Déposer une annonce
         </Link>
     );

@@ -11,31 +11,31 @@ const Categories = () =>
     const [categories, setCategories] = useState<Category[]>([]);
     const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
     const {showToast} = useToast();
-    const [newCategoryName, setNewCategoryName] = useState("");
-    const [newSubCategoryNames, setNewSubCategoryNames] = useState<Record<number, string>>({});
+    const [newCategoryLabel, setNewCategoryLabel] = useState("");
+    const [newSubCategoryLabels, setNewSubCategoryLabels] = useState<Record<number, string>>({});
 
     const addNewCategory = async () => {
 
-        const category = categories.find(c => c.name === newCategoryName);
+        const category = categories.find(c => c.label === newCategoryLabel);
 
         if (category)
         {
             showToast({
-                message: `La catégorie "${newCategoryName}" existe déjà.`,
+                message: `La catégorie "${newCategoryLabel}" existe déjà.`,
                 position: { vertical: "bottom", horizontal: "right" },
                 type: 'error'
             });
             return;
         }
 
-        if (!newCategoryName.trim() || category) return;
+        if (!newCategoryLabel.trim() || category) return;
 
         try {
-            const response = await axiosService.post('category', { name: newCategoryName, language_id: 1 });
+            const response = await axiosService.post('category', { name: newCategoryLabel, language_id: 1 });
             setCategories(prev => [...prev, { ...response.data.category }]);
-            setNewCategoryName("");
+            setNewCategoryLabel("");
             showToast({
-                message: `Catégorie "${newCategoryName}" créée avec succès`,
+                message: `Catégorie "${newCategoryLabel}" créée avec succès`,
                 position: { vertical: "bottom", horizontal: "right" },
                 type: 'success'
             });
@@ -50,23 +50,23 @@ const Categories = () =>
     };
 
     const addNewSubCategory = async (categoryId: number) => {
-        const subCategoryName = newSubCategoryNames[categoryId];
-        const subCategory = categories.find(c => c.id === categoryId)?.subCategories.find(c => c.name === subCategoryName);
+        const subCategoryLabel = newSubCategoryLabels[categoryId];
+        const subCategory = categories.find(c => c.id === categoryId)?.subCategories.find(c => c.label === subCategoryLabel);
 
         if (subCategory)
         {
             showToast({
-                message: `La sous-catégorie "${subCategoryName}" existe déjà.`,
+                message: `La sous-catégorie "${subCategoryLabel}" existe déjà.`,
                 position: { vertical: "bottom", horizontal: "right" },
                 type: 'error'
             });
         }
 
-        if (!subCategoryName?.trim() || subCategory) return;
+        if (!subCategoryLabel?.trim() || subCategory) return;
 
         try {
             const response = await axiosService.post('subcategory', {
-                name: subCategoryName,
+                name: subCategoryLabel,
                 category_id: categoryId,
                 language_id: 1
             });
@@ -77,9 +77,9 @@ const Categories = () =>
                     : cat
             ));
 
-            setNewSubCategoryNames(prev => ({ ...prev, [categoryId]: "" }));
+            setNewSubCategoryLabels(prev => ({ ...prev, [categoryId]: "" }));
             showToast({
-                message: `Sous-catégorie "${subCategoryName}" créée avec succès`,
+                message: `Sous-catégorie "${subCategoryLabel}" créée avec succès`,
                 position: { vertical: "bottom", horizontal: "right" },
                 type: 'success'
             });
@@ -94,7 +94,7 @@ const Categories = () =>
     };
 
     const handleNewSubCategoryChange = (categoryId: number, value: string) => {
-        setNewSubCategoryNames(prev => ({ ...prev, [categoryId]: value }));
+        setNewSubCategoryLabels(prev => ({ ...prev, [categoryId]: value }));
     };
 
     const loadCategories = async () =>
@@ -110,11 +110,11 @@ const Categories = () =>
         }
     };
 
-    const updateCategory = async (id: number, newName: string) =>
+    const updateCategory = async (id: number, newLabel: string) =>
     {
         try
         {
-            if (newName === '')
+            if (newLabel === '')
             {
                 await axiosService.delete(`category/${id}`);
 
@@ -122,11 +122,11 @@ const Categories = () =>
             }
             else
             {
-                await axiosService.put(`category/${id}`, {name: newName});
+                await axiosService.put(`category/${id}`, {name: newLabel});
             }
 
             showToast({
-                message:  `La catégorie ${newName} a bien été modifiée.`,
+                message:  `La catégorie ${newLabel} a bien été modifiée.`,
                 position: {vertical: "bottom", horizontal: "right"},
                 type:     'success'
             });
@@ -138,7 +138,7 @@ const Categories = () =>
 
     const handleCategoryChange = (id: number, newValue: string) =>
     {
-        const findingCategory = categories.find((c: Category) => c.name === newValue);
+        const findingCategory = categories.find((c: Category) => c.label === newValue);
 
         if (findingCategory !== undefined)
         {
@@ -150,18 +150,18 @@ const Categories = () =>
         } else
         {
             setCategories(prev => prev.map(cat =>
-                cat.id === id ? {...cat, name: newValue} : cat
+                cat.id === id ? {...cat, label: newValue} : cat
             ));
         }
     };
 
-    const hasSubCategoryName = (newName: string): boolean =>
+    const hasSubCategoryLabel = (newLabel: string): boolean =>
     {
         for (const category of categories)
         {
             for (const subCategory of category.subCategories)
             {
-                if (subCategory.name.toLowerCase() === newName.toLowerCase())
+                if (subCategory.label.toLowerCase() === newLabel.toLowerCase())
                 {
                     return true;
                 }
@@ -172,7 +172,7 @@ const Categories = () =>
 
     const handleSubCategoryChange = (categoryId: number, subId: number, newValue: string) =>
     {
-        if (hasSubCategoryName(newValue))
+        if (hasSubCategoryLabel(newValue))
         {
             showToast({
                 message:  `La sous-catégorie ${newValue} existe déjà.`,
@@ -187,7 +187,7 @@ const Categories = () =>
                 return {
                     ...cat,
                     subCategories: cat.subCategories.map(sub =>
-                        sub.id === subId ? {...sub, name: newValue} : sub
+                        sub.id === subId ? {...sub, label: newValue} : sub
                     )
                 };
             }));
@@ -199,7 +199,7 @@ const Categories = () =>
         const category = categories.find(c => c.id === id);
         if (category)
         {
-            updateCategory(id, category.name);
+            updateCategory(id, category.label);
         }
     };
 
@@ -208,7 +208,7 @@ const Categories = () =>
         const subCategory = categories.find(c => c.id === categoryId)?.subCategories.find(c => c.id === subCategoryId);
         if (subCategory)
         {
-            updateSubCategory(subCategoryId, subCategory.name, categoryId);
+            updateSubCategory(subCategoryId, subCategory.label, categoryId);
         }
     };
 
@@ -241,11 +241,11 @@ const Categories = () =>
         }
     };
 
-    const updateSubCategory = async (subCategoryId: number, newName: string, categoryId: number) =>
+    const updateSubCategory = async (subCategoryId: number, newLabel: string, categoryId: number) =>
     {
         try
         {
-            if (newName === '')
+            if (newLabel === '')
             {
                 await axiosService.delete(`subcategory/${subCategoryId}`);
 
@@ -259,11 +259,11 @@ const Categories = () =>
                 }));
             } else
             {
-                await axiosService.put(`subcategory/${subCategoryId}`, {name: newName});
+                await axiosService.put(`subcategory/${subCategoryId}`, {name: newLabel});
             }
 
             showToast({
-                message:  `La sous-catégorie ${newName} a bien été ${newName === '' ? 'suprimée' : 'modifiée'}.`,
+                message:  `La sous-catégorie ${newLabel} a bien été ${newLabel === '' ? 'suprimée' : 'modifiée'}.`,
                 position: {vertical: "bottom", horizontal: "right"},
                 type:     'success'
             });
@@ -288,8 +288,8 @@ const Categories = () =>
 
             <TextField
                 key={-1}
-                value={newCategoryName}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCategoryName(e.target.value)}
+                value={newCategoryLabel}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCategoryLabel(e.target.value)}
                 placeholder="Nouvelle catégorie"
                 onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addNewCategory()}
                 sx={{ width: '60%' }}
@@ -303,7 +303,7 @@ const Categories = () =>
                             {
                                 inputRefs.current[category.id] = el;
                             }}
-                            value={category.name}
+                            value={category.label}
                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleCategoryChange(category.id, e.target.value)}
                             onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, category.id, false)}
                             sx={{width: '100%'}}
@@ -313,7 +313,7 @@ const Categories = () =>
                             {category.subCategories.map((subCategory: SubCategory) => (
                                 <TextField
                                     key={subCategory.id}
-                                    value={subCategory.name}
+                                    value={subCategory.label}
                                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleSubCategoryChange(category.id, subCategory.id, e.target.value)}
                                     onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, subCategory.id, true, category.id)}
                                     sx={{width: '90%', mt: 1}}
@@ -321,7 +321,7 @@ const Categories = () =>
                             ))}
 
                             <TextField
-                                value={newSubCategoryNames[category.id] || ""}
+                                value={newSubCategoryLabels[category.id] || ""}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleNewSubCategoryChange(category.id, e.target.value)}
                                 placeholder="Nouvelle sous-catégorie"
                                 onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addNewSubCategory(category.id)}

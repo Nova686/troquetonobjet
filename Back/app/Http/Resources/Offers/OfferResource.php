@@ -20,29 +20,43 @@ class OfferResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'author' => ["id" => $this->userId, "username" => $this->username],
+            'author' => [
+                'id' => $this->userId,
+                'username' => $this->username,
+                'avatar' => $this->avatar
+            ],
+            'subCategory' => $this->when($this->subCategory, function () {
+                return [
+                    'id' => $this->subCategory->id,
+                    'label' => $this->subCategory->name
+                ];
+            }, null),
+            'category' => $this->when($this->subCategory, function () {
+                return [
+                    'id' => $this->subCategory->category->id,
+                    'label' => $this->subCategory->category->name
+                ];
+            }, null),
             'wishs' => $this->whenLoaded('wishs', function () {
                 return WishOfferResource::collection($this->wishs);
             }),
-            'images' => $this->whenLoaded('offerImages', function()
-            {
+            'images' => $this->whenLoaded('offerImages', function() {
                 $urlList = [];
-                foreach ($this->offerImages as $element)
-                {
+                foreach ($this->offerImages as $element) {
                     if($element->order != 0)
                         $urlList[] = url("storage/".$element->url);
                 }
 
                 return $urlList;
             }),
-            'mainImage' => $this->whenLoaded('offerImages', function ()
-            {
+            'mainImage' => $this->whenLoaded('offerImages', function () {
                 return $this->mainOfferImage ? url("storage/" . $this->mainOfferImage->url) : null;
             }),
             'isDonation' => $this->is_donation,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'cityName' => $this->city_name,
+            'isVisible' => $this->is_visible,
             'isUpdated' => $this->updated_at != $this->created_at,
             'createdAt' => $this->created_at,
             'isFavorite' => (bool)$this->isFavorite,
