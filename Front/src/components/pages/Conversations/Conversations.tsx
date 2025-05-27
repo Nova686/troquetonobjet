@@ -113,6 +113,29 @@ const Conversations: FC = () => {
 		})();
 	}, []);
 
+	const shouldDisplayAvatar = (message: MessageType, index: number): boolean => {
+		return index === messages.length - 1 ||
+			(index <= messages.length - 1 &&
+				message.sender.id !==
+				messages[index + 1].sender.id) ||
+			new Date(message.createdAt).toLocaleString("fr", {
+				hour12: false,
+				dateStyle: "short",
+			}) !==
+			new Date(messages[index + 1].createdAt).toLocaleString("fr", {
+				hour12: false,
+				dateStyle: "short",
+			})
+			|| shouldDisplayDate(messages[index + 1], index + 1)
+	}
+
+	const shouldDisplayDate = (message: MessageType, index: number): boolean => {
+		return (index === 0 ||
+			message.sender.id !== messages[index - 1].sender.id ||
+			new Date(messages[index - 1].createdAt).getTime() - new Date(message.createdAt).getTime() > 5 * 60 * 1000
+		);
+	}
+
 	return (
 		<div className="conversations-container">
 			<div className="conversations-list">
@@ -165,20 +188,8 @@ const Conversations: FC = () => {
 															</div>
 														)}
 													<Message message={message}
-														withAvatar={
-															i === messages.length - 1 ||
-															(i <= messages.length - 1 &&
-																message.sender.id !==
-																messages[i + 1].sender.id) ||
-															new Date(message.createdAt).toLocaleString("fr", {
-																hour12: false,
-																dateStyle: "short",
-															}) !==
-															new Date(messages[i + 1].createdAt).toLocaleString("fr", {
-																hour12: false,
-																dateStyle: "short",
-															})
-														}
+														shouldDisplayAvatar={shouldDisplayAvatar(message, i)}
+														shouldDisplayDate={shouldDisplayDate(message, i)}
 														isCurrentUser={!!user && user.id === message.sender.id} />
 												</div>
 											);

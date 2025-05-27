@@ -6,7 +6,7 @@ import {
 	DialogActions,
 	Button,
 	useTheme,
-	Grid2,
+	Grid,
 	CircularProgress
 } from '@mui/material';
 import { Avatar } from '../../atoms';
@@ -40,9 +40,9 @@ const AvatarSelectionModal: FC<AvatarSelectionModalProps> = ({
 		<Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
 			<DialogTitle>Choisissez une image de profil</DialogTitle>
 			<DialogContent>
-				<Grid2 container spacing={2}>
+				<Grid container spacing={2}>
 					{avatars.map((picNumber, index) => (
-						<Grid2
+						<Grid
 							key={index}
 							size={{ xs: 3 }}
 							onClick={() => setSelected(picNumber)}
@@ -55,13 +55,13 @@ const AvatarSelectionModal: FC<AvatarSelectionModalProps> = ({
 							}}
 						>
 							<Avatar
-								url={`/Images/Avatars/${picNumber}.webp`}
+								avatarIndex={picNumber}
 								size="100%"
 								hasBorder={selected !== picNumber}
 							/>
-						</Grid2>
+						</Grid>
 					))}
-				</Grid2>
+				</Grid>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={onClose} color="secondary">
