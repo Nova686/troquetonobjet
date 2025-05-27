@@ -165,7 +165,7 @@ const Conversations: FC = () => {
 															</div>
 														)}
 													<Message message={message}
-														withAvatar={
+														firstGroupMessage={
 															i === messages.length - 1 ||
 															(i <= messages.length - 1 &&
 																message.sender.id !==

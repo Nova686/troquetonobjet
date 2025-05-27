@@ -8,11 +8,11 @@ import { timestampFormat } from "../../../services/FormatterService";
 
 type MessageProps = {
     message: MessageType;
-    withAvatar: boolean;
+    firstGroupMessage: boolean;
     isCurrentUser: boolean;
 };
 
-export const Message: FC<MessageProps> = ({ message, withAvatar, isCurrentUser }) => {
+export const Message: FC<MessageProps> = ({ message, firstGroupMessage, isCurrentUser }) => {
     const [isHover, setIsHover] = useState<boolean>(false);
     const [isEditable, setIsEditable] = useState<boolean>(false);
     const messageContentRef = useRef<HTMLDivElement | null>(null);
@@ -39,9 +39,9 @@ export const Message: FC<MessageProps> = ({ message, withAvatar, isCurrentUser }
 
     return (
         <div className={`message-container ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
-            <div className={`message-item ${isCurrentUser ? 'flex-row-reverse' : ''}`}>
-                {withAvatar ?
-                    <Avatar url={null} size="12px" />
+            <div className={`message-item align-items-center ${isCurrentUser ? 'flex-row-reverse' : ''}`}>
+                {firstGroupMessage ?
+                    <Avatar avatarIndex={message.sender.avatar} size="48px" />
                 :
                     <div style={{ width: 48, height: 48 }}></div>
                 }

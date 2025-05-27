@@ -19,14 +19,14 @@ const DetailOffer: FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [offer, setOffer] = useState<Offer | null>(null);
-    const [profileUrl, setProfileUrl] = useState<string>('/Images/avatar.jpg');
+    const [avatarIndex, setAvatarIndex] = useState<number | null>(null);
     const theme = useTheme();
 
     const handleOffer: () => Promise<void> = async (): Promise<void> => {
         const response: AxiosResponse<any, any> = await axiosService.get(`offers/${id}`);
         setOffer(response.data);
         if (response.data.author.avatar) {
-            setProfileUrl(`/Images/Avatars/${response.data.author.avatar}.webp`);
+            setAvatarIndex(response.data.author.avatar);
         }
     }
 
@@ -101,7 +101,7 @@ const DetailOffer: FC = () => {
             </div>
             <div style={{width: "30%"}}>
                 <div style={{ display: "flex", marginBottom: 32 }}>
-                    <Avatar size={"128px"} url={profileUrl} />
+                    <Avatar size={"128px"} avatarIndex={avatarIndex} />
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginLeft: 8 }}>
                         <div>
                             <Typography sx={{fontSize: "20px", fontWeight: 'bold', color: theme.palette.primary.main}}>{offer.author.username}</Typography>

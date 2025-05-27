@@ -5,18 +5,18 @@ import theme from '../../../theme';
 import { User } from '../../../typings/Auth';
 
 interface Props {
-	profileUrl: string;
+	avatarIndex: number | null;
 	user: User;
 	onEditAvatar: () => void;
 	onEditProfile: () => void;
 	onLogout: () => void;
 }
 
-const AccountHeader = ({ profileUrl, user, onEditAvatar, onEditProfile, onLogout }: Props) => (
+const AccountHeader = ({ avatarIndex, user, onEditAvatar, onEditProfile, onLogout }: Props) => (
 	<Box display='flex' justifyContent='space-between' width='100%'>
 		<Box display='flex' alignItems='center'>
 			<Box position='relative'>
-				<Avatar size={"180px"} url={profileUrl} />
+				<Avatar size={"180px"} avatarIndex={avatarIndex} />
 				<IconButton onClick={onEditAvatar} sx={{ position: "absolute", bottom: 0, right: 0 }}>
 					<Edit fontSize='large' sx={{ color: 'white', backgroundColor: theme.palette.primary.main, borderRadius: '50%', border: "1px solid grey", padding: "5px" }} />
 				</IconButton>

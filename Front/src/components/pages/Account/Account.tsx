@@ -111,8 +111,6 @@ const Account: FC = () => {
 		logout(() => window.location.href = "/");
 	};
 
-	const profileUrl = user?.avatar == null ? '/Images/avatar.jpg' : `/Images/Avatars/${user.avatar}.webp`;
-
 	return (
 		<Box color={theme.palette.primary.main}>
 			<Typography variant='h4'>
@@ -120,7 +118,7 @@ const Account: FC = () => {
 			</Typography>
 			<AccountHeader
 				user={user!}
-				profileUrl={profileUrl}
+				avatarIndex={user?.avatar ?? null}
 				onLogout={handleLogout}
 				onEditProfile={() => setEditModalOpen(true)}
 				onEditAvatar={() => setAvatarsModalOpen(true)}
