@@ -16,6 +16,8 @@ const Categories = () =>
         id: number;
         offerId: number;
         reason: string;
+        offerTitle: string;
+        username: string;
     }
 
     const [reports, setReports] = useState<Report[]>([]);
@@ -67,43 +69,47 @@ const Categories = () =>
     {
         setRows(reports.map((report: Report) => ({
             id:      report.id,
-            offerId: report.offer_id,
+            username: report.username,
+            offerTitle: report.offerTitle,
+            offerId: report.offerId,
             reason:  report.reason
         })));
     }, [reports]);
 
     return (
         <>
-            <h1 style={{color: theme.palette.custom.textColor}}>Tableau des utilisateurs report</h1>
+            <h1 style={{color: theme.palette.custom.textColor}}>Tableau des annonces report</h1>
 
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
-                    <TableHead>
+                    <TableHead sx={{ backgroundColor: theme.palette.primary.main }}>
                         <TableRow>
                             <TableCell>ID</TableCell>
-                            <TableCell>ID de l'annonce</TableCell>
+                            <TableCell>Utilisateur</TableCell>
+                            <TableCell>Annonce</TableCell>
                             <TableCell>Raison</TableCell>
                             <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody sx={{ backgroundColor: '#747d67' }}>
                         {rows.map((row) => (
                             <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}>
-                                <TableCell>{row.id}</TableCell>
+                                <TableCell sx={{ color: 'white' }}>{row.id}</TableCell>
+                                <TableCell sx={{ color: 'white' }}>{row.username}</TableCell>
                                 <TableCell>
                                     <Link to={`/offers/${row.offerId}`}>
-                                        {row.offerId}
+                                        <span style={{ color: 'white' }}>{row.offerTitle}</span>
                                     </Link>
                                 </TableCell>
-                                <TableCell>{row.reason}</TableCell>
+                                <TableCell sx={{ color: 'white' }}>{row.reason}</TableCell>
                                 <TableCell sx={{ cursor: 'pointer' }}>
                                     <Button sx={{
                                         border:      '1px solid',
-                                        borderColor: theme.palette.custom.danger
+                                        borderColor: theme.palette.secondary.main
                                     }}
                                     onClick={() => handleDelete(row.id)}
                                     >
-                                        <DeleteIcon sx={{color: theme.palette.custom.danger}}/>
+                                        <DeleteIcon sx={{color: theme.palette.secondary.main }}/>
                                     </Button>
                                 </TableCell>
                             </TableRow>

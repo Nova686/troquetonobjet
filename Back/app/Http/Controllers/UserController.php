@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Resources\ReportResource;
 use App\Library\Results;
 use App\Library\Storage\StorageService;
 use App\Models\Offer;
@@ -63,7 +64,7 @@ class UserController extends Controller
         ->get();
 
         return response()->json([
-            "reports" => $reports,
+            "reports" => ReportResource::collection($reports),
         ]);
     }
 }

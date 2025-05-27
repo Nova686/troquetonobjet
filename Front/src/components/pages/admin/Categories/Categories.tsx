@@ -282,7 +282,7 @@ const Categories = () =>
         <div>
             <h1 style={{color: theme.palette.custom.textColor, marginBottom: "8px"}}>Gestion des catégories et sous
                 catégories</h1>
-            <div style={{color: theme.palette.custom.danger, marginBottom: "24px"}}><strong>ATTENTION</strong> Pour
+            <div style={{color: theme.palette.secondary.main, marginBottom: "24px"}}><strong>ATTENTION</strong> Pour
                 valider vos changement il suffit d'appuyer sur "Entrer" après modification.
             </div>
 
