@@ -10,6 +10,7 @@ import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import {CreateOfferButton} from "../../molecules";
 import {PermIdentityOutlined} from "@mui/icons-material";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { Avatar } from "../../atoms";
 
 const Header: FC = () =>
 {
@@ -116,7 +117,7 @@ const Header: FC = () =>
                                 <Link to="/profile">
                                     <Box display='flex' alignItems='center' flexDirection={"column"}
                                          color={theme.palette.custom.textColor}>
-                                        <AccountCircleIcon sx={{fontSize: 42}}/>
+                                        <Avatar avatarIndex={user?.avatar ?? null} size="42px"/>
                                         Mon compte
                                     </Box>
                                 </Link>
