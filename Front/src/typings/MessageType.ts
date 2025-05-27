@@ -7,3 +7,11 @@ export type MessageType = {
     createdAt: string
     isUpdated: boolean
 }
+
+export type wsMessageResponseType = {
+    message: MessageType;
+}
+
+export type wsDeleteMessageResponseType = {
+	messageId: number;
+}

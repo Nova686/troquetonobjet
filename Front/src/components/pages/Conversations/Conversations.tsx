@@ -4,11 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Conversation, Message } from "../../organisms";
 import { createMessage, getConversations, getMessages } from "../../../services/messages";
 import { ConversationType } from "../../../typings/ConversationType";
-import { MessageType } from "../../../typings/MessageType";
+import { MessageType, wsDeleteMessageResponseType, wsMessageResponseType } from "../../../typings/MessageType";
 import { IoMdSend } from "react-icons/io";
 import { FaFileImage } from "react-icons/fa";
 import { timestampFormat } from "../../../services/FormatterService";
 import { useAuth } from "../../../contexts/AuthContext";
+import echo from "../../../services/EchoService";
 
 const Conversations: FC = () => {
 	const { user } = useAuth();
@@ -97,6 +98,25 @@ const Conversations: FC = () => {
 			setMessageIsLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		if(currentConversation?.id) {
+			echo.private(`Conversation.${currentConversation?.id}`)
+				.listen('.message.create', (response: wsMessageResponseType) => {
+					setMessages((prevMessages) => [response.message, ...prevMessages]);
+				}).listen('.message.update', (response: wsMessageResponseType) => {
+					setMessages(messages.map((message) => {
+						return message.id === response.message.id ? response.message : message;
+					}));
+				}).listen('.message.delete', (response: wsDeleteMessageResponseType) => {
+					setMessages(messages.filter((message) => message.id !== response.messageId));
+				});
+	
+			return () => {
+				echo.leave(`Conversation.${currentConversation?.id}`);
+			}
+		}
+	}, [currentConversation]);
 
 	useEffect(() => {
 		(async () => {
