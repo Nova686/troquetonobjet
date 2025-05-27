@@ -21,7 +21,7 @@ const Offers: FC = () => {
 		setLoading(true);
 
 		try {
-			const response: AxiosResponse = await axiosService.get("offers", { params: { page: page, nb_per_page: 3 } });
+			const response: AxiosResponse = await axiosService.get("offers", { params: { page: page, nb_per_page: 18 } });
 			setOffers(response.data);
 			setError(null);
 		} catch (err) {
