@@ -126,6 +126,7 @@ const Conversations: FC = () => {
 				hour12: false,
 				dateStyle: "short",
 			})
+			|| shouldDisplayDate(messages[index + 1], index + 1)
 	}
 
 	const shouldDisplayDate = (message: MessageType, index: number): boolean => {
